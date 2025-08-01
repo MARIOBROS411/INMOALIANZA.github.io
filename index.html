@@ -108,7 +108,7 @@
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         color: #1d3557;
-        width: 400px;
+        width: 500px;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
@@ -141,8 +141,8 @@
       }
 
       canvas {
-        width: 150px !important;
-        height: 150px !important;
+        width: 250px !important;
+        height: 250px !important;
         margin-left: 10px;
         display: block;
       }
@@ -150,22 +150,28 @@
       .texto-centro-grafico {
         position: absolute;
         top: 40%;
-        right: 0px;
-        width: 150px;
-        height: 150px;
-        transform: translateY(-50%);
+        left: 51%;
+        width: 100%;
+        height: 100%;
+        transform: translate(-50%, -50%);
         pointer-events: none;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: black;
+        color: #1d3557;
         font-family: Arial, sans-serif;
-        font-weight: normal;
+        font-weight: bold;
         user-select: none;
         text-align: center;
-        font-size: 14px;
-        line-height: 1.3;
-        background: transparent;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .texto-centro-grafico .cuota span {
+        font-size: 16px;
+        font-weight: bold;
+        display: block;
+        margin-top: 4px;
       }
 
       /* Entrada afuera, abajo del canvas */
@@ -368,7 +374,7 @@
 
         <div class="resultado" id="resultado">
           <div class="datos">
-            <h2>Resultado de la simulación</h2>
+            <h2>Resultado del Financiamiento</h2>
             <p><strong>Cliente:</strong> <span id="cliente"></span></p>
             <p><strong>Cédula:</strong> <span id="doc"></span></p>
             <p><strong>Monto:</strong> $<span id="montoResultado"></span></p>
@@ -390,13 +396,13 @@
             "
           >
             <canvas id="graficoCuota"></canvas>
-            <div
-              class="texto-centro-grafico"
-              id="textoCentroGrafico"
-              aria-hidden="true"
-            >
-              <div class="cuota">Cuota mensual: $0</div>
+            <div class="texto-centro-grafico" id="textoCentroGrafico">
+              <div class="cuota">
+                Cuota mensual:<br />
+                <span id="valorCuota">$0</span>
+              </div>
             </div>
+
             <div class="entrada-valor" id="valorEntrada">
               Entrada (5.23%): $0
             </div>
@@ -518,10 +524,10 @@
         document.getElementById("interes").textContent = formatoNumero(interes);
         document.getElementById("valorEntrada").textContent =
           "Entrada (5.23%): $" + formatoNumero(valorEntrada.toFixed(2));
-        document
-          .getElementById("textoCentroGrafico")
-          .querySelector(".cuota").textContent =
-          "Cuota mensual: $" + formatoNumero(cuota.toFixed(2));
+        document.querySelector("#textoCentroGrafico .cuota").innerHTML =
+  "Cuota mensual:<br><span id='valorCuota'>$" +
+  formatoNumero(cuota.toFixed(2)) +
+  "</span>";
 
         // Guardar datos en localStorage
         localStorage.setItem("nombres", nombres);
@@ -539,17 +545,23 @@
 
       function mostrarResultadoGrafico(cuota, monto, entradaPorcentaje) {
         const ctx = document.getElementById("graficoCuota").getContext("2d");
+
+        const totalPagado =
+          cuota * 12 * parseInt(document.getElementById("plazo").value);
+        const interes = totalPagado - monto;
+
         if (window.miGrafico) {
           window.miGrafico.destroy();
         }
+
         window.miGrafico = new Chart(ctx, {
           type: "doughnut",
           data: {
-            labels: ["Cuota mensual", "Monto restante"],
+            labels: ["Capital", "Interés"],
             datasets: [
               {
-                data: [cuota, monto - cuota],
-                backgroundColor: ["#0077b6", "#caf0f8"],
+                data: [monto, interes],
+                backgroundColor: ["#0077b6", "#90e0ef"],
                 borderWidth: 0,
               },
             ],
@@ -562,7 +574,8 @@
             },
             plugins: {
               legend: {
-                display: false,
+                display: true,
+                position: "bottom",
               },
             },
           },
