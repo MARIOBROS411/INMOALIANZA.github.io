@@ -2,46 +2,45 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Resultados credito Inmoalianza</title>
-    <link rel="icon" href="logoinmo.png" type="image/png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inmoalianza &#8211; El mejor aliado en tu financiamiento de casas</title>
+    <link rel="icon" href="https://inmoalianza.ec/wp-content/uploads/2023/06/cropped-Flechas-32x32.png" type="image/png" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-      /* Fondo con GIF */
       body {
-        margin: 0;
-        min-height: 100vh;
         font-family: Arial, sans-serif;
-        color: #3c4249;
+        background-color: #093a56;
+        color: #f4f7fa;
         padding: 20px 40px 40px 40px;
         max-width: 1000px;
-        margin-left: auto;
-        margin-right: auto;
-
-        background: url("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZXczZ2FkbzRob3g4M2t3OGN4Ymh5aHpnN2cwMnBoM3pnaHFtanhqZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1t2SjedcVIOU8XeZg6/giphy.gif")
-          no-repeat center center fixed;
-
-        background-size: cover;
-        position: relative;
-        z-index: 0;
+        margin: auto;
       }
-
-      /* Capa oscura sobre el fondo */
-      body::before {
-        content: "";
+      
+      /* Video de fondo */
+      .video-background {
         position: fixed;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(78, 70, 70, 0.4); /* capa oscura con opacidad */
-        pointer-events: none;
+        width: 100%;
+        height: 100%;
         z-index: -1;
+        overflow: hidden;
       }
-
-      /* Contenido sobre el fondo */
-      .contenido {
-        position: relative;
-        z-index: 1;
+      
+      .video-background video {
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+      }
+      
+      .video-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(9, 58, 86, 0.7);
+        z-index: -1;
       }
 
       header {
@@ -59,6 +58,8 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         display: block;
         margin: 0 auto;
+        background-color: #093a56;
+        padding: 10px;
       }
       h1 {
         text-align: center;
@@ -108,7 +109,7 @@
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         color: #1d3557;
-        width: 500px;
+        width: 400px;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
@@ -141,8 +142,8 @@
       }
 
       canvas {
-        width: 250px !important;
-        height: 250px !important;
+        width: 150px !important;
+        height: 150px !important;
         margin-left: 10px;
         display: block;
       }
@@ -150,31 +151,24 @@
       .texto-centro-grafico {
         position: absolute;
         top: 40%;
-        left: 51%;
-        width: 100%;
-        height: 100%;
-        transform: translate(-50%, -50%);
+        right: 0px;
+        width: 150px;
+        height: 150px;
+        transform: translateY(-50%);
         pointer-events: none;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #1d3557;
+        color: black;
         font-family: Arial, sans-serif;
-        font-weight: bold;
+        font-weight: normal;
         user-select: none;
         text-align: center;
-        font-size: 13px;
-        line-height: 1.4;
+        font-size: 14px;
+        line-height: 1.3;
+        background: transparent;
       }
 
-      .texto-centro-grafico .cuota span {
-        font-size: 16px;
-        font-weight: bold;
-        display: block;
-        margin-top: 4px;
-      }
-
-      /* Entrada afuera, abajo del canvas */
       .entrada-valor {
         margin-top: 8px;
         font-size: 16px;
@@ -217,426 +211,280 @@
         font-weight: 600;
       }
 
-      @media (max-width: 780px) {
-        .contenedor-flex {
-          flex-direction: column;
-          align-items: center;
-        }
-        .resultado,
-        .formulario {
-          width: 90%;
-        }
-        .resultado {
-          flex-direction: column;
-          align-items: center;
-        }
-        .datos {
-          width: 100%;
-          margin-bottom: 15px;
-          text-align: center;
-        }
-        canvas {
-          margin-left: 0;
-          margin-bottom: 10px;
-        }
-        .texto-centro-grafico {
-          position: relative;
-          top: auto;
-          right: auto;
-          width: 100%;
-          height: auto;
-          transform: none;
-          margin-top: -20px;
-          color: #1d3557;
-        }
-        .entrada-valor {
-          font-size: 15px;
-        }
+      /* Nuevos estilos para la sección de enlace */
+      .enlace-container {
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        transition: all 0.5s ease;
       }
-      .capacidad-pago {
-        background-color: rgba(255, 255, 255, 0.85);
-        padding: 15px 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        color: #1d3557;
-        width: 400px;
-        box-sizing: border-box;
-        display: none; /* Oculto por defecto */
-        margin-top: 20px;
+      
+      .enlace-imagen {
+        max-width: 300px;
+        height: auto;
+        margin-bottom: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        transition: all 0.3s ease;
+        transform: scale(1);
+        filter: brightness(1);
       }
-      .capacidad-pago h2 {
-        margin: 0 0 10px 0;
+      
+      .enlace-imagen:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+        cursor: pointer;
       }
-      .capacidad-pago p {
-        margin: 5px 0;
+      
+      .enlace-imagen:active {
+        transform: scale(0.98);
       }
-      .formulario1 {
-        position: fixed;
-        top: -300px; /* Comienza fuera de la vista */
-        left: 50%;
-        transform: translate(-50%, 0);
-        background-color: rgba(255, 255, 255, 0.85);
-        padding: 30px; /* Aumentar el padding */
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        color: #1d3557;
-        width: 500px; /* Aumentar el ancho del formulario */
-        box-sizing: border-box;
-        opacity: 0;
-        transition: opacity 0.5s ease, transform 0.5s ease;
-        z-index: 1000;
+      
+      .enlace-texto {
+        color: white;
+        font-size: 18px;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
       }
-
-      .formulario1.show {
-        top: 50%; /* Mover al centro */
-        opacity: 1;
-        transform: translate(-50%, -50%);
+      
+      .enlace-container:hover .enlace-texto {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
       }
-
-      .cerrar {
-        background: none;
-        border: none;
+      
+      .enlace-flecha {
         font-size: 24px;
-        color: #1d3557;
+        color: white;
         cursor: pointer;
-        position: absolute;
-        top: 10px;
-        right: 10px;
+        animation: bounce 2s infinite;
+        transition: all 0.3s ease;
       }
-
-      input[type="email"],
-      input[type="text"],
-      input[type="tel"] {
-        width: 100%; /* Hacer que los campos de entrada ocupen todo el ancho */
-        padding: 10px; /* Espaciado interno */
-        margin: 6px 0 12px 0; /* Margen entre campos */
-        border-radius: 5px; /* Bordes redondeados */
-        border: 1px solid #ccc; /* Borde */
-        font-size: 14px; /* Tamaño de fuente */
-        box-sizing: border-box; /* Incluir padding y border en el ancho total */
+      
+      .enlace-container:hover .enlace-flecha {
+        color: #f99444;
+        transform: scale(1.2);
       }
-
-      .botones {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
+      
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
       }
-
-      .whatsapp-icon {
-        width: 40px; /* Tamaño del ícono */
-        height: 40px;
-        cursor: pointer;
+      
+      /* Efecto de pulso al hacer hover en todo el contenedor */
+      .enlace-container:hover {
+        animation: pulse 1.5s infinite alternate;
+      }
+      
+      @keyframes pulse {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-5px);
+        }
       }
     </style>
   </head>
   <body>
-    <div class="contenido">
-      <header>
-        <img src="inmoalianza.jpg" alt="Inmoalianza Logo o Banner" />
-      </header>
+    <!-- Fondo animado -->
+    <div class="video-background">
+      <video autoplay muted loop>
+        <source src="https://inmoalianza.ec/wp-content/uploads/2024/12/ghetto-in-america-poor-inner-city-urban-residenti-2023-11-27-04-59-42-utc-1.mov" type="video/mp4">
+      </video>
+    </div>
+    <div class="video-overlay"></div>
 
-      <h1>Resultado del Financiamiento Inmoalianza</h1>
+    <header>
+      <img src="inmoalianza.jpg" alt="Inmoalianza Logo" />
+    </header>
 
-      <div class="contenedor-flex">
-        <div class="formulario">
-          <label for="nombres">Nombres:</label>
-          <input type="text" id="nombres" placeholder="Ingrese sus nombres" />
-          <label for="apellidos">Apellidos:</label>
-          <input
-            type="text"
-            id="apellidos"
-            placeholder="Ingrese sus apellidos"
-          />
-          <label for="cedula">Cédula:</label>
-          <input type="text" id="cedula" placeholder="Ingrese su cédula" />
+    <h1>Lo que pagarias mensualmente por tu vivienda con INMOALIANZA
+    </h1>
 
-          <label for="monto">Monto del crédito:</label>
-          <select id="monto">
-            <option value="20000">20,000</option>
-            <option value="30000">30,000</option>
-            <option value="40000">40,000</option>
-            <option value="50000">50,000</option>
-            <option value="60000">60,000</option>
-            <option value="70000">70,000</option>
-            <option value="80000">80,000</option>
-            <option value="90000">90,000</option>
-            <option value="100000">100,000</option>
-          </select>
+    <div class="contenedor-flex">
+      <div class="formulario">
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" placeholder="Ingrese sus nombres" />
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" placeholder="Ingrese sus apellidos" />
+        <label for="cedula">Cédula:</label>
+        <input type="text" id="cedula" placeholder="Ingrese su cédula" />
 
-          <label for="plazo">Plazo (años):</label>
-          <select id="plazo">
-            <option value="5">5 Años/60 meses</option>
-            <option value="10">10 Años/ 120 meses</option>
-            <option value="15">15 Años/ 180 meses</option>
-          </select>
-        </div>
+        <label for="monto">Valor de la propiedad:</label>
+        <select id="monto">
+          <option value="20000">20,000</option>
+          <option value="30000">30,000</option>
+          <option value="40000">40,000</option>
+          <option value="50000">50,000</option>
+          <option value="60000">60,000</option>
+          <option value="70000">70,000</option>
+          <option value="80000">80,000</option>
+          <option value="90000">90,000</option>
+          <option value="100000">100,000</option>
+        </select>
 
-        <div class="resultado" id="resultado">
-          <div class="datos">
-            <h2>Resultado del Financiamiento</h2>
-            <p><strong>Cliente:</strong> <span id="cliente"></span></p>
-            <p><strong>Cédula:</strong> <span id="doc"></span></p>
-            <p><strong>Monto:</strong> $<span id="montoResultado"></span></p>
-            <p>
-              <strong>Plazo:</strong> <span id="plazoResultado"></span> años
-            </p>
-            <p>
-              <strong>Deuda total a pagar:</strong> $<span id="total"></span>
-            </p>
-            <p><strong>Interés total:</strong> $<span id="interes"></span></p>
-          </div>
-
-          <div
-            style="
-              position: relative;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-            "
-          >
-            <canvas id="graficoCuota"></canvas>
-            <div class="texto-centro-grafico" id="textoCentroGrafico">
-              <div class="cuota">
-                Cuota mensual:<br />
-                <span id="valorCuota">$0</span>
-              </div>
-            </div>
-
-            <div class="entrada-valor" id="valorEntrada">
-              Entrada (5.23%): $0
-            </div>
-            <div class="entrada-valor" id="interesFijo">Interés del 2.30%</div>
-          </div>
-        </div>
+        <label for="plazo">Plazo (años):</label>
+        <select id="plazo">
+          <option value="5">5 Años/60 meses</option>
+          <option value="10">10 Años/ 120 meses</option>
+          <option value="15">15 Años/ 180 meses</option>
+        </select>
       </div>
 
-      <div class="boton-container">
-        <button onclick="simular()">Calcular</button>
-        <button onclick="mostrarFormulario()">Aplicar</button>
-        <div class="estado-texto">
-          <strong> Inmoalianza group S.A.S 2023 - 2025</strong>
+      <div class="resultado" id="resultado">
+        <div class="datos">
+          <h2>Resultado de la simulación</h2>
+          <p><strong>Cliente:</strong> <span id="cliente"></span></p>
+          <p><strong>Cédula:</strong> <span id="doc"></span></p>
+          <p><strong>Monto:</strong> $<span id="montoResultado"></span></p>
+          <p><strong>Plazo:</strong> <span id="plazoResultado"></span> años</p>
+          <p><strong>Deuda total a pagar:</strong> $<span id="total"></span></p>
+          <p><strong>Interés total:</strong> $<span id="interes"></span></p>
         </div>
-      </div>
 
-      <div id="overlay" class="overlay" style="display: none"></div>
-
-      <div id="formularioContacto" class="formulario1" style="display: none">
-        <button class="cerrar" onclick="cerrarFormulario()">✖</button>
-        <!-- Botón de cerrar como X -->
-        <h2>Formulario de Contacto</h2>
-        <form id="miFormulario" onsubmit="enviarDatos(); return false;">
-          <input type="text" id="nombre" placeholder="Nombre" required />
-          <input type="email" id="correo" placeholder="Correo" required />
-          <input type="tel" id="telefono" placeholder="Teléfono" required />
-        </form>
-
-        <div class="botones">
-          <button onclick="enviarDatos()">Enviar</button>
-          <a href="https://wa.me/593996275830" target="_blank">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-              alt="WhatsApp"
-              class="whatsapp-icon"
-            />
-          </a>
+        <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+          <canvas id="graficoCuota"></canvas>
+          <div class="texto-centro-grafico" id="textoCentroGrafico" aria-hidden="true">
+            <div class="cuota">Cuota mensual: $0</div>
+          </div>
+          <div class="entrada-valor" id="valorEntrada">Entrada (5.23%): $0</div>
+          <div class="entrada-valor" id="interesFijo">Interés del 2.30%</div>
         </div>
       </div>
     </div>
 
+    <div class="boton-container">
+      <button onclick="simular()">Calcular</button>
+   
+
+    <!-- Nueva sección de enlace MEJORADA -->
+    <div class="enlace-container" onclick="window.location.href='index2.html'">
+      <div class="enlace-texto">¿Deseas saber más sobre Inmoalianza?</div>
+      <div class="enlace-flecha">↓</div>
+      <img src="inmoalianzaenlace.png" alt="Más sobre Inmoalianza" class="enlace-imagen">
+    </div>
+   <div class="estado-texto">
+        <strong> Inmoalianza group S.A.S 2023 - 2025</strong>
+      </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    if (localStorage.getItem("nombres")) {
-      document.getElementById("nombres").value = localStorage.getItem("nombres");
-      document.getElementById("apellidos").value = localStorage.getItem("apellidos");
-      document.getElementById("cedula").value = localStorage.getItem("cedula");
-      document.getElementById("monto").value = localStorage.getItem("monto");
-      document.getElementById("plazo").value = localStorage.getItem("plazo");
-    }
-    cerrarFormulario();
-  });
-
-  function mostrarFormulario() {
-    const formulario = document.getElementById("formularioContacto");
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "block";
-    formulario.style.display = "block";
-    setTimeout(() => formulario.classList.add("show"), 10);
-  }
-
-  function cerrarFormulario() {
-    const formulario = document.getElementById("formularioContacto");
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "none";
-    formulario.classList.remove("show");
-    setTimeout(() => (formulario.style.display = "none"), 500);
-  }
-
-  function simular() {
-    const nombres = document.getElementById("nombres").value.trim();
-    const apellidos = document.getElementById("apellidos").value.trim();
-    const cedula = document.getElementById("cedula").value.trim();
-    const monto = parseFloat(document.getElementById("monto").value);
-    const plazo = parseInt(document.getElementById("plazo").value);
-
-    // ✅ Validaciones
-    if (!nombres || !apellidos || !cedula || isNaN(monto) || isNaN(plazo)) {
-      alert("Por favor, completa todos los campos correctamente.");
-      return;
-    }
-
-    if (!validarCedula(cedula)) {
-      alert("Cédula inválida. Verifica que sea una cédula ecuatoriana válida.");
-      return;
-    }
-
-    const cuotas = {
-      20000: { 5: 410, 10: 205, 15: 149.44 },
-      30000: { 5: 615, 10: 307.5, 15: 224.17 },
-      40000: { 5: 820, 10: 410, 15: 298.89 },
-      50000: { 5: 1025, 10: 512.5, 15: 373.61 },
-      60000: { 5: 1230, 10: 615, 15: 448.33 },
-      70000: { 5: 1435, 10: 717.5, 15: 523.06 },
-      80000: { 5: 1640, 10: 820, 15: 597.78 },
-      90000: { 5: 1845, 10: 922.5, 15: 672.5 },
-      100000: { 5: 2050, 10: 1025, 15: 747.22 },
-    };
-
-    if (!cuotas[monto] || !cuotas[monto][plazo]) {
-      alert("El monto o plazo ingresado no está disponible.");
-      return;
-    }
-
-    const cuota = cuotas[monto][plazo];
-    const total = (cuota * 12 * plazo).toFixed(2);
-    const interes = (total - monto).toFixed(2);
-    const entradaPorcentaje = 5.23 / 100;
-    const valorEntrada = monto * entradaPorcentaje;
-
-    function formatoNumero(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    document.getElementById("cliente").textContent = nombres + " " + apellidos;
-    document.getElementById("doc").textContent = cedula;
-    document.getElementById("montoResultado").textContent = formatoNumero(monto);
-    document.getElementById("plazoResultado").textContent = plazo;
-    document.getElementById("total").textContent = formatoNumero(total);
-    document.getElementById("interes").textContent = formatoNumero(interes);
-    document.getElementById("valorEntrada").textContent =
-      "Entrada (5.23%): $" + formatoNumero(valorEntrada.toFixed(2));
-    document.querySelector("#textoCentroGrafico .cuota").innerHTML =
-      "Cuota mensual:<br><span id='valorCuota'>$" +
-      formatoNumero(cuota.toFixed(2)) +
-      "</span>";
-
-    // Guardar en localStorage
-    localStorage.setItem("nombres", nombres);
-    localStorage.setItem("apellidos", apellidos);
-    localStorage.setItem("cedula", cedula);
-    localStorage.setItem("monto", monto);
-    localStorage.setItem("plazo", plazo);
-
-    mostrarResultadoGrafico(cuota, monto, entradaPorcentaje);
-
-    document.getElementById("resultado").classList.add("show");
-  }
-
-  function mostrarResultadoGrafico(cuota, monto, entradaPorcentaje) {
-    const ctx = document.getElementById("graficoCuota").getContext("2d");
-    const totalPagado = cuota * 12 * parseInt(document.getElementById("plazo").value);
-    const interes = totalPagado - monto;
-
-    if (window.miGrafico) {
-      window.miGrafico.destroy();
-    }
-
-    window.miGrafico = new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: ["Capital", "Interés"],
-        datasets: [
-          {
-            data: [monto, interes],
-            backgroundColor: ["#0077b6", "#90e0ef"],
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        cutout: "60%",
-        animation: {
-          animateRotate: true,
-          duration: 700,
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: "bottom",
-          },
-        },
-      },
-    });
-  }
-
-  function validarCedula(cedula) {
-    if (!/^\d{10}$/.test(cedula)) return false;
-
-    const digitos = cedula.split("").map(Number);
-    const provincia = parseInt(cedula.substring(0, 2), 10);
-    if (provincia < 1 || provincia > 24) return false;
-
-    const digitoVerificador = digitos[9];
-    let suma = 0;
-
-    for (let i = 0; i < 9; i++) {
-      let valor = digitos[i];
-      if (i % 2 === 0) {
-        valor *= 2;
-        if (valor > 9) valor -= 9;
-      }
-      suma += valor;
-    }
-
-    const decenaSuperior = Math.ceil(suma / 10) * 10;
-    const resultado = decenaSuperior - suma;
-    return resultado === digitoVerificador || (resultado === 10 && digitoVerificador === 0);
-  }
-
-  function enviarDatos() {
-    const nombre = document.getElementById("nombre").value;
-    const correo = document.getElementById("correo").value;
-    const telefono = document.getElementById("telefono").value;
-
-    const url = "https://script.google.com/macros/s/AKfycbzCBBaeLDvxIaA7JeBQ0xvJtDSS5IE2u2NH5CXiyiEi6nKgWUM1nfN63RZOHdLeKAte/exec";
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nombre: nombre,
-        correo: correo,
-        telefono: telefono,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-        alert("Datos enviados correctamente");
-        document.getElementById("miFormulario").reset();
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("Error al enviar los datos");
+      // Cargar datos guardados al iniciar la página
+      document.addEventListener("DOMContentLoaded", function () {
+        if (localStorage.getItem("nombres")) {
+          document.getElementById("nombres").value = localStorage.getItem("nombres");
+          document.getElementById("apellidos").value = localStorage.getItem("apellidos");
+          document.getElementById("cedula").value = localStorage.getItem("cedula");
+          document.getElementById("monto").value = localStorage.getItem("monto");
+          document.getElementById("plazo").value = localStorage.getItem("plazo");
+        }
       });
-  }
-</script>
 
+      function simular() {
+        const nombres = document.getElementById("nombres").value;
+        const apellidos = document.getElementById("apellidos").value;
+        const cedula = document.getElementById("cedula").value;
+        const monto = parseFloat(document.getElementById("monto").value);
+        const plazo = parseInt(document.getElementById("plazo").value);
+        const cuotas = {
+          20000: { 5: 410, 10: 205, 15: 149.44 },
+          30000: { 5: 615, 10: 307.5, 15: 224.17 },
+          40000: { 5: 820, 10: 410, 15: 298.89 },
+          50000: { 5: 1025, 10: 512.5, 15: 373.61 },
+          60000: { 5: 1230, 10: 615, 15: 448.33 },
+          70000: { 5: 1435, 10: 717.5, 15: 523.06 },
+          80000: { 5: 1640, 10: 820, 15: 597.78 },
+          90000: { 5: 1845, 10: 922.5, 15: 672.5 },
+          100000: { 5: 2050, 10: 1025, 15: 747.22 },
+        };
+
+        const cuota = cuotas[monto][plazo];
+        const total = (cuota * 12 * plazo).toFixed(2);
+        const interes = (total - monto).toFixed(2);
+        const entradaPorcentaje = 5.23 / 100;
+        const valorEntrada = monto * entradaPorcentaje;
+
+        function formatoNumero(num) {
+          return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        document.getElementById("cliente").textContent = `${nombres} ${apellidos}`;
+        document.getElementById("doc").textContent = cedula;
+        document.getElementById("montoResultado").textContent = formatoNumero(monto);
+        document.getElementById("plazoResultado").textContent = plazo;
+        document.getElementById("total").textContent = formatoNumero(total);
+        document.getElementById("interes").textContent = formatoNumero(interes);
+
+        const resultado = document.getElementById("resultado");
+        resultado.classList.remove("show");
+        void resultado.offsetWidth;
+        resultado.classList.add("show");
+
+        const textoCentro = document.getElementById("textoCentroGrafico");
+        textoCentro.querySelector(".cuota").textContent = `Cuota mensual: $${formatoNumero(cuota.toFixed(2))}`;
+
+        const entradaDiv = document.getElementById("valorEntrada");
+        entradaDiv.textContent = `Entrada: $${formatoNumero(valorEntrada.toFixed(2))}`;
+
+        const ctx = document.getElementById("graficoCuota").getContext("2d");
+        if (window.miGrafico) {
+          window.miGrafico.destroy();
+        }
+        window.miGrafico = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: ["Cuota mensual", "Interés total", "Monto original"],
+            datasets: [{
+              data: [cuota, interes, monto],
+              backgroundColor: ["#000000", "#457b9d", "#a8dadc"],
+              borderWidth: 0,
+              borderRadius: 0,
+              spacing: 3,
+            }],
+          },
+          options: {
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) {
+                    const label = ctx.label || "";
+                    const value = Number(ctx.raw).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    });
+                    return `${label}: $${value}`;
+                  },
+                },
+              },
+            },
+            cutout: "70%",
+          },
+        });
+
+        guardarDatosFormulario();
+      }
+      
+      function guardarDatosFormulario() {
+        const nombres = document.getElementById("nombres").value;
+        const apellidos = document.getElementById("apellidos").value;
+        const cedula = document.getElementById("cedula").value;
+        const monto = document.getElementById("monto").value;
+        const plazo = document.getElementById("plazo").value;
+        
+        localStorage.setItem("nombres", nombres);
+        localStorage.setItem("apellidos", apellidos);
+        localStorage.setItem("cedula", cedula);
+        localStorage.setItem("monto", monto);
+        localStorage.setItem("plazo", plazo);
+      }
     </script>
   </body>
 </html>
-
