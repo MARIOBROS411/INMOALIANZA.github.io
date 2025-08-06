@@ -150,7 +150,7 @@
 
       .texto-centro-grafico {
         position: absolute;
-        top: 40%;
+        top: 45%;
         right: 0px;
         width: 150px;
         height: 150px;
@@ -340,7 +340,7 @@
 
       <div class="resultado" id="resultado">
         <div class="datos">
-          <h2>Resultado de la simulación</h2>
+          <h2>Resultado</h2>
           <p><strong>Cliente:</strong> <span id="cliente"></span></p>
           <p><strong>Cédula:</strong> <span id="doc"></span></p>
           <p><strong>Monto:</strong> $<span id="montoResultado"></span></p>
@@ -354,6 +354,8 @@
           <div class="texto-centro-grafico" id="textoCentroGrafico" aria-hidden="true">
             <div class="cuota">Cuota mensual: $0</div>
           </div>
+          <div class="entrada-valor" id="valorEntrada"></div>
+          <div class="entrada-valor" id="interesFijo"></div>
         </div>
       </div>
     </div>
@@ -366,7 +368,7 @@
     <div class="enlace-container" onclick="window.location.href='index2.html'">
       <div class="enlace-texto">¿Deseas saber más sobre Inmoalianza?</div>
       <div class="enlace-flecha">↓</div>
-      <img src="https://github.com/MARIOBROS411/INMOALIANZA.github.io/blob/main/imageninmoalianza.jpg" alt="Más sobre Inmoalianza" class="enlace-imagen">
+      <img src="https://github.com/MARIOBROS411/INMOALIANZA.github.io/blob/main/inmoalianzaenlace.PNG" alt="Más sobre Inmoalianza" class="enlace-imagen">
     </div>
    <div class="estado-texto">
         <strong> Inmoalianza group S.A.S 2023 - 2025</strong>
@@ -428,8 +430,7 @@
         const textoCentro = document.getElementById("textoCentroGrafico");
         textoCentro.querySelector(".cuota").textContent = `Cuota mensual: $${formatoNumero(cuota.toFixed(2))}`;
 
-        const entradaDiv = document.getElementById("valorEntrada");
-        entradaDiv.textContent = `Entrada: $${formatoNumero(valorEntrada.toFixed(2))}`;
+    
 
         const ctx = document.getElementById("graficoCuota").getContext("2d");
         if (window.miGrafico) {
@@ -485,5 +486,4 @@
       }
     </script>
   </body>
-
 </html>
