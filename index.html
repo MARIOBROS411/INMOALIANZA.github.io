@@ -2,17 +2,29 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Inmoalianza - El mejor aliado en tu financiamiento de casas">
-    <meta name="robots" content="index, follow">
-    <title>Inmoalianza &#8211; El mejor aliado en tu financiamiento de casas</title>
-    <link rel="icon" href="https://inmoalianza.ec/wp-content/uploads/2023/06/cropped-Flechas-32x32.png" type="image/png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta
+      name="description"
+      content="Inmoalianza - El mejor aliado en tu financiamiento de casas"
+    />
+    <meta name="robots" content="index, follow" />
+    <title>
+      Inmoalianza &#8211; El mejor aliado en tu financiamiento de casas
+    </title>
+    <link
+      rel="icon"
+      href="https://inmoalianza.ec/wp-content/uploads/2023/06/cropped-Flechas-32x32.png"
+      type="image/png"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       * {
         box-sizing: border-box;
       }
-      
+
       body {
         font-family: Arial, sans-serif;
         background-color: #093a56;
@@ -21,7 +33,7 @@
         margin: 0;
         min-height: 100vh;
       }
-      
+
       /* Video de fondo */
       .video-background {
         position: fixed;
@@ -32,13 +44,13 @@
         z-index: -1;
         overflow: hidden;
       }
-      
+
       .video-background video {
         min-width: 100%;
         min-height: 100%;
         object-fit: cover;
       }
-      
+
       .video-overlay {
         position: fixed;
         top: 0;
@@ -54,7 +66,7 @@
         margin: 0 auto 20px auto;
         text-align: center;
       }
-      
+
       header img {
         max-height: 100px;
         width: auto;
@@ -67,7 +79,7 @@
         background-color: #093a56;
         padding: 10px;
       }
-      
+
       h1 {
         text-align: center;
         color: #caf0f8;
@@ -92,7 +104,8 @@
         }
       }
 
-      .formulario, .resultado {
+      .formulario,
+      .resultado {
         width: 100%;
         max-width: 100%;
         background-color: rgba(255, 255, 255, 0.85);
@@ -116,7 +129,7 @@
         margin-top: 8px;
         display: block;
       }
-      
+
       .formulario input,
       .formulario select {
         width: 100%;
@@ -137,12 +150,12 @@
         transform: translateY(20px);
         pointer-events: none;
       }
-      
+
       .resultado.show {
         animation: fadeSlideIn 0.5s forwards;
         pointer-events: auto;
       }
-      
+
       @keyframes fadeSlideIn {
         0% {
           opacity: 0;
@@ -217,7 +230,7 @@
         text-align: center;
         margin: 20px 0;
       }
-      
+
       button {
         background-color: #0077b6;
         color: white;
@@ -231,7 +244,7 @@
         width: 100%;
         max-width: 300px;
       }
-      
+
       button:hover {
         background-color: #005f86;
       }
@@ -251,7 +264,7 @@
         padding: 20px;
         transition: all 0.5s ease;
       }
-      
+
       .enlace-imagen {
         max-width: 100%;
         height: auto;
@@ -260,27 +273,27 @@
         transform: scale(1);
         filter: brightness(1);
       }
-      
+
       .enlace-imagen:hover {
         transform: scale(1.05);
         filter: brightness(1.1);
       }
-      
+
       .enlace-imagen:active {
         transform: scale(0.98);
       }
-      
+
       .enlace-texto {
         color: white;
         font-size: clamp(1rem, 4vw, 1.2rem);
         margin-bottom: 10px;
         transition: all 0.3s ease;
       }
-      
+
       .enlace-container:hover .enlace-texto {
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
       }
-      
+
       .enlace-flecha {
         font-size: 24px;
         color: white;
@@ -288,9 +301,13 @@
         animation: bounce 2s infinite;
         transition: all 0.3s ease;
       }
-      
+
       @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
           transform: translateY(0);
         }
         40% {
@@ -300,7 +317,7 @@
           transform: translateY(-5px);
         }
       }
-      
+
       /* Redes sociales flotantes */
       .redes-sociales {
         position: fixed;
@@ -310,21 +327,30 @@
         display: flex;
         flex-direction: column;
       }
-      
+
       .redes-sociales a {
         margin: 5px;
       }
-      
+
       .redes-sociales img {
         width: 40px;
         height: 40px;
       }
-      
+
       @media (max-width: 480px) {
         .redes-sociales img {
           width: 35px;
           height: 35px;
         }
+      }
+
+      /* Estilo para mensajes de error */
+      .error-message {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        display: none;
       }
     </style>
   </head>
@@ -332,7 +358,10 @@
     <!-- Fondo animado -->
     <div class="video-background">
       <video autoplay muted loop playsinline>
-        <source src="https://inmoalianza.ec/wp-content/uploads/2024/12/ghetto-in-america-poor-inner-city-urban-residenti-2023-11-27-04-59-42-utc-1.mov" type="video/mp4">
+        <source
+          src="https://inmoalianza.ec/wp-content/uploads/2024/12/ghetto-in-america-poor-inner-city-urban-residenti-2023-11-27-04-59-42-utc-1.mov"
+          type="video/mp4"
+        />
       </video>
     </div>
     <div class="video-overlay"></div>
@@ -340,10 +369,16 @@
     <!-- Redes Sociales Flotantes -->
     <div class="redes-sociales">
       <a href="https://www.instagram.com/inmoalianza.ec/" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+          alt="Instagram"
+        />
       </a>
       <a href="https://www.tiktok.com/@inmoalianza.ec" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png"
+          alt="TikTok"
+        />
       </a>
     </div>
 
@@ -360,7 +395,13 @@
         <label for="apellidos">Apellidos:</label>
         <input type="text" id="apellidos" placeholder="Ingrese sus apellidos" />
         <label for="cedula">Cédula:</label>
-        <input type="text" id="cedula" placeholder="Ingrese su cédula" />
+        <input
+          type="text"
+          id="cedula"
+          placeholder="Ingrese su cédula"
+          maxlength="10"
+        />
+        <div id="cedula-error" class="error-message"></div>
 
         <label for="monto">Valor de la propiedad:</label>
         <select id="monto">
@@ -394,9 +435,20 @@
           <p><strong>Interés total:</strong> $<span id="interes"></span></p>
         </div>
 
-        <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+        <div
+          style="
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+        >
           <canvas id="graficoCuota"></canvas>
-          <div class="texto-centro-grafico" id="textoCentroGrafico" aria-hidden="true">
+          <div
+            class="texto-centro-grafico"
+            id="textoCentroGrafico"
+            aria-hidden="true"
+          >
             <div class="cuota">Cuota mensual: $0</div>
           </div>
           <div class="entrada-valor" id="valorEntrada"></div>
@@ -413,29 +465,144 @@
     <div class="enlace-container" onclick="window.location.href='index2.html'">
       <div class="enlace-texto">¿Deseas saber más sobre Inmoalianza?</div>
       <div class="enlace-flecha">↓</div>
-      <img src="inmoalianzaenlace.jpg" alt="Más sobre Inmoalianza" class="enlace-imagen">
+      <img
+        src="inmoalianzaenlace.jpg"
+        alt="Más sobre Inmoalianza"
+        class="enlace-imagen"
+      />
     </div>
-    
+
     <div class="estado-texto">
       <strong>Inmoalianza group S.A.S 2023 - 2025</strong>
     </div>
 
     <script>
+      // Función para validar cédula ecuatoriana
+      function validarCedula(cedula) {
+        // Verificar que tenga 10 dígitos y sean solo números
+        if (cedula.length !== 10 || !/^\d+$/.test(cedula)) {
+          return false;
+        }
+
+        // Los dos primeros dígitos deben corresponder a un provincia válida (01-24)
+        const provincia = parseInt(cedula.substring(0, 2));
+        if (provincia < 1 || provincia > 24) {
+          return false;
+        }
+
+        // Algoritmo de validación (módulo 10)
+        const digitos = cedula.split("").map(Number);
+        const digitoVerificador = digitos.pop(); // Último dígito
+
+        let suma = 0;
+
+        for (let i = 0; i < digitos.length; i++) {
+          let valor;
+          if (i % 2 === 0) {
+            valor = digitos[i] * 2;
+            if (valor > 9) valor -= 9;
+          } else {
+            valor = digitos[i];
+          }
+          suma += valor;
+        }
+
+        const digitoCalculado = suma % 10 === 0 ? 0 : 10 - (suma % 10);
+
+        return digitoVerificador === digitoCalculado;
+      }
+
+      // Función para mostrar error en el formulario
+      function mostrarError(campo, mensaje) {
+        const errorElement = document.getElementById(`${campo}-error`);
+        errorElement.textContent = mensaje;
+        errorElement.style.display = "block";
+        document.getElementById(campo).style.borderColor = "#dc3545";
+        return false;
+      }
+
+      // Función para limpiar errores
+      function limpiarErrores() {
+        const errors = document.querySelectorAll(".error-message");
+        errors.forEach((error) => {
+          error.textContent = "";
+          error.style.display = "none";
+        });
+
+        const inputs = document.querySelectorAll(
+          ".formulario input, .formulario select"
+        );
+        inputs.forEach((input) => {
+          input.style.borderColor = "#ccc";
+        });
+      }
+
       // Cargar datos guardados al iniciar la página
       document.addEventListener("DOMContentLoaded", function () {
         if (localStorage.getItem("nombres")) {
-          document.getElementById("nombres").value = localStorage.getItem("nombres");
-          document.getElementById("apellidos").value = localStorage.getItem("apellidos");
-          document.getElementById("cedula").value = localStorage.getItem("cedula");
-          document.getElementById("monto").value = localStorage.getItem("monto");
-          document.getElementById("plazo").value = localStorage.getItem("plazo");
+          document.getElementById("nombres").value =
+            localStorage.getItem("nombres");
+          document.getElementById("apellidos").value =
+            localStorage.getItem("apellidos");
+          document.getElementById("cedula").value =
+            localStorage.getItem("cedula");
+          document.getElementById("monto").value =
+            localStorage.getItem("monto");
+          document.getElementById("plazo").value =
+            localStorage.getItem("plazo");
         }
+
+        // Validar cédula mientras se escribe
+        document
+          .getElementById("cedula")
+          .addEventListener("input", function (e) {
+            this.value = this.value.replace(/[^0-9]/g, "");
+            if (this.value.length > 10) {
+              this.value = this.value.slice(0, 10);
+            }
+          });
       });
 
       function simular() {
-        const nombres = document.getElementById("nombres").value;
-        const apellidos = document.getElementById("apellidos").value;
-        const cedula = document.getElementById("cedula").value;
+        limpiarErrores();
+
+        const nombres = document.getElementById("nombres").value.trim();
+        const apellidos = document.getElementById("apellidos").value.trim();
+        const cedula = document.getElementById("cedula").value.trim();
+
+        // Validaciones de campos obligatorios
+        if (!nombres)
+          return mostrarError("nombres", "Por favor ingrese sus nombres");
+        if (!apellidos)
+          return mostrarError("apellidos", "Por favor ingrese sus apellidos");
+        if (!cedula)
+          return mostrarError(
+            "cedula",
+            "Por favor ingrese su número de cédula"
+          );
+
+        // Validar formato de cédula
+        if (cedula.length !== 10 || !/^\d+$/.test(cedula)) {
+          return mostrarError(
+            "cedula",
+            "La cédula debe tener 10 dígitos numéricos"
+          );
+        }
+
+        // Validar provincia
+        const provincia = parseInt(cedula.substring(0, 2));
+        if (provincia < 1 || provincia > 24) {
+          return mostrarError(
+            "cedula",
+            "Los dos primeros dígitos no corresponden a una provincia válida"
+          );
+        }
+
+        // Validar algoritmo de cédula
+        if (!validarCedula(cedula)) {
+          return mostrarError("cedula", "El número de cédula no es válido");
+        }
+
         const monto = parseFloat(document.getElementById("monto").value);
         const plazo = parseInt(document.getElementById("plazo").value);
         const cuotas = {
@@ -460,9 +627,12 @@
           return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
-        document.getElementById("cliente").textContent = `${nombres} ${apellidos}`;
+        document.getElementById(
+          "cliente"
+        ).textContent = `${nombres} ${apellidos}`;
         document.getElementById("doc").textContent = cedula;
-        document.getElementById("montoResultado").textContent = formatoNumero(monto);
+        document.getElementById("montoResultado").textContent =
+          formatoNumero(monto);
         document.getElementById("plazoResultado").textContent = plazo;
         document.getElementById("total").textContent = formatoNumero(total);
         document.getElementById("interes").textContent = formatoNumero(interes);
@@ -473,7 +643,9 @@
         resultado.classList.add("show");
 
         const textoCentro = document.getElementById("textoCentroGrafico");
-        textoCentro.querySelector(".cuota").textContent = `Cuota mensual: $${formatoNumero(cuota.toFixed(2))}`;
+        textoCentro.querySelector(
+          ".cuota"
+        ).textContent = `Cuota mensual: $${formatoNumero(cuota.toFixed(2))}`;
 
         const ctx = document.getElementById("graficoCuota").getContext("2d");
         if (window.miGrafico) {
@@ -483,13 +655,15 @@
           type: "doughnut",
           data: {
             labels: ["Cuota mensual", "Interés total", "Monto original"],
-            datasets: [{
-              data: [cuota, interes, monto],
-              backgroundColor: ["#000000", "#457b9d", "#a8dadc"],
-              borderWidth: 0,
-              borderRadius: 0,
-              spacing: 3,
-            }],
+            datasets: [
+              {
+                data: [cuota, interes, monto],
+                backgroundColor: ["#000000", "#457b9d", "#a8dadc"],
+                borderWidth: 0,
+                borderRadius: 0,
+                spacing: 3,
+              },
+            ],
           },
           options: {
             plugins: {
@@ -513,14 +687,14 @@
 
         guardarDatosFormulario();
       }
-      
+
       function guardarDatosFormulario() {
         const nombres = document.getElementById("nombres").value;
         const apellidos = document.getElementById("apellidos").value;
         const cedula = document.getElementById("cedula").value;
         const monto = document.getElementById("monto").value;
         const plazo = document.getElementById("plazo").value;
-        
+
         localStorage.setItem("nombres", nombres);
         localStorage.setItem("apellidos", apellidos);
         localStorage.setItem("cedula", cedula);
