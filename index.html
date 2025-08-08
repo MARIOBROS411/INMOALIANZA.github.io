@@ -80,11 +80,31 @@
         padding: 10px;
       }
 
-      h1 {
+      /* Estilo unificado para los títulos principales */
+      .titulo-principal,
+      .footer-text {
         text-align: center;
         color: #caf0f8;
         margin: 15px 0;
         font-size: clamp(1.5rem, 4vw, 2rem);
+        font-weight: 300;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .titulo-principal::after,
+      .footer-text::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #caf0f8, transparent);
       }
 
       .contenedor-flex {
@@ -249,12 +269,15 @@
         background-color: #005f86;
       }
 
-      .estado-texto {
-        margin-top: 12px;
-        font-size: 14px;
-        color: #caf0f8;
-        font-weight: 600;
+      .footer-container {
         text-align: center;
+        margin-top: 30px;
+        padding: 20px 0;
+      }
+
+      .footer-text {
+        font-size: clamp(1rem, 3vw, 1.2rem);
+        margin: 0;
       }
 
       /* Sección de enlace */
@@ -263,6 +286,7 @@
         margin: 30px 0;
         padding: 20px;
         transition: all 0.5s ease;
+        cursor: pointer;
       }
 
       .enlace-imagen {
@@ -285,13 +309,38 @@
 
       .enlace-texto {
         color: white;
-        font-size: clamp(1rem, 4vw, 1.2rem);
-        margin-bottom: 10px;
+        font-size: clamp(1.2rem, 4vw, 1.8rem);
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        font-family: 'Arial', sans-serif;
+        font-weight: 300;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 8px;
+      }
+
+      .enlace-texto::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffffff, transparent);
         transition: all 0.3s ease;
       }
 
+      .enlace-container:hover .enlace-texto::after {
+        width: 80%;
+        background: linear-gradient(90deg, transparent, #caf0f8, transparent);
+      }
+
       .enlace-container:hover .enlace-texto {
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        text-shadow: 0 0 15px rgba(202, 240, 248, 0.7);
+        color: #caf0f8;
       }
 
       .enlace-flecha {
@@ -370,7 +419,7 @@
       <img src="inmoalianza.jpg" alt="Inmoalianza Logo" />
     </header>
 
-    <h1>Lo que pagarías mensualmente por tu vivienda con INMOALIANZA</h1>
+    <h1 class="titulo-principal">Lo que pagarías mensualmente por tu vivienda con INMOALIANZA</h1>
 
     <div class="contenedor-flex">
       <div class="formulario">
@@ -415,8 +464,7 @@
           <p><strong>Cédula:</strong> <span id="doc"></span></p>
           <p><strong>Monto:</strong> $<span id="montoResultado"></span></p>
           <p><strong>Plazo:</strong> <span id="plazoResultado"></span> años</p>
-          <p><strong>Deuda total a pagar:</strong> $<span id="total"></span></p>
-          <p><strong>Interés total:</strong> $<span id="interes"></span></p>
+          <p><strong>Cuota mensual:</strong> $<span id="cuotaMensual"></span></p>
         </div>
 
         <div
@@ -436,7 +484,6 @@
             <div class="cuota">Cuota mensual: $0</div>
           </div>
           <div class="entrada-valor" id="valorEntrada"></div>
-          <div class="entrada-valor" id="interesFijo"></div>
         </div>
       </div>
     </div>
@@ -456,8 +503,8 @@
       />
     </div>
 
-    <div class="estado-texto">
-      <strong>Inmoalianza group S.A.S 2023 - 2025</strong>
+    <div class="footer-container">
+      <div class="footer-text">Inmoalianza group S.A.S 2023 - 2025</div>
     </div>
 
     <script>
@@ -602,8 +649,6 @@
         };
 
         const cuota = cuotas[monto][plazo];
-        const total = (cuota * 12 * plazo).toFixed(2);
-        const interes = (total - monto).toFixed(2);
         const entradaPorcentaje = 5.23 / 100;
         const valorEntrada = monto * entradaPorcentaje;
 
@@ -618,8 +663,7 @@
         document.getElementById("montoResultado").textContent =
           formatoNumero(monto);
         document.getElementById("plazoResultado").textContent = plazo;
-        document.getElementById("total").textContent = formatoNumero(total);
-        document.getElementById("interes").textContent = formatoNumero(interes);
+        document.getElementById("cuotaMensual").textContent = formatoNumero(cuota.toFixed(2));
 
         const resultado = document.getElementById("resultado");
         resultado.classList.remove("show");
@@ -638,11 +682,11 @@
         window.miGrafico = new Chart(ctx, {
           type: "doughnut",
           data: {
-            labels: ["Cuota mensual", "Interés total", "Monto original"],
+            labels: ["Cuota mensual", "Monto original"],
             datasets: [
               {
-                data: [cuota, interes, monto],
-                backgroundColor: ["#000000", "#457b9d", "#a8dadc"],
+                data: [cuota, monto],
+                backgroundColor: ["#000000", "#a8dadc"],
                 borderWidth: 0,
                 borderRadius: 0,
                 spacing: 3,
@@ -688,4 +732,5 @@
     </script>
   </body>
 </html>
+
 
