@@ -83,8 +83,8 @@
       /* Estilo unificado para los títulos principales */
       .titulo-principal,
       .footer-text {
-        font-weight: 800; /* Más grueso que "bold" (700) */
-        letter-spacing: 1.5px; /* Espaciado ligeramente mayor */
+        font-weight: 800;
+        letter-spacing: 1.5px;
         text-align: center;
         color: #caf0f8;
         margin: 15px 0;
@@ -108,27 +108,23 @@
         background: linear-gradient(90deg, transparent, #caf0f8, transparent);
       }
 
-      .contenedor-flex {
+      .contenedor-principal {
         display: flex;
         flex-direction: column;
         gap: 20px;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
+        width: 100%;
       }
 
       @media (min-width: 768px) {
-        .contenedor-flex {
+        .contenedor-principal {
           flex-direction: row;
+          justify-content: center;
           align-items: flex-start;
-          gap: 30px;
         }
       }
 
-      .formulario,
-      .resultado {
+      .formulario {
         width: 100%;
-        max-width: 100%;
         background-color: rgba(255, 255, 255, 0.85);
         padding: 15px;
         border-radius: 10px;
@@ -139,9 +135,7 @@
       @media (min-width: 768px) {
         .formulario {
           width: 320px;
-        }
-        .resultado {
-          width: 400px;
+          flex-shrink: 0;
         }
       }
 
@@ -161,8 +155,48 @@
         font-size: 14px;
       }
 
+      .boton-container {
+        text-align: center;
+        margin: 20px 0;
+        width: 100%;
+      }
+
+      button {
+        background-color: #0077b6;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: none;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      button:hover {
+        background-color: #005f86;
+      }
+
+      .resultado-container {
+        width: 100%;
+        min-height: 0;
+        transition: min-height 0.3s ease;
+      }
+
+      .resultado-container.has-content {
+        min-height: 300px;
+      }
+
       .resultado {
-        position: relative;
+        width: 100%;
+        max-width: 100%;
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        color: #1d3557;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -170,22 +204,24 @@
         opacity: 0;
         transform: translateY(20px);
         pointer-events: none;
+        height: 0;
+        overflow: hidden;
+        transition: opacity 0.5s ease, transform 0.5s ease, height 0.5s ease;
+      }
+
+      @media (min-width: 768px) {
+        .resultado {
+          width: 400px;
+          flex-shrink: 0;
+        }
       }
 
       .resultado.show {
-        animation: fadeSlideIn 0.5s forwards;
+        opacity: 1;
+        transform: translateY(0);
         pointer-events: auto;
-      }
-
-      @keyframes fadeSlideIn {
-        0% {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        height: auto;
+        overflow: visible;
       }
 
       .datos {
@@ -245,31 +281,6 @@
         color: rgba(0, 2, 136, 1);
         text-align: center;
         font-weight: 600;
-      }
-
-      .boton-container {
-        text-align: center;
-        margin: 20px 0;
-        width: 100%;
-        order: 2; /* Esto coloca el botón después del formulario en móviles */
-      }
-
-      button {
-        background-color: #0077b6;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        padding: 12px 30px;
-        font-size: 16px;
-        border-radius: 6px;
-        border: none;
-        transition: background-color 0.3s ease;
-        width: 100%;
-        max-width: 300px;
-      }
-
-      button:hover {
-        background-color: #005f86;
       }
 
       .footer-container {
@@ -373,32 +384,6 @@
         }
       }
 
-      /* Redes sociales flotantes */
-      .redes-sociales {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 999;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .redes-sociales a {
-        margin: 5px;
-      }
-
-      .redes-sociales img {
-        width: 40px;
-        height: 40px;
-      }
-
-      @media (max-width: 480px) {
-        .redes-sociales img {
-          width: 35px;
-          height: 35px;
-        }
-      }
-
       /* Estilo para mensajes de error */
       .error-message {
         color: #dc3545;
@@ -406,24 +391,6 @@
         margin-top: -10px;
         margin-bottom: 10px;
         display: none;
-      }
-
-      /* Nuevos estilos para la reorganización móvil */
-      .mobile-layout {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
-      
-      @media (max-width: 767px) {
-        .contenedor-flex {
-          flex-direction: column;
-        }
-        
-        .resultado {
-          order: 3; /* Esto coloca el resultado después del botón en móviles */
-          margin-top: 20px;
-        }
       }
     </style>
   </head>
@@ -445,41 +412,45 @@
 
     <h1 class="titulo-principal">Lo que pagarías mensualmente por tu vivienda con INMOALIANZA</h1>
 
-    <div class="mobile-layout">
-      <div class="contenedor-flex">
-        <div class="formulario">
-          <label for="nombres">Nombres:</label>
-          <input type="text" id="nombres" placeholder="Ingrese sus nombres" />
-          <label for="apellidos">Apellidos:</label>
-          <input type="text" id="apellidos" placeholder="Ingrese sus apellidos" />
-          <label for="cedula">Cédula:</label>
-          <input
-            type="text"
-            id="cedula"
-            placeholder="Ingrese su cédula"
-            maxlength="10"
-          />
-          <div id="cedula-error" class="error-message"></div>
+    <div class="contenedor-principal">
+      <div class="formulario">
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" placeholder="Ingrese sus nombres" />
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" placeholder="Ingrese sus apellidos" />
+        <label for="cedula">Cédula:</label>
+        <input
+          type="text"
+          id="cedula"
+          placeholder="Ingrese su cédula"
+          maxlength="10"
+        />
+        <div id="cedula-error" class="error-message"></div>
 
-          <label for="monto">Valor de la propiedad:</label>
-          <select id="monto">
-            <option value="20000">20,000</option>
-            <option value="30000">30,000</option>
-            <option value="40000">40,000</option>
-            <option value="50000">50,000</option>
-            <option value="60000">60,000</option>
-            <option value="70000">70,000</option>
-            <option value="80000">80,000</option>
-            <option value="90000">90,000</option>
-            <option value="100000">100,000</option>
-          </select>
+        <label for="monto">Valor de la propiedad:</label>
+        <select id="monto">
+          <option value="20000">20,000</option>
+          <option value="30000">30,000</option>
+          <option value="40000">40,000</option>
+          <option value="50000">50,000</option>
+          <option value="60000">60,000</option>
+          <option value="70000">70,000</option>
+          <option value="80000">80,000</option>
+          <option value="90000">90,000</option>
+          <option value="100000">100,000</option>
+        </select>
 
-          <label for="plazo">Plazo (años):</label>
-          <select id="plazo">
-            <option value="5">5 Años/60 meses</option>
-            <option value="10">10 Años/ 120 meses</option>
-            <option value="15">15 Años/ 180 meses</option>
-          </select>
+        <label for="plazo">Plazo (años):</label>
+        <select id="plazo">
+          <option value="5">5 Años/60 meses</option>
+          <option value="10">10 Años/ 120 meses</option>
+          <option value="15">15 Años/ 180 meses</option>
+        </select>
+      </div>
+
+      <div class="resultado-container">
+        <div class="boton-container">
+          <button onclick="simular()">Calcular</button>
         </div>
 
         <div class="resultado" id="resultado">
@@ -511,10 +482,6 @@
             <div class="entrada-valor" id="valorEntrada"></div>
           </div>
         </div>
-      </div>
-
-      <div class="boton-container">
-        <button onclick="simular()">Calcular</button>
       </div>
     </div>
 
@@ -692,6 +659,9 @@
         document.getElementById("cuotaMensual").textContent = formatoNumero(cuota.toFixed(2));
 
         const resultado = document.getElementById("resultado");
+        const resultadoContainer = document.querySelector(".resultado-container");
+        
+        resultadoContainer.classList.add("has-content");
         resultado.classList.remove("show");
         void resultado.offsetWidth;
         resultado.classList.add("show");
