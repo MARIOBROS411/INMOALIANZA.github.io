@@ -1,963 +1,300 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inmoalianza – EL MEJOR ALIADO AL MOMENTO DE ADQUIRIR TU VIVIENDA</title>
-    <link
-      rel="icon"
-      href="https://inmoalianza.ec/wp-content/uploads/2023/06/cropped-Flechas-32x32.png"
-      type="image/png"
-    />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* Variables de colores y estilos */
-        :root {
-            --color-primary: #093a56;
-            --color-secondary: #f99444;
-            --color-accent: #2c3e50;
-            --color-light: #f8f9fa;
-            --color-dark: #343a40;
-            --color-text: #333333;
-            --color-white: #ffffff;
-            --border-radius: 12px;
-            --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-        
-        /* Reset y estilos generales */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
-            font-family: 'Montserrat', 'Open Sans', sans-serif;
-            color: var(--color-text);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-color: #f9f9f9;
-        }
-        
-        /* Eliminar espacio blanco superior */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-        }
-        
-        .elementor-heading-title {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            line-height: 1.3;
-            margin-bottom: 15px;
-        }
-        
-        .elementor-widget-text-editor p {
-            margin-bottom: 15px;
-            font-size: 16px;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        /* Mejora de botones */
-        .elementor-button {
-            border-radius: 50px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 14px 32px;
-            transition: var(--transition);
-            border: none;
-            display: inline-block;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .elementor-button.elementor-size-sm {
-            padding: 12px 28px;
-            font-size: 14px;
-        }
-        
-        .elementor-button-link {
-            background-color: var(--color-secondary);
-            color: var(--color-white);
-        }
-        
-        .elementor-button-link:hover {
-            background-color: var(--color-primary);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(249, 148, 68, 0.3);
-        }
-        
-        /* Mejora de secciones */
-        .elementor-section {
-            padding: 80px 0;
-        }
-        
-        .elementor-section-boxed > .elementor-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* Hero section mejorada */
-        .hero-section {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            background: linear-gradient(to right, rgba(9, 58, 86, 0.85) 0%, rgba(9, 58, 86, 0.7) 100%), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80');
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .hero-section .elementor-heading-title {
-            font-size: 3.5rem;
-            color: var(--color-white);
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .hero-section .elementor-heading-title strong {
-            color: var(--color-secondary);
-        }
-        .hero-section p {
-    font-size: 22px;           /* Aumenta el tamaño */
-    color: var(--color-white); /* Blanco para mejor contraste */
-    font-weight: 500;          /* Un poco más grueso */
-    line-height: 1.6;          /* Más espaciado */
-    text-shadow: 0 1px 4px rgba(0,0,0,0.3); /* Mejor legibilidad */
-}
-        
-        /* Header mejorado - REDUCIDO */
-        header {
-            background: var(--color-primary);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 10px 0; /* Reducido de 15px */
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        header .elementor-image img {
-            max-height: 35px; /* Reducido de 50px */
-            width: auto;
-        }
-        
-        /* Ajustar contenido para header fijo */
-        main {
-            margin-top: 60px; /* Reducido de 80px */
-        }
-        
-        /* Mejora de tarjetas de servicios */
-        .service-card {
-            background: var(--color-white);
-            border-radius: var(--border-radius);
-            padding: 30px 25px;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-        
-        .service-card .elementor-widget-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .service-card .elementor-button-wrapper {
-            margin-top: auto;
-        }
-        
-        /* Mejora de iconos */
-        .elementor-icon {
-            color: var(--color-secondary);
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        /* Mejora de imágenes */
-        .elementor-widget-image img {
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .elementor-widget-image img:hover {
-            transform: scale(1.03);
-            box-shadow: var(--box-shadow);
-        }
-        .regulation-container {
-    display: flex;
-    flex-wrap: wrap;       /* Se acomodan en varias filas si no caben */
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center;     /* Centra verticalmente si el alto del padre lo permite */
-    margin: 20px auto;       /* Auto en los lados para centrar el bloque */
-    max-width: 1000px;       /* Opcional: límite de ancho */ }
-    
-        /* Mejora de la sección de regulaciones */
-       .regulation-card {
-    background: var(--color-white);
-    border: 2px solid var(--color-secondary);
-    border-radius: 15px;
-    padding: 25px 15px;
-    width: 180px;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    box-shadow: 0 5px 15px rgba(249, 148, 68, 0.1);
-    transition: var(--transition);
-    margin: 10px;
-}
-        
-        .regulation-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(249, 148, 68, 0.2);
-            border-color: #e07d2e;
-        }
-        
-        /* Footer mejorado */
-        footer {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            padding: 60px 0 30px;
-            text-align: center;
-        }
-        
-        footer .elementor-widget-text-editor p {
-            color: var(--color-light);
-            font-size: 18px;
-            max-width: 700px;
-            margin: 0 auto 25px;
-        }
-        
-        footer .elementor-button-link {
-            background-color: transparent;
-            border: 2px solid var(--color-secondary);
-        }
-        
-        footer .elementor-button-link:hover {
-            background-color: var(--color-secondary);
-        }
-        
-        /* Logo en footer mejorado */
-        .footer-logo {
-            filter: brightness(0) invert(1);
-            max-width: 250px;
-            margin: 0 auto 20px;
-            display: block;
-        }
-        
-        /* Redes sociales flotantes mejoradas */
-        .social-floating {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .social-floating a {
-            margin: 8px;
-            background: var(--color-white);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            transition: var(--transition);
-        }
-        
-        .social-floating a:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            background: var(--color-secondary);
-        }
-        
-        .social-floating a:hover i {
-            color: white;
-        }
-        
-        .social-floating i {
-            font-size: 24px;
-            color: var(--color-primary);
-            transition: var(--transition);
-        }
-        
-        /* Animaciones mejoradas */
-        .elementor-animation-shrink:hover {
-            transform: scale(0.95);
-        }
-        
-        .elementor-animation-push:hover {
-            animation: push 0.3s linear 1;
-        }
-        
-        @keyframes push {
-            50% {
-                transform: scale(0.9);
-            }
-        }
-        
-        .elementor-animation-bob:hover {
-            animation: bob 1s ease-in-out infinite;
-        }
-        
-        @keyframes bob {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-        
-        /* Mejoras responsivas */
-        @media (max-width: 1024px) {
-            .hero-section .elementor-heading-title {
-                font-size: 2.8rem;
-            }
-            
-            .elementor-section {
-                padding: 70px 0;
-            }
-        }
-        
-        @media (max-width: 767px) {
-            .elementor-section {
-                padding: 50px 0;
-            }
-            
-            .hero-section {
-                min-height: 80vh;
-                text-align: center;
-            }
-            
-            .hero-section .elementor-heading-title {
-                font-size: 2.2rem;
-            }
-            
-            .service-card {
-                margin-bottom: 25px;
-            }
-            
-            .social-floating {
-                bottom: 10px;
-                right: 10px;
-            }
-            
-            .social-floating a {
-                width: 44px;
-                height: 44px;
-                margin: 5px;
-            }
-            
-            .social-floating i {
-                font-size: 20px;
-            }
-            
-            .regulation-card {
-                width: 160px;
-                min-height: 180px;
-                margin-bottom: 15px;
-            }
-            
-            header .elementor-image img {
-                max-height: 30px; /* Reducido de 40px */
-            }
-            
-            main {
-                margin-top: 50px; /* Reducido de 70px */
-            }
-        }
-        
-        /* Efectos de aparición */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Mejora específica para el carrusel */
-        .carousel-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-        
-        .carousel-container .elementor-widget {
-            flex: 1;
-            min-width: 300px;
-            max-width: 500px;
-        }
-        
-        /* Estilos específicos para secciones */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-            position: relative;
-        }
-        
-        .section-title:after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--color-secondary);
-            margin: 15px auto 0;
-            border-radius: 2px;
-        }
-        
-        .highlight {
-            color: var(--color-secondary);
-        }
-        
-        .stats-section {
-            background: var(--color-primary);
-            color: white;
-            padding: 60px 0;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--color-secondary);
-        }
-        
-        .stat-text {
-            font-size: 1.2rem;
-        }
-        
-        .bg-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23093a56' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-        }
-        
-        /* Garantías Section (reemplaza testimonios) */
-        .guarantees-section {
-            background: var(--color-light);
-            padding: 80px 0;
-        }
-        
-        .guarantee-item {
-            text-align: center;
-            padding: 30px;
-        }
-        
-        .guarantee-icon {
-            font-size: 50px;
-            color: var(--color-secondary);
-            margin-bottom: 20px;
-        }
-        
-        .guarantee-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--color-primary);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asignación de Citas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: 'Montserrat', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #191C1F;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background: #1a2a6c;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Secciones */
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 800;
+      color: #1a2a6c;
+      margin-bottom: 40px;
+    }
+
+    /* Agenda */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .day-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+
+    .day-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .day-card h3 {
+      text-align: center;
+      color: #1a2a6c;
+      margin-bottom: 10px;
+    }
+
+    .time-slot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f0f2f5;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin: 6px 0;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .time-slot:hover { background: #e7eaf0; }
+
+    .time-slot.libre { color: green; }
+    .time-slot.ocupado { color: red; }
+    .time-slot.no-disponible { color: gray; text-decoration: line-through; }
+
+    /* Formulario requisitos */
+    .requisitos-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .requisitos-form label {
+      font-weight: 600;
+      color: #1a2a6c;
+    }
+
+    .requisitos-form input[type="file"] {
+      background: #f0f2f5;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #6c63ff;
+      color: #fff;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(108,99,255,0.3);
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .cta-button:hover {
+      background: #5848e5;
+      transform: translateY(-2px);
+    }
+
+    #mensaje-enviado {
+      text-align: center;
+      color: green;
+      font-weight: 600;
+      margin-top: 20px;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      background: #191C1F;
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 50px;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #6c63ff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .section-title { font-size: 28px; }
+    }
+  </style>
 </head>
 
 <body>
+  <header>
+    Asignación de Citas - Inmoalianza
+  </header>
 
-<!-- Redes Sociales Flotantes -->
-<div class="social-floating">
-    <a href="https://www.instagram.com/inmoalianza.ec/" target="_blank">
-        <i class="fab fa-instagram"></i>
-    </a>
-    <a href="https://www.tiktok.com/@hogarfacilsc?lang=es-419"_blank">
-        <i class="fab fa-tiktok"></i>
-    </a>
-</div>
+  <!-- Sección de Citas -->
+  <section class="section" id="citas">
+    <div class="container">
+      <h2 class="section-title">📅 Selecciona tu Cita</h2>
+      <p style="text-align:center; max-width:700px; margin:0 auto 30px;">
+        Selecciona un día y una hora disponible para tu cita.<br>
+        <strong>Lunes a Viernes:</strong> 10:00 AM – 5:00 PM |
+        <strong>Sábado:</strong> 10:00 AM – 3:00 PM |
+        <strong>Domingo:</strong> 10:00 AM – 12:00 PM
+      </p>
 
-<header>
-    <div class="elementor-container elementor-column-gap-no">
-        <div class="elementor-column elementor-col-33 elementor-top-column">
-            <div class="elementor-widget-wrap elementor-element-populated">
-                <div class="elementor-widget elementor-widget-image">
-                    <div class="elementor-widget-container">
-                        <img width="1366" height="167" src="https://inmoalianza.ec/wp-content/uploads/2024/06/InmoAlianza-LogoMesa-de-trabajo-1.png" alt="InmoAlianza Logo" />
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div id="agenda" class="agenda-grid"></div>
     </div>
-</header>
+  </section>
 
-<main id="content">
-    <!-- HERO SECTION -->
-    <section class="hero-section">
-        <div class="elementor-container elementor-column-gap-no">
-            <div class="elementor-column elementor-col-100 elementor-top-column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div class="elementor-container elementor-column-gap-no">
-                        <div class="elementor-column elementor-col-50 elementor-inner-column">
-                            <div class="elementor-widget-wrap elementor-element-populated">
-                                <div class="elementor-widget elementor-widget-heading">
-                                    <div class="elementor-widget-container">
-                                        <h2 class="elementor-heading-title elementor-size-default">TU PRIMERA</h2>
-                                    </div>
-                                </div>
-                                <div class="elementor-widget elementor-widget-heading">
-                                    <div class="elementor-widget-container">
-                                        <h2 class="elementor-heading-title elementor-size-default">Casa, Apartamento, Construccion, Terreno</h2>
-                                    </div>
-                                </div>
-                                <div class="elementor-widget elementor-widget-heading">
-                                    <div class="elementor-widget-container">
-                                        <h2 class="elementor-heading-title elementor-size-default">desde <strong>$298 mensuales</strong></h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="elementor-column elementor-col-50 elementor-inner-column">
-                            <div class="elementor-widget-wrap elementor-element-populated">
-                                <div class="elementor-widget elementor-widget-text-editor">
-                                    <div class="elementor-widget-container">
-                                        <p>Creemos que <strong>todos merecen</strong> tener un lugar al que llamar MI HOGAR.</p>
-                                    </div>
-                                </div>
-                                <div class="elementor-widget elementor-widget-button">
-                                    <div class="elementor-widget-container">
-                                        <div class="elementor-button-wrapper">
-                                            <a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="https://wa.link/4lw37s">
-                                                <span class="elementor-button-content-wrapper">
-                                                    <span class="elementor-button-icon">
-                                                        <i class="fas fa-arrow-right"></i>
-                                                    </span>
-                                                    <span class="elementor-button-text">Quiero una asesoría GRATIS</span>
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- Sección de Requisitos -->
+  <section class="section" id="requisitos">
+    <div class="container">
+      <h2 class="section-title">📄 Requisitos para el Análisis</h2>
+      <p style="text-align:center; margin-bottom:25px;">Adjunta los siguientes documentos:</p>
 
-    <!-- SERVICIOS SECTION -->
-    <section class="elementor-section bg-pattern">
-        <div class="elementor-container">
-            <h2 class="section-title">De sueño <span class="highlight">a REALIDAD</span> con nosotros</h2>
-            
-            <div class="carousel-container">
-                <div class="elementor-widget elementor-widget-image">
-                    <div class="elementor-widget-container">
-                        <a href="https://wa.link/4lw37s">
-                            <img width="800" height="114" src="https://inmoalianza.ec/wp-content/uploads/2024/12/Carrousel-Mesa-de-trabajo-3-1024x146.png" alt="Carrousel Inmoalianza" />
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="elementor-widget elementor-widget-image">
-                    <div class="elementor-widget-container">
-                        <a href="https://wa.link/a6huho">
-                            <img width="800" height="110" src="https://inmoalianza.ec/wp-content/uploads/2024/12/Carrousel-Mesa-de-trabajo-1-1024x141.png" alt="Carrousel Inmoalianza" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="elementor-container elementor-column-gap-no" style="margin-top: 50px;">
-                <div class="elementor-column elementor-col-50 elementor-inner-column">
-                    <div class="elementor-widget-wrap elementor-element-populated">
-                        <div class="elementor-widget elementor-widget-heading">
-                            <div class="elementor-widget-container">
-                                <h2 class="elementor-heading-title elementor-size-default">Una alternativa para <span class="highlight">Todas las circunstancias.</span></h2>
-                            </div>
-                        </div>
-                        <div class="elementor-widget elementor-widget-text-editor">
-                            <div class="elementor-widget-container">
-                                <p>En Inmoalianza <strong>TODOS tenemos casa, departamento, terrenos, remodelación.</strong> Te ofrecemos soluciones para la compra cualquier casa en venta con la tasa de 2,30% anual, <strong>la más baja del mercado</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="elementor-column elementor-col-50 elementor-inner-column">
-                    <div class="elementor-widget-wrap elementor-element-populated">
-                        <div class="elementor-widget elementor-widget-icon">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-icon-wrapper">
-                                    <div class="elementor-icon">
-                                        <i class="fas fa-medal" style="font-size: 48px; color: #f99444;"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="elementor-widget elementor-widget-heading">
-                            <div class="elementor-widget-container">
-                                <h2 class="elementor-heading-title elementor-size-default">Tus <strong>aliados</strong></h2>
-                            </div>
-                        </div>
-                        <div class="elementor-widget elementor-widget-text-editor">
-                            <div class="elementor-widget-container">
-                                <p><strong>Transparencia, confianza y excelencia</strong>: la esencia de nuestra agencia. Establecemos <strong>relaciones sólidas</strong> con diálogo abierto y honesto, brindando asesoramiento experto en cada paso del <strong>proceso de compra de tu vivienda.</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      <form id="formRequisitos" class="requisitos-form">
+        <label>📘 Cédula o Pasaporte:</label>
+        <input type="file" required>
 
-    <!-- SERVICIOS DETALLADOS -->
-    <section class="elementor-section">
-        <div class="elementor-container">
-            <h2 class="section-title">Nuestros <span class="highlight">Servicios</span></h2>
-            
-            <div class="services-grid">
-                <!-- Casa Propia -->
-                <div class="service-card fade-in">
-                    <div class="elementor-widget elementor-widget-heading">
-                        <div class="elementor-widget-container">
-                            <h2 class="elementor-heading-title elementor-size-default">Mi <span class="highlight">casa</span> propia</h2>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-text-editor">
-                        <div class="elementor-widget-container">
-                            <p>Te ofrecemos la oportunidad de <strong>acceder a una vivienda</strong> que se adapta a tus necesidades, con <strong>opciones flexibles</strong> y asesoría personalizada en todo el proceso.</p>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-image">
-                        <div class="elementor-widget-container">
-                            <img width="800" height="450" src="https://inmoalianza.ec/wp-content/uploads/2024/12/Fotos-Web-ServiciosMesa-de-trabajo-1-1024x576.png" alt="Casa propia" />
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-button">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-button-wrapper">
-                                <a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="https://wa.link/4lw37s">
-                                    <span class="elementor-button-content-wrapper">
-                                        <span class="elementor-button-icon">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                                        <span class="elementor-button-text">Mas informacion</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Departamento -->
-                <div class="service-card fade-in">
-                    <div class="elementor-widget elementor-widget-heading">
-                        <div class="elementor-widget-container">
-                            <h2 class="elementor-heading-title elementor-size-default">Mi <span class="highlight">depar</span> propio</h2>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-text-editor">
-                        <div class="elementor-widget-container">
-                            <p>Te ofrecemos la oportunidad de <strong>adquirir un departamento</strong> moderno, funcional y a tu medida, <strong>con opciones accesibles</strong> y un proceso ágil y sin complicaciones.</p>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-image">
-                        <div class="elementor-widget-container">
-                            <img width="800" height="450" src="https://inmoalianza.ec/wp-content/uploads/2024/12/Fotos-Web-ServiciosMesa-de-trabajo-1-copia-1024x576.png" alt="Departamento propio" />
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-button">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-button-wrapper">
-                                <a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="https://wa.link/tbt751">
-                                    <span class="elementor-button-content-wrapper">
-                                        <span class="elementor-button-icon">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                                        <span class="elementor-button-text">Mas informacion</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Terreno -->
-                <div class="service-card fade-in">
-                    <div class="elementor-widget elementor-widget-heading">
-                        <div class="elementor-widget-container">
-                            <h2 class="elementor-heading-title elementor-size-default">Mi <span class="highlight">terreno</span> propio</h2>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-text-editor">
-                        <div class="elementor-widget-container">
-                            <p>Tener un espacio tuyo, <strong>donde puedas construir la casa, negocio o proyecto</strong> que siempre has querido. Te ofrecemos terrenos en <strong>ubicaciones estratégicas, accesibles y flexibles</strong>.</p>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-image">
-                        <div class="elementor-widget-container">
-                            <img width="800" height="450" src="https://inmoalianza.ec/wp-content/uploads/2024/12/Fotos-Web-ServiciosMesa-de-trabajo-1-copia-3-1024x576.png" alt="Terreno propio" />
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-button">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-button-wrapper">
-                                <a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="https://wa.link/a6huho">
-                                    <span class="elementor-button-content-wrapper">
-                                        <span class="elementor-button-icon">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                                        <span class="elementor-button-text">Mas informacion</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Construcción -->
-                <div class="service-card fade-in">
-                    <div class="elementor-widget elementor-widget-heading">
-                        <div class="elementor-widget-container">
-                            <h2 class="elementor-heading-title elementor-size-default">Mi <span class="highlight">construcción</span></h2>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-text-editor">
-                        <div class="elementor-widget-container">
-                            <p>Realizamos <strong>proyectos de construcción</strong> adaptados a tus necesidades y presupuesto, con materiales de calidad y cumpliendo los plazos establecidos.</p>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-image">
-                        <div class="elementor-widget-container">
-                            <img width="800" height="450" src="https://inmoalianza.ec/wp-content/uploads/2024/12/Fotos-Web-ServiciosMesa-de-trabajo-1-copia-4-1024x576.png" alt="Construcción" />
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-button">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-button-wrapper">
-                                <a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="https://wa.link/w3j8er">
-                                    <span class="elementor-button-content-wrapper">
-                                        <span class="elementor-button-icon">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                                        <span class="elementor-button-text">Mas informacion</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Remodelación -->
-                <div class="service-card fade-in">
-                    <div class="elementor-widget elementor-widget-heading">
-                        <div class="elementor-widget-container">
-                            <h2 class="elementor-heading-title elementor-size-default">Mi <span class="highlight">remodelación</span></h2>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-text-editor">
-                        <div class="elementor-widget-container">
-                            <p><strong>Transformamos tus espacios</strong> con diseños modernos y funcionales, optimizando cada área de tu hogar para que se adapte a tu estilo de vida.</p>
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-image">
-                        <div class="elementor-widget-container">
-                            <img width="800" height="450" src="https://inmoalianza.ec/wp-content/uploads/2024/12/Fotos-Web-ServiciosMesa-de-trabajo-1-copia-5-1024x576.png" alt="Remodelación" />
-                        </div>
-                    </div>
-                    <div class="elementor-widget elementor-widget-button">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-button-wrapper">
-                                <a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-shrink" href="https://wa.link/q7m9we">
-                                    <span class="elementor-button-content-wrapper">
-                                        <span class="elementor-button-icon">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                                        <span class="elementor-button-text">Mas informacion</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <label>👥 2 Referencias Personales:</label>
+        <input type="file" multiple required>
 
-    <!-- ESTADÍSTICAS SECTION -->
-    <section class="stats-section">
-        <div class="elementor-container">
-            <div class="elementor-row">
-                <div class="elementor-column elementor-col-25">
-                    <div class="stat-item">
-                        <div class="stat-number">500+</div>
-                        <div class="stat-text">Clientes Satisfechos</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <label>🗳️ Papeleta de Votación:</label>
+        <input type="file" required>
 
-    <!-- REGULACIONES SECTION -->
-<section class="elementor-section bg-pattern">
-    <div class="elementor-container">
-        <h2 class="section-title">Regulaciones <span class="highlight">Inmobiliarias</span></h2>
-        
-        <div class="regulation-container">
-    <!-- Regulación SUPERCIA -->
-    <a href="SUPERCIA.pdf" class="regulation-card fade-in" target="_blank">
-        <div class="elementor-widget elementor-widget-image">
-            <div class="elementor-widget-container">
-                <img width="150" height="150" src="SUPERCIA.png" alt="Regulación SUPERCIA" />
-            </div>
-        </div>
-        <div class="regulation-name">SUPERCIA</div>
-    </a>
-    
-    <!-- Regulación UAFE -->
-    <a href="UAFE.pdf" class="regulation-card fade-in" target="_blank">
-        <div class="elementor-widget elementor-widget-image">
-            <div class="elementor-widget-container">
-                <img width="150" height="150" src="UAFE.jpg" alt="Regulación UAFE" />
-            </div>
-        </div>
-        <div class="regulation-name">UAFE</div>
-    </a>
-</div>
+        <label>💡 Planilla de Servicio Básico (agua o luz):</label>
+        <input type="file" required>
 
-</section>
-    <!-- GARANTÍAS SECTION -->
-    <section class="guarantees-section">
-        <div class="elementor-container">
-            <h2 class="section-title">Nuestras <span class="highlight">Garantías</span></h2>
-            
-            <div class="elementor-container elementor-column-gap-default">
-                <div class="elementor-column elementor-col-33">
-                    <div class="guarantee-item fade-in">
-                        <div class="guarantee-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3 class="guarantee-title">Seguridad Jurídica</h3>
-                        <p>Todos nuestros procesos están respaldados legalmente, garantizando transparencia y protección en cada transacción.</p>
-                    </div>
-                </div>
-                
-                <div class="elementor-column elementor-col-33">
-                    <div class="guarantee-item fade-in">
-                        <div class="guarantee-icon">
-                            <i class="fas fa-hand-holding-usd"></i>
-                        </div>
-                        <h3 class="guarantee-title">Mejores Tasas</h3>
-                        <p>Ofrecemos las tasas de interés más competitivas del mercado, con opciones flexibles de pago adaptadas a tu capacidad económica.</p>
-                    </div>
-                </div>
-                
-                <div class="elementor-column elementor-col-33">
-                    <div class="guarantee-item fade-in">
-                        <div class="guarantee-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <h3 class="guarantee-title">Asesoría Personalizada</h3>
-                        <p>Te acompañamos en cada paso del proceso, resolviendo tus dudas y brindándote la mejor opción según tus necesidades.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <label>💼 Roles de Pago, RUC o Estados de Cuenta (recientes):</label>
+        <input type="file" multiple required>
 
-    <!-- FOOTER SECTION -->
-    <footer>
-        <div class="elementor-container">
-            <div class="elementor-widget elementor-widget-image">
-                <div class="elementor-widget-container">
-                    <img width="1366" height="167" src="https://inmoalianza.ec/wp-content/uploads/2024/06/InmoAlianza-LogoMesa-de-trabajo-1.png" alt="InmoAlianza Logo" class="footer-logo" />
-                </div>
-            </div>
-            
-            <div class="elementor-widget elementor-widget-text-editor">
-                <div class="elementor-widget-container">
-                    <p>En Inmoalianza, creemos que todos merecen tener un lugar al que llamar hogar. Nuestra misión es hacer realidad el sueño de la vivienda propia con transparencia, confianza y excelencia.</p>
-                </div>
-            </div>
-            
-            <div class="elementor-widget elementor-widget-button">
-                <div class="elementor-widget-container">
-                    <div class="elementor-button-wrapper">
-                        <a class="elementor-button elementor-button-link elementor-size-sm elementor-animation-push" href="https://wa.link/4lw37s">
-                            <span class="elementor-button-content-wrapper">
-                                <span class="elementor-button-icon">
-                                    <i class="fab fa-whatsapp"></i>
-                                </span>
-                                <span class="elementor-button-text">Contactar por WhatsApp</span>
-                            </span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-</main>
+        <button type="submit" class="cta-button">Enviar para análisis</button>
+      </form>
 
-<script>
-    // Script para animaciones de aparición al hacer scroll
-    document.addEventListener('DOMContentLoaded', function() {
-        const fadeElements = document.querySelectorAll('.fade-in');
-        
-        const fadeInOptions = {
-            threshold: 0.3,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const fadeInObserver = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, fadeInOptions);
-        
-        fadeElements.forEach(element => {
-            fadeInObserver.observe(element);
+      <p id="mensaje-enviado">
+        ✅ Tu solicitud ha sido enviada correctamente.<br>
+        Será analizada en un lapso de <strong>24 a 48 horas</strong>.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2025 Inmoalianza S.A.S Group — Todos los derechos reservados.</div>
+    <div style="margin-top:10px;">
+      <a href="#">Términos</a> |
+      <a href="#">Privacidad</a> |
+      <a href="#">Contacto</a>
+    </div>
+  </footer>
+
+  <script>
+    // Generación automática de horarios
+    const horarios = {
+      "Lunes": [10, 17],
+      "Martes": [10, 17],
+      "Miércoles": [10, 17],
+      "Jueves": [10, 17],
+      "Viernes": [10, 17],
+      "Sábado": [10, 15],
+      "Domingo": [10, 12]
+    };
+
+    const agendaDiv = document.getElementById("agenda");
+
+    Object.keys(horarios).forEach(dia => {
+      const [inicio, fin] = horarios[dia];
+      const card = document.createElement("div");
+      card.className = "day-card";
+
+      const title = document.createElement("h3");
+      title.textContent = dia;
+      card.appendChild(title);
+
+      for (let h = inicio; h <= fin; h++) {
+        const slot = document.createElement("div");
+        slot.className = "time-slot libre";
+        slot.textContent = `${h > 12 ? h - 12 : h}:00 ${h < 12 ? "AM" : "PM"}`;
+        slot.dataset.estado = "libre";
+
+        slot.addEventListener("click", () => {
+          if (slot.dataset.estado === "libre") {
+            slot.dataset.estado = "ocupado";
+            slot.className = "time-slot ocupado";
+          } else if (slot.dataset.estado === "ocupado") {
+            slot.dataset.estado = "no-disponible";
+            slot.className = "time-slot no-disponible";
+          } else {
+            slot.dataset.estado = "libre";
+            slot.className = "time-slot libre";
+          }
         });
-    });
-</script>
 
+        card.appendChild(slot);
+      }
+
+      agendaDiv.appendChild(card);
+    });
+
+    // Envío del formulario de requisitos
+    document.getElementById("formRequisitos").addEventListener("submit", function(e) {
+      e.preventDefault();
+      document.getElementById("mensaje-enviado").style.display = "block";
+      this.reset();
+      window.scrollTo({ top: this.offsetTop, behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
+
+
