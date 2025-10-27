@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificador de Facebook Pixel</title>
+    <title>Verificador de Facebook Pixel - ID: 1560096578769877</title>
     <style>
         * {
             margin: 0;
@@ -37,7 +37,18 @@
         h1 {
             color: #1877F2;
             margin-bottom: 10px;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
+        }
+        
+        .pixel-id {
+            background: #1877F2;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            display: inline-block;
+            margin: 10px 0;
         }
         
         .subtitle {
@@ -228,6 +239,30 @@
             font-family: 'Courier New', monospace;
             overflow-x: auto;
             margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .event-counter {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .counter-item {
+            text-align: center;
+        }
+        
+        .counter-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1877F2;
+        }
+        
+        .counter-label {
+            font-size: 0.8rem;
+            color: #666;
         }
         
         @media (max-width: 768px) {
@@ -240,11 +275,33 @@
             }
         }
     </style>
+    
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        
+        // INICIALIZAR PIXEL CON TU ID
+        fbq('init', '1560096578769877');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none" 
+             src="https://www.facebook.com/tr?id=1560096578769877&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Verificador de Facebook Pixel</h1>
+            <div class="pixel-id">ID: 1560096578769877</div>
             <p class="subtitle">Herramienta para verificar si los eventos del Facebook Pixel se están registrando correctamente</p>
         </header>
         
@@ -265,7 +322,7 @@
                     <div class="play-btn" id="play-video"></div>
                 </div>
                 
-                <button class="btn btn-primary" style="width: 100%;" id="btn-clear">Limpiar Registros</button>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="btn-clear">Limpiar Registros</button>
             </div>
             
             <div class="panel">
@@ -282,8 +339,19 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 15px;">
-                    <button class="btn btn-secondary" id="btn-test-pixel">Probar Pixel Manualmente</button>
+                <div class="event-counter">
+                    <div class="counter-item">
+                        <div class="counter-number" id="total-events">0</div>
+                        <div class="counter-label">Total Eventos</div>
+                    </div>
+                    <div class="counter-item">
+                        <div class="counter-number" id="pixel-events">0</div>
+                        <div class="counter-label">Eventos Pixel</div>
+                    </div>
+                    <div class="counter-item">
+                        <div class="counter-number" id="conversion-events">0</div>
+                        <div class="counter-label">Conversiones</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -291,38 +359,55 @@
         <div class="instructions">
             <h3>Instrucciones de Uso</h3>
             <ol>
-                <li><strong>Agrega este código a tu sitio web</strong> - Inserta este verificador en tu página donde tienes el Facebook Pixel instalado.</li>
+                <li><strong>Este verificador ya incluye tu Pixel</strong> - El código del Pixel con ID 1560096578769877 está integrado.</li>
                 <li><strong>Haz clic en los botones</strong> - Simula las acciones que quieres rastrear (pagos, clics en video, etc.).</li>
                 <li><strong>Verifica los registros</strong> - Observa si los eventos aparecen en el panel de registro.</li>
                 <li><strong>Inspecciona la consola</strong> - Abre las herramientas de desarrollador (F12) y ve a la pestaña "Console" para más detalles.</li>
+                <li><strong>Revisa Facebook Events Manager</strong> - Los eventos deberían aparecer en tu panel de Facebook.</li>
             </ol>
             
             <div class="code-block">
-// Código para verificar eventos manualmente (ya incluido en esta página)
+// Código del Facebook Pixel integrado
+fbq('init', '1560096578769877');
+fbq('track', 'PageView');
+
+// Función para rastrear eventos personalizados
 function trackFacebookEvent(eventName, parameters) {
-    console.log(`[Facebook Pixel Simulator] Evento: ${eventName}`, parameters);
-    
-    // Registrar en la interfaz
+    // Registrar en nuestro verificador
     logEvent(eventName, parameters);
     
-    // Si Facebook Pixel está disponible, enviar el evento real
-    if (typeof fbq !== 'undefined') {
-        fbq('track', eventName, parameters);
-        console.log(`[Facebook Pixel Real] Evento enviado: ${eventName}`);
-    }
+    // Enviar al Facebook Pixel real
+    fbq('track', eventName, parameters);
 }
             </div>
             
-            <p><strong>Nota:</strong> Esta herramienta simula el comportamiento del Facebook Pixel. Para verificar el funcionamiento real, asegúrate de tener el Pixel instalado correctamente en tu sitio.</p>
+            <p><strong>Nota:</strong> Los eventos pueden tardar algunos minutos en aparecer en el Facebook Events Manager. Esta herramienta te muestra en tiempo real si se están enviando correctamente.</p>
         </div>
     </div>
 
     <script>
+        // Contadores de eventos
+        let totalEvents = 0;
+        let pixelEvents = 0;
+        let conversionEvents = 0;
+        
         // Elementos de la interfaz
         const eventLog = document.getElementById('event-log');
         const pixelStatus = document.getElementById('pixel-status');
         const pixelStatusText = document.getElementById('pixel-status-text');
         const currentTimeElement = document.getElementById('current-time');
+        
+        // Elementos de contadores
+        const totalEventsElement = document.getElementById('total-events');
+        const pixelEventsElement = document.getElementById('pixel-events');
+        const conversionEventsElement = document.getElementById('conversion-events');
+        
+        // Actualizar contadores
+        function updateCounters() {
+            totalEventsElement.textContent = totalEvents;
+            pixelEventsElement.textContent = pixelEvents;
+            conversionEventsElement.textContent = conversionEvents;
+        }
         
         // Actualizar hora actual
         function updateCurrentTime() {
@@ -335,6 +420,9 @@ function trackFacebookEvent(eventName, parameters) {
         
         // Función para registrar eventos en el log
         function logEvent(eventName, parameters = {}) {
+            totalEvents++;
+            updateCounters();
+            
             const now = new Date();
             const timeString = now.toLocaleTimeString();
             
@@ -352,35 +440,84 @@ function trackFacebookEvent(eventName, parameters) {
             if (eventLog.children.length > 20) {
                 eventLog.removeChild(eventLog.lastChild);
             }
+            
+            // Scroll al top
+            eventLog.scrollTop = 0;
         }
         
         // Función para verificar si Facebook Pixel está cargado
         function checkPixelStatus() {
-            if (typeof fbq !== 'undefined') {
-                pixelStatus.className = 'status-indicator status-active';
-                pixelStatusText.textContent = 'Facebook Pixel detectado';
-                logEvent('Pixel Status', { status: 'active' });
-            } else {
-                pixelStatus.className = 'status-indicator status-inactive';
-                pixelStatusText.textContent = 'Facebook Pixel no detectado';
-                logEvent('Pixel Status', { status: 'inactive' });
-                
-                // Intentar nuevamente después de 2 segundos
-                setTimeout(checkPixelStatus, 2000);
+            if (typeof fbq !== 'undefined' && typeof fbq.getState === 'function') {
+                try {
+                    const state = fbq.getState();
+                    if (state && state.pixels && state.pixels['1560096578769877']) {
+                        pixelStatus.className = 'status-indicator status-active';
+                        pixelStatusText.textContent = 'Facebook Pixel ACTIVO (ID: 1560096578769877)';
+                        logEvent('Pixel Status', { 
+                            status: 'active', 
+                            pixelId: '1560096578769877' 
+                        });
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Error checking pixel state:', e);
+                }
             }
+            
+            pixelStatus.className = 'status-indicator status-inactive';
+            pixelStatusText.textContent = 'Facebook Pixel NO DETECTADO';
+            logEvent('Pixel Status', { 
+                status: 'inactive', 
+                pixelId: '1560096578769877' 
+            });
+            
+            // Intentar nuevamente después de 2 segundos
+            setTimeout(checkPixelStatus, 2000);
         }
         
-        // Función para simular eventos de Facebook Pixel
+        // Función para enviar eventos al Facebook Pixel
         function trackFacebookEvent(eventName, parameters = {}) {
-            console.log(`[Facebook Pixel Simulator] Evento: ${eventName}`, parameters);
+            console.log(`[Facebook Pixel] Enviando evento: ${eventName}`, parameters);
             
-            // Registrar en la interfaz
+            // Registrar en nuestra interfaz
             logEvent(eventName, parameters);
+            pixelEvents++;
+            updateCounters();
+            
+            // Contar como conversión si es un evento de compra o lead
+            if (eventName === 'Purchase' || eventName === 'Lead' || eventName === 'InitiateCheckout') {
+                conversionEvents++;
+                updateCounters();
+            }
             
             // Si Facebook Pixel está disponible, enviar el evento real
             if (typeof fbq !== 'undefined') {
-                fbq('track', eventName, parameters);
-                console.log(`[Facebook Pixel Real] Evento enviado: ${eventName}`);
+                try {
+                    fbq('track', eventName, parameters);
+                    console.log(`✅ Evento enviado correctamente a Facebook: ${eventName}`);
+                    
+                    // Registrar confirmación
+                    setTimeout(() => {
+                        const now = new Date();
+                        const timeString = now.toLocaleTimeString();
+                        
+                        const confirmEntry = document.createElement('div');
+                        confirmEntry.className = 'log-entry';
+                        confirmEntry.style.borderLeftColor = '#28a745';
+                        confirmEntry.innerHTML = `
+                            <div class="log-time">${timeString}</div>
+                            <div class="log-event" style="color: #28a745;">✅ ${eventName} CONFIRMADO</div>
+                            <div>Evento recibido por Facebook Pixel</div>
+                        `;
+                        
+                        eventLog.prepend(confirmEntry);
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('❌ Error enviando evento a Facebook:', error);
+                }
+            } else {
+                console.error('❌ Facebook Pixel no disponible');
             }
         }
         
@@ -388,6 +525,7 @@ function trackFacebookEvent(eventName, parameters) {
         document.getElementById('btn-payment').addEventListener('click', function() {
             trackFacebookEvent('InitiateCheckout', {
                 content_name: 'Producto de Prueba',
+                content_category: 'Ecommerce',
                 currency: 'USD',
                 value: 49.99
             });
@@ -396,13 +534,17 @@ function trackFacebookEvent(eventName, parameters) {
         document.getElementById('btn-checkout').addEventListener('click', function() {
             trackFacebookEvent('Purchase', {
                 currency: 'USD',
-                value: 49.99
+                value: 49.99,
+                content_ids: ['prod123'],
+                contents: [{id: 'prod123', quantity: 1}]
             });
         });
         
         document.getElementById('btn-lead').addEventListener('click', function() {
             trackFacebookEvent('Lead', {
-                content_name: 'Formulario de contacto'
+                content_name: 'Formulario de contacto',
+                value: 0,
+                currency: 'USD'
             });
         });
         
@@ -415,12 +557,18 @@ function trackFacebookEvent(eventName, parameters) {
         document.getElementById('play-video').addEventListener('click', function() {
             trackFacebookEvent('ViewContent', {
                 content_name: 'Video promocional',
-                content_type: 'video'
+                content_type: 'video',
+                content_id: 'video123'
             });
         });
         
         document.getElementById('btn-clear').addEventListener('click', function() {
             eventLog.innerHTML = '';
+            totalEvents = 0;
+            pixelEvents = 0;
+            conversionEvents = 0;
+            updateCounters();
+            
             const now = new Date();
             const timeString = now.toLocaleTimeString();
             
@@ -434,66 +582,20 @@ function trackFacebookEvent(eventName, parameters) {
             eventLog.prepend(logEntry);
         });
         
-        document.getElementById('btn-test-pixel').addEventListener('click', function() {
-            if (typeof fbq !== 'undefined') {
-                // Probar el PageView
-                fbq('track', 'PageView');
-                logEvent('PageView (test)', { testing: true });
-                alert('PageView enviado correctamente al Facebook Pixel');
-            } else {
-                alert('Facebook Pixel no detectado. Asegúrate de tenerlo instalado correctamente.');
-            }
-        });
-        
         // Verificar el estado del Pixel al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
-            checkPixelStatus();
+            // Esperar a que el Pixel se cargue
+            setTimeout(checkPixelStatus, 1000);
             
-            // También verificar si hay algún botón de pago en la página y rastrearlos
-            const paymentButtons = document.querySelectorAll(`
-                .ls-button-ls-rCSwm3zPm8Mt2cPtnL1SN9,
-                .ls-button-ls-usEPYMtiU8iQrtvSn9rzr9,
-                .ls-button-ls-sVtAQoAyfAmdFMgDAbQSm9,
-                .ls-button-ls-8zAQprLs5W3NkLGkELqeKe,
-                .ls-button-ls-ekJdYp8Bkkt5kaUR11eMkC,
-                .ls-button-ls-pLKgLk4ShsB4ADnLuxUh5Q
-            `);
-            
-            paymentButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    trackFacebookEvent('InitiateCheckout', {
-                        content_name: 'Producto o servicio',
-                        currency: 'USD',
-                        value: 0
-                    });
-                });
+            // Mensaje inicial
+            logEvent('Sistema de verificación iniciado', { 
+                version: '2.0',
+                pixelId: '1560096578769877'
             });
-            
-            // Rastrear clic en el video de tu página
-            const videoElement = document.querySelector('.ls-video-ls-oroLxnDvRRg3dfYSphLkY4');
-            if (videoElement) {
-                videoElement.addEventListener('click', function() {
-                    trackFacebookEvent('ViewContent', {
-                        content_name: 'Video promocional',
-                        content_type: 'video'
-                    });
-                });
-            }
-            
-            // También rastrear clic en el botón de reproducción si existe
-            const playButton = document.querySelector('.play-btn');
-            if (playButton) {
-                playButton.addEventListener('click', function() {
-                    trackFacebookEvent('ViewContent', {
-                        content_name: 'Video promocional',
-                        content_type: 'video'
-                    });
-                });
-            }
         });
         
-        // Mensaje inicial
-        logEvent('Sistema de verificación iniciado', { version: '1.0' });
+        // También puedes usar esta función en tu sitio web real
+        window.trackFacebookEvent = trackFacebookEvent;
     </script>
 </body>
 </html>
