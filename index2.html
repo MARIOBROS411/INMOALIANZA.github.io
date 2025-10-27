@@ -1,300 +1,139 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asignación de Citas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      font-family: 'Montserrat', sans-serif;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background-color: #f5f7fa;
-      color: #191C1F;
-      line-height: 1.6;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* Header */
-    header {
-      background: #1a2a6c;
-      color: #fff;
-      padding: 20px 0;
-      text-align: center;
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    /* Secciones */
-    .section {
-      padding: 80px 0;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 36px;
-      font-weight: 800;
-      color: #1a2a6c;
-      margin-bottom: 40px;
-    }
-
-    /* Agenda */
-    .agenda-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 20px;
-    }
-
-    .day-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      transition: transform 0.3s;
-    }
-
-    .day-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .day-card h3 {
-      text-align: center;
-      color: #1a2a6c;
-      margin-bottom: 10px;
-    }
-
-    .time-slot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f0f2f5;
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin: 6px 0;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .time-slot:hover { background: #e7eaf0; }
-
-    .time-slot.libre { color: green; }
-    .time-slot.ocupado { color: red; }
-    .time-slot.no-disponible { color: gray; text-decoration: line-through; }
-
-    /* Formulario requisitos */
-    .requisitos-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 400px;
-      margin: 0 auto;
-      text-align: left;
-    }
-
-    .requisitos-form label {
-      font-weight: 600;
-      color: #1a2a6c;
-    }
-
-    .requisitos-form input[type="file"] {
-      background: #f0f2f5;
-      padding: 10px;
-      border-radius: 6px;
-    }
-
-    .cta-button {
-      display: inline-block;
-      background: #6c63ff;
-      color: #fff;
-      padding: 14px 30px;
-      border-radius: 50px;
-      font-size: 16px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(108,99,255,0.3);
-      margin-top: 15px;
-      text-align: center;
-    }
-
-    .cta-button:hover {
-      background: #5848e5;
-      transform: translateY(-2px);
-    }
-
-    #mensaje-enviado {
-      text-align: center;
-      color: green;
-      font-weight: 600;
-      margin-top: 20px;
-      display: none;
-    }
-
-    /* Footer */
-    footer {
-      background: #191C1F;
-      color: white;
-      text-align: center;
-      padding: 40px 20px;
-      margin-top: 50px;
-      font-size: 14px;
-    }
-
-    footer a {
-      color: #6c63ff;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-      .section-title { font-size: 28px; }
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    Asignación de Citas - Inmoalianza
-  </header>
-
-  <!-- Sección de Citas -->
-  <section class="section" id="citas">
-    <div class="container">
-      <h2 class="section-title">📅 Selecciona tu Cita</h2>
-      <p style="text-align:center; max-width:700px; margin:0 auto 30px;">
-        Selecciona un día y una hora disponible para tu cita.<br>
-        <strong>Lunes a Viernes:</strong> 10:00 AM – 5:00 PM |
-        <strong>Sábado:</strong> 10:00 AM – 3:00 PM |
-        <strong>Domingo:</strong> 10:00 AM – 12:00 PM
-      </p>
-
-      <div id="agenda" class="agenda-grid"></div>
-    </div>
-  </section>
-
-  <!-- Sección de Requisitos -->
-  <section class="section" id="requisitos">
-    <div class="container">
-      <h2 class="section-title">📄 Requisitos para el Análisis</h2>
-      <p style="text-align:center; margin-bottom:25px;">Adjunta los siguientes documentos:</p>
-
-      <form id="formRequisitos" class="requisitos-form">
-        <label>📘 Cédula o Pasaporte:</label>
-        <input type="file" required>
-
-        <label>👥 2 Referencias Personales:</label>
-        <input type="file" multiple required>
-
-        <label>🗳️ Papeleta de Votación:</label>
-        <input type="file" required>
-
-        <label>💡 Planilla de Servicio Básico (agua o luz):</label>
-        <input type="file" required>
-
-        <label>💼 Roles de Pago, RUC o Estados de Cuenta (recientes):</label>
-        <input type="file" multiple required>
-
-        <button type="submit" class="cta-button">Enviar para análisis</button>
-      </form>
-
-      <p id="mensaje-enviado">
-        ✅ Tu solicitud ha sido enviada correctamente.<br>
-        Será analizada en un lapso de <strong>24 a 48 horas</strong>.
-      </p>
-    </div>
-  </section>
-
-  <footer>
-    <div>© 2025 Inmoalianza S.A.S Group — Todos los derechos reservados.</div>
-    <div style="margin-top:10px;">
-      <a href="#">Términos</a> |
-      <a href="#">Privacidad</a> |
-      <a href="#">Contacto</a>
-    </div>
-  </footer>
-
-  <script>
-    // Generación automática de horarios
-    const horarios = {
-      "Lunes": [10, 17],
-      "Martes": [10, 17],
-      "Miércoles": [10, 17],
-      "Jueves": [10, 17],
-      "Viernes": [10, 17],
-      "Sábado": [10, 15],
-      "Domingo": [10, 12]
-    };
-
-    const agendaDiv = document.getElementById("agenda");
-
-    Object.keys(horarios).forEach(dia => {
-      const [inicio, fin] = horarios[dia];
-      const card = document.createElement("div");
-      card.className = "day-card";
-
-      const title = document.createElement("h3");
-      title.textContent = dia;
-      card.appendChild(title);
-
-      for (let h = inicio; h <= fin; h++) {
-        const slot = document.createElement("div");
-        slot.className = "time-slot libre";
-        slot.textContent = `${h > 12 ? h - 12 : h}:00 ${h < 12 ? "AM" : "PM"}`;
-        slot.dataset.estado = "libre";
-
-        slot.addEventListener("click", () => {
-          if (slot.dataset.estado === "libre") {
-            slot.dataset.estado = "ocupado";
-            slot.className = "time-slot ocupado";
-          } else if (slot.dataset.estado === "ocupado") {
-            slot.dataset.estado = "no-disponible";
-            slot.className = "time-slot no-disponible";
-          } else {
-            slot.dataset.estado = "libre";
-            slot.className = "time-slot libre";
-          }
-        });
-
-        card.appendChild(slot);
-      }
-
-      agendaDiv.appendChild(card);
-    });
-
-    // Envío del formulario de requisitos
-    document.getElementById("formRequisitos").addEventListener("submit", function(e) {
-      e.preventDefault();
-      document.getElementById("mensaje-enviado").style.display = "block";
-      this.reset();
-      window.scrollTo({ top: this.offsetTop, behavior: 'smooth' });
-    });
-  </script>
-</body>
-</html>
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Facebook Pixel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #1877F2;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .panel h2 {
+            color: #1877F2;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #1877F2;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0e5ebe;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #42A5F5;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #1e88e5;
+            transform: translateY(-2px);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #333, #555);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 
