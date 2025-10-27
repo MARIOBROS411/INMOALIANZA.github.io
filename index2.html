@@ -51,15 +51,51 @@
             margin: 10px 0;
         }
         
-        .subtitle {
-            color: #666;
-            font-size: 1.2rem;
+        .debug-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #1877F2;
         }
         
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+        .debug-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .debug-label {
+            font-weight: bold;
+        }
+        
+        .debug-value {
+            font-family: monospace;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .loading {
+            background: #cce7ff;
+            color: #004085;
         }
         
         .panel {
@@ -67,20 +103,7 @@
             border-radius: 10px;
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .panel h2 {
-            color: #1877F2;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
-        }
-        
-        .button-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
         }
         
         .btn {
@@ -90,7 +113,7 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
-            text-align: center;
+            margin: 5px;
         }
         
         .btn-primary {
@@ -100,69 +123,6 @@
         
         .btn-primary:hover {
             background: #0e5ebe;
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background: #42A5F5;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #1e88e5;
-            transform: translateY(-2px);
-        }
-        
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            background: #000;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        
-        .video-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #333, #555);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-        
-        .play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .play-btn:hover {
-            background: white;
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        
-        .play-btn::after {
-            content: '';
-            width: 0;
-            height: 0;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            border-left: 20px solid #1877F2;
-            margin-left: 5px;
         }
         
         .log-container {
@@ -172,626 +132,341 @@
             height: 300px;
             overflow-y: auto;
             border: 1px solid #dee2e6;
+            font-family: monospace;
+            font-size: 0.9rem;
         }
         
         .log-entry {
-            padding: 8px 10px;
-            margin-bottom: 8px;
-            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 3px;
             background: white;
             border-left: 4px solid #1877F2;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
-        .log-time {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-bottom: 3px;
-        }
-        
-        .log-event {
-            font-weight: bold;
-            color: #1877F2;
-        }
-        
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .status-active {
-            background: #28a745;
-        }
-        
-        .status-inactive {
-            background: #dc3545;
-        }
-        
-        .status-loading {
-            background: #ffc107;
-        }
-        
-        .debug-panel {
-            background: #f8f9fa;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
-            border-left: 4px solid #17a2b8;
-        }
-        
-        .debug-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            padding: 5px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        .debug-label {
-            font-weight: bold;
-            color: #495057;
-        }
-        
-        .debug-value {
-            font-family: monospace;
-            color: #1877F2;
-        }
-        
-        .debug-value.success {
-            color: #28a745;
-        }
-        
-        .debug-value.error {
-            color: #dc3545;
-        }
-        
-        .debug-value.warning {
-            color: #ffc107;
-        }
-        
-        .instructions {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
+        .solution-box {
+            background: #e7f3ff;
+            border: 2px solid #1877F2;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .instructions h3 {
-            color: #1877F2;
-            margin-bottom: 15px;
-        }
-        
-        .instructions ol {
-            margin-left: 20px;
-        }
-        
-        .instructions li {
-            margin-bottom: 10px;
-        }
-        
-        .code-block {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-            margin: 15px 0;
-            font-size: 0.9rem;
-        }
-        
-        .event-counter {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-        
-        .counter-item {
-            text-align: center;
-        }
-        
-        .counter-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1877F2;
-        }
-        
-        .counter-label {
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        .network-check {
-            background: #e9ecef;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-family: monospace;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
-            
-            .button-grid {
-                grid-template-columns: 1fr;
-            }
+            padding: 20px;
+            margin: 20px 0;
         }
     </style>
-    
-    <!-- Facebook Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    
-    // INICIALIZAR PIXEL CON TU ID
-    fbq('init', '1560096578769877');
-    fbq('track', 'PageView');
-    </script>
-    <noscript>
-    <img height="1" width="1" style="display:none" 
-         src="https://www.facebook.com/tr?id=1560096578769877&ev=PageView&noscript=1"/>
-    </noscript>
-    <!-- End Facebook Pixel Code -->
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Verificador de Facebook Pixel</h1>
+            <h1>🔍 Verificador de Facebook Pixel</h1>
             <div class="pixel-id">ID: 1560096578769877</div>
-            <p class="subtitle">Herramienta para verificar si los eventos del Facebook Pixel se están registrando correctamente</p>
-            
-            <div class="debug-panel">
-                <h3>🔍 Diagnóstico del Pixel</h3>
-                <div class="debug-item">
-                    <span class="debug-label">Estado del Pixel:</span>
-                    <span class="debug-value" id="pixel-status-text">Verificando...</span>
-                </div>
-                <div class="debug-item">
-                    <span class="debug-label">fbq cargado:</span>
-                    <span class="debug-value" id="fbq-loaded">verificando...</span>
-                </div>
-                <div class="debug-item">
-                    <span class="debug-label">fbq.init llamado:</span>
-                    <span class="debug-value" id="fbq-init">verificando...</span>
-                </div>
-                <div class="debug-item">
-                    <span class="debug-label">PageView enviado:</span>
-                    <span class="debug-value" id="pageview-sent">verificando...</span>
-                </div>
-                <div class="debug-item">
-                    <span class="debug-label">Tiempo de carga:</span>
-                    <span class="debug-value" id="load-time">0s</span>
-                </div>
-            </div>
+            <p>Diagnóstico avanzado del Pixel de Facebook</p>
         </header>
-        
-        <div class="content">
-            <div class="panel">
-                <h2>🎮 Simulador de Eventos</h2>
-                <p>Haz clic en los botones para simular eventos y verificar si se registran correctamente:</p>
-                
-                <div class="button-grid">
-                    <button class="btn btn-primary" id="btn-payment">💳 Botón de Pago</button>
-                    <button class="btn btn-primary" id="btn-checkout">🛒 Iniciar Checkout</button>
-                    <button class="btn btn-secondary" id="btn-lead">📝 Generar Lead</button>
-                    <button class="btn btn-secondary" id="btn-contact">📞 Contactar</button>
-                </div>
-                
-                <div class="video-container">
-                    <div class="video-placeholder">🎬 Video Promocional</div>
-                    <div class="play-btn" id="play-video"></div>
-                </div>
-                
-                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="btn-clear">🗑️ Limpiar Registros</button>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" id="btn-test">🧪 Probar Pixel Manualmente</button>
+
+        <div class="debug-panel">
+            <h3>📊 Estado del Pixel</h3>
+            <div class="debug-item">
+                <span class="debug-label">fbq cargado:</span>
+                <span class="debug-value" id="fbq-loaded">verificando...</span>
             </div>
-            
-            <div class="panel">
-                <h2>📊 Registro de Eventos</h2>
-                
-                <div class="log-container" id="event-log">
-                    <div class="log-entry">
-                        <div class="log-time" id="current-time">Cargando...</div>
-                        <div class="log-event">Sistema iniciado. Los eventos aparecerán aquí.</div>
-                    </div>
-                </div>
-                
-                <div class="event-counter">
-                    <div class="counter-item">
-                        <div class="counter-number" id="total-events">0</div>
-                        <div class="counter-label">Total Eventos</div>
-                    </div>
-                    <div class="counter-item">
-                        <div class="counter-number" id="pixel-events">0</div>
-                        <div class="counter-label">Eventos Pixel</div>
-                    </div>
-                    <div class="counter-item">
-                        <div class="counter-number" id="conversion-events">0</div>
-                        <div class="counter-label">Conversiones</div>
-                    </div>
-                </div>
+            <div class="debug-item">
+                <span class="debug-label">fbq.init llamado:</span>
+                <span class="debug-value" id="fbq-init">verificando...</span>
+            </div>
+            <div class="debug-item">
+                <span class="debug-label">Estado del Pixel:</span>
+                <span class="debug-value" id="pixel-status">verificando...</span>
+            </div>
+            <div class="debug-item">
+                <span class="debug-label">Método de detección:</span>
+                <span class="debug-value" id="detection-method">verificando...</span>
             </div>
         </div>
-        
-        <div class="instructions">
-            <h3>📋 Instrucciones de Uso</h3>
-            <ol>
-                <li><strong>Este verificador ya incluye tu Pixel</strong> - El código del Pixel con ID 1560096578769877 está integrado.</li>
-                <li><strong>Observa el panel de diagnóstico</strong> - Verifica que todos los indicadores estén en verde.</li>
-                <li><strong>Haz clic en los botones</strong> - Simula las acciones que quieres rastrear (pagos, clics en video, etc.).</li>
-                <li><strong>Verifica los registros</strong> - Observa si los eventos aparecen en el panel de registro con confirmación.</li>
-                <li><strong>Inspecciona la consola</strong> - Abre las herramientas de desarrollador (F12) para más detalles.</li>
-            </ol>
-            
-            <div class="code-block">
-// Código del Facebook Pixel integrado
-fbq('init', '1560096578769877');
-fbq('track', 'PageView');
 
-// Función para rastrear eventos personalizados
-function trackFacebookEvent(eventName, parameters) {
-    // Registrar en nuestro verificador
-    logEvent(eventName, parameters);
-    
-    // Enviar al Facebook Pixel real
-    fbq('track', eventName, parameters);
-}
+        <div class="panel">
+            <h3>🎮 Probar Eventos</h3>
+            <button class="btn btn-primary" onclick="testPixel()">Probar Pixel</button>
+            <button class="btn btn-primary" onclick="sendTestEvent()">Enviar Evento de Prueba</button>
+            <button class="btn btn-primary" onclick="forceReinit()">Reinicializar Pixel</button>
+        </div>
+
+        <div class="panel">
+            <h3>📝 Registro de Eventos</h3>
+            <div class="log-container" id="log">
+                <div class="log-entry">Sistema iniciado. Esperando eventos...</div>
             </div>
-            
-            <div class="network-check">
-                <strong>🔍 Para verificar manualmente:</strong><br>
-                1. Abre DevTools (F12)<br>
-                2. Ve a pestaña "Network"<br>
-                3. Busca llamadas a: facebook.com/tr?id=1560096578769877<br>
-                4. Deberías ver llamadas por cada evento
-            </div>
-            
-            <p><strong>💡 Nota:</strong> Los eventos pueden tardar algunos minutos en aparecer en el Facebook Events Manager. Esta herramienta te muestra en tiempo real si se están enviando correctamente.</p>
+        </div>
+
+        <div class="solution-box">
+            <h3>🚨 SOLUCIÓN SI EL PIXEL NO SE DETECTA</h3>
+            <p><strong>Problema:</strong> fbq se carga pero no se inicializa correctamente.</p>
+            <p><strong>Solución:</strong> </p>
+            <ol>
+                <li>Haz clic en "Reinicializar Pixel" arriba</li>
+                <li>Si no funciona, el problema puede ser:
+                    <ul>
+                        <li>Bloqueador de anuncios activado</li>
+                        <li>Problemas de CORS</li>
+                        <li>El dominio no está verificado en Facebook</li>
+                    </ul>
+                </li>
+                <li>Prueba en una ventana de incógnito</li>
+            </ol>
         </div>
     </div>
 
+    <!-- CÓDIGO DEL PIXEL MEJORADO -->
     <script>
-        // Contadores de eventos
-        let totalEvents = 0;
-        let pixelEvents = 0;
-        let conversionEvents = 0;
-        let startTime = Date.now();
-        
-        // Elementos de la interfaz
-        const eventLog = document.getElementById('event-log');
-        const currentTimeElement = document.getElementById('current-time');
-        
-        // Elementos de contadores
-        const totalEventsElement = document.getElementById('total-events');
-        const pixelEventsElement = document.getElementById('pixel-events');
-        const conversionEventsElement = document.getElementById('conversion-events');
-        
-        // Elementos de diagnóstico
-        const fbqLoadedElement = document.getElementById('fbq-loaded');
-        const fbqInitElement = document.getElementById('fbq-init');
-        const pageviewSentElement = document.getElementById('pageview-sent');
-        const pixelStatusElement = document.getElementById('pixel-status-text');
-        const loadTimeElement = document.getElementById('load-time');
-        
-        // Actualizar contadores
-        function updateCounters() {
-            totalEventsElement.textContent = totalEvents;
-            pixelEventsElement.textContent = pixelEvents;
-            conversionEventsElement.textContent = conversionEvents;
-        }
-        
-        // Actualizar hora actual
-        function updateCurrentTime() {
-            const now = new Date();
-            currentTimeElement.textContent = now.toLocaleTimeString();
-        }
-        
-        // Actualizar tiempo de carga
-        function updateLoadTime() {
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            loadTimeElement.textContent = `${elapsed}s`;
-        }
-        
-        setInterval(updateCurrentTime, 1000);
-        setInterval(updateLoadTime, 1000);
-        updateCurrentTime();
-        
-        // Función para registrar eventos en el log
-        function logEvent(eventName, parameters = {}) {
-            totalEvents++;
-            updateCounters();
+        // Guardar referencia global al estado del Pixel
+        window.pixelState = {
+            loaded: false,
+            initialized: false,
+            lastEvent: null
+        };
+
+        // Función para loguear mensajes
+        function log(message, type = 'info') {
+            const logContainer = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.style.borderLeftColor = type === 'error' ? '#dc3545' : 
+                                         type === 'success' ? '#28a745' : '#1877F2';
+            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.prepend(entry);
             
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            
-            const logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            logEntry.innerHTML = `
-                <div class="log-time">${timeString}</div>
-                <div class="log-event">${eventName}</div>
-                <div>${JSON.stringify(parameters)}</div>
-            `;
-            
-            eventLog.prepend(logEntry);
-            
-            // Limitar a 20 entradas máximo
-            if (eventLog.children.length > 20) {
-                eventLog.removeChild(eventLog.lastChild);
+            // Limitar a 50 entradas
+            if (logContainer.children.length > 50) {
+                logContainer.removeChild(logContainer.lastChild);
             }
             
-            // Scroll al top
-            eventLog.scrollTop = 0;
+            console.log(`[Pixel Debug] ${message}`);
         }
-        
-        // Función mejorada para verificar el estado del Pixel
-        function checkPixelStatus() {
-            let fbqExists = typeof fbq !== 'undefined';
-            let fbqLoaded = fbqExists && fbq.loaded;
-            let fbqInitialized = false;
-            let pageviewTracked = false;
-            
-            // Actualizar estado de fbq cargado
-            if (fbqLoaded) {
-                fbqLoadedElement.textContent = '✅ sí';
-                fbqLoadedElement.className = 'debug-value success';
-            } else {
-                fbqLoadedElement.textContent = '❌ no';
-                fbqLoadedElement.className = 'debug-value error';
+
+        // Función para actualizar la UI del estado
+        function updateUI() {
+            const fbqLoaded = document.getElementById('fbq-loaded');
+            const fbqInit = document.getElementById('fbq-init');
+            const pixelStatus = document.getElementById('pixel-status');
+            const detectionMethod = document.getElementById('detection-method');
+
+            // Verificar si fbq existe
+            if (typeof fbq === 'undefined') {
+                fbqLoaded.textContent = '❌ NO';
+                fbqLoaded.className = 'debug-value error';
+                fbqInit.textContent = '❌ NO';
+                fbqInit.className = 'debug-value error';
+                pixelStatus.textContent = '❌ PIXEL NO CARGADO';
+                pixelStatus.className = 'debug-value error';
+                detectionMethod.textContent = 'fbq no definido';
+                return;
             }
-            
-            // Verificar si se inicializó el Pixel
-            if (fbqExists && typeof fbq.getState === 'function') {
+
+            fbqLoaded.textContent = '✅ SÍ';
+            fbqLoaded.className = 'debug-value success';
+
+            // Múltiples métodos para verificar si el Pixel está inicializado
+            let isInitialized = false;
+            let method = '';
+
+            // Método 1: Verificar fbq.loaded
+            if (fbq.loaded) {
+                isInitialized = true;
+                method = 'fbq.loaded = true';
+            }
+
+            // Método 2: Verificar mediante getState si está disponible
+            if (typeof fbq.getState === 'function') {
                 try {
                     const state = fbq.getState();
                     if (state && state.pixels && state.pixels['1560096578769877']) {
-                        fbqInitialized = true;
-                        fbqInitElement.textContent = '✅ sí';
-                        fbqInitElement.className = 'debug-value success';
-                        
-                        // Verificar si se envió PageView
-                        if (state.pixels['1560096578769877'].loaded) {
-                            pageviewTracked = true;
-                            pageviewSentElement.textContent = '✅ sí';
-                            pageviewSentElement.className = 'debug-value success';
-                        }
+                        isInitialized = true;
+                        method = 'fbq.getState()';
                     }
                 } catch (e) {
-                    console.log('Error checking pixel state:', e);
+                    log('Error en fbq.getState(): ' + e.message, 'error');
                 }
             }
-            
-            if (!fbqInitialized) {
-                fbqInitElement.textContent = '🔄 cargando...';
-                fbqInitElement.className = 'debug-value warning';
+
+            // Método 3: Verificar si hay cola de eventos
+            if (fbq.queue && fbq.queue.length > 0) {
+                isInitialized = true;
+                method = 'fbq.queue activa';
             }
-            
-            if (!pageviewTracked) {
-                pageviewSentElement.textContent = '🔄 verificando...';
-                pageviewSentElement.className = 'debug-value warning';
+
+            // Método 4: Intentar enviar un evento de prueba
+            try {
+                // Este es un método más agresivo pero efectivo
+                const originalQueue = fbq.queue ? [...fbq.queue] : [];
+                fbq('track', 'TestInitialization', { test: true });
+                isInitialized = true;
+                method = 'evento de prueba enviado';
+                
+                // Restaurar la cola original
+                if (fbq.queue) {
+                    fbq.queue = originalQueue;
+                }
+            } catch (e) {
+                // Si falla, el Pixel probablemente no esté listo
             }
-            
-            // Determinar estado general
-            if (fbqLoaded && fbqInitialized && pageviewTracked) {
-                pixelStatusElement.textContent = '✅ PIXEL ACTIVO Y FUNCIONANDO';
-                pixelStatusElement.className = 'debug-value success';
-                return true;
-            } else if (fbqLoaded) {
-                pixelStatusElement.textContent = '⚠️ PIXEL CARGADO - Inicializando...';
-                pixelStatusElement.className = 'debug-value warning';
-                return false;
+
+            if (isInitialized) {
+                fbqInit.textContent = '✅ INICIALIZADO';
+                fbqInit.className = 'debug-value success';
+                pixelStatus.textContent = '✅ PIXEL ACTIVO';
+                pixelStatus.className = 'debug-value success';
+                window.pixelState.initialized = true;
             } else {
-                pixelStatusElement.textContent = '❌ PIXEL NO DETECTADO';
-                pixelStatusElement.className = 'debug-value error';
-                return false;
+                fbqInit.textContent = '🔄 INICIALIZANDO...';
+                fbqInit.className = 'debug-value warning';
+                pixelStatus.textContent = '⚠️ PIXEL CARGADO PERO NO INICIALIZADO';
+                pixelStatus.className = 'debug-value warning';
+                window.pixelState.initialized = false;
+            }
+
+            detectionMethod.textContent = method || 'múltiples métodos';
+            window.pixelState.loaded = true;
+        }
+
+        // Función para probar el Pixel
+        function testPixel() {
+            log('=== INICIANDO PRUEBA DEL PIXEL ===');
+            
+            if (typeof fbq === 'undefined') {
+                log('❌ fbq NO está definido', 'error');
+                return;
+            }
+
+            log('✅ fbq está definido', 'success');
+            log(`fbq version: ${fbq.version || 'No disponible'}`);
+            log(`fbq.loaded: ${fbq.loaded}`);
+            log(`fbq.queue length: ${fbq.queue ? fbq.queue.length : 'No disponible'}`);
+
+            // Intentar múltiples métodos de verificación
+            if (typeof fbq.getState === 'function') {
+                try {
+                    const state = fbq.getState();
+                    log(`fbq.getState() disponible: ${JSON.stringify(state).substring(0, 200)}...`);
+                } catch (e) {
+                    log(`❌ Error en fbq.getState(): ${e.message}`, 'error');
+                }
+            }
+
+            updateUI();
+        }
+
+        // Función para enviar evento de prueba
+        function sendTestEvent() {
+            if (typeof fbq === 'undefined') {
+                log('❌ No se puede enviar evento: fbq no está definido', 'error');
+                return;
+            }
+
+            log('🔄 Enviando evento de prueba...');
+            
+            try {
+                fbq('track', 'TestEvent', {
+                    testing: true,
+                    timestamp: new Date().toISOString(),
+                    source: 'PixelDebugger'
+                });
+                log('✅ Evento de prueba enviado correctamente', 'success');
+                
+                // Verificar si el evento se encoló
+                if (fbq.queue) {
+                    log(`Eventos en cola: ${fbq.queue.length}`);
+                }
+            } catch (error) {
+                log(`❌ Error enviando evento: ${error.message}`, 'error');
             }
         }
-        
-        // Función para enviar eventos al Facebook Pixel
-        function trackFacebookEvent(eventName, parameters = {}) {
-            console.log(`[Facebook Pixel] Enviando evento: ${eventName}`, parameters);
+
+        // Función para reinicializar el Pixel
+        function forceReinit() {
+            log('🔄 Reinicializando Pixel...');
             
-            // Registrar en nuestra interfaz
-            logEvent(eventName, parameters);
-            pixelEvents++;
-            updateCounters();
-            
-            // Contar como conversión si es un evento de compra o lead
-            if (eventName === 'Purchase' || eventName === 'Lead' || eventName === 'InitiateCheckout') {
-                conversionEvents++;
-                updateCounters();
-            }
-            
-            // Si Facebook Pixel está disponible, enviar el evento real
             if (typeof fbq !== 'undefined') {
                 try {
-                    fbq('track', eventName, parameters);
-                    console.log(`✅ Evento enviado correctamente a Facebook: ${eventName}`);
+                    // Forzar reinicialización
+                    fbq('init', '1560096578769877', {}, { agent: 'PixelDebugger' });
+                    fbq('track', 'PageView');
+                    log('✅ Pixel reinicializado manualmente', 'success');
                     
-                    // Registrar confirmación
-                    setTimeout(() => {
-                        const now = new Date();
-                        const timeString = now.toLocaleTimeString();
-                        
-                        const confirmEntry = document.createElement('div');
-                        confirmEntry.className = 'log-entry';
-                        confirmEntry.style.borderLeftColor = '#28a745';
-                        confirmEntry.innerHTML = `
-                            <div class="log-time">${timeString}</div>
-                            <div class="log-event" style="color: #28a745;">✅ ${eventName} CONFIRMADO</div>
-                            <div>Evento recibido por Facebook Pixel</div>
-                        `;
-                        
-                        eventLog.prepend(confirmEntry);
-                    }, 500);
-                    
+                    // Esperar y volver a verificar
+                    setTimeout(updateUI, 1000);
                 } catch (error) {
-                    console.error('❌ Error enviando evento a Facebook:', error);
-                    
-                    const now = new Date();
-                    const errorEntry = document.createElement('div');
-                    errorEntry.className = 'log-entry';
-                    errorEntry.style.borderLeftColor = '#dc3545';
-                    errorEntry.innerHTML = `
-                        <div class="log-time">${now.toLocaleTimeString()}</div>
-                        <div class="log-event" style="color: #dc3545;">❌ ${eventName} ERROR</div>
-                        <div>${error.message}</div>
-                    `;
-                    
-                    eventLog.prepend(errorEntry);
+                    log(`❌ Error reinicializando: ${error.message}`, 'error');
                 }
             } else {
-                console.error('❌ Facebook Pixel no disponible');
-                
-                const now = new Date();
-                const errorEntry = document.createElement('div');
-                errorEntry.className = 'log-entry';
-                errorEntry.style.borderLeftColor = '#dc3545';
-                errorEntry.innerHTML = `
-                    <div class="log-time">${now.toLocaleTimeString()}</div>
-                    <div class="log-event" style="color: #dc3545;">❌ ${eventName} NO ENVIADO</div>
-                    <div>Facebook Pixel no disponible</div>
-                `;
-                
-                eventLog.prepend(errorEntry);
+                log('❌ fbq no disponible para reinicialización', 'error');
             }
         }
-        
-        // Configurar event listeners para los botones
-        document.getElementById('btn-payment').addEventListener('click', function() {
-            trackFacebookEvent('InitiateCheckout', {
-                content_name: 'Producto de Prueba',
-                content_category: 'Ecommerce',
-                currency: 'USD',
-                value: 49.99
-            });
-        });
-        
-        document.getElementById('btn-checkout').addEventListener('click', function() {
-            trackFacebookEvent('Purchase', {
-                currency: 'USD',
-                value: 49.99,
-                content_ids: ['prod123'],
-                contents: [{id: 'prod123', quantity: 1}]
-            });
-        });
-        
-        document.getElementById('btn-lead').addEventListener('click', function() {
-            trackFacebookEvent('Lead', {
-                content_name: 'Formulario de contacto',
-                value: 0,
-                currency: 'USD'
-            });
-        });
-        
-        document.getElementById('btn-contact').addEventListener('click', function() {
-            trackFacebookEvent('Contact', {
-                method: 'formulario web'
-            });
-        });
-        
-        document.getElementById('play-video').addEventListener('click', function() {
-            trackFacebookEvent('ViewContent', {
-                content_name: 'Video promocional',
-                content_type: 'video',
-                content_id: 'video123'
-            });
-        });
-        
-        document.getElementById('btn-clear').addEventListener('click', function() {
-            eventLog.innerHTML = '';
-            totalEvents = 0;
-            pixelEvents = 0;
-            conversionEvents = 0;
-            updateCounters();
+
+        // CÓDIGO DEL PIXEL DE FACEBOOK
+        // Versión mejorada con manejo de errores
+        function loadFacebookPixel() {
+            log('🔄 Cargando Facebook Pixel...');
             
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            
-            const logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            logEntry.innerHTML = `
-                <div class="log-time">${timeString}</div>
-                <div class="log-event">Registros limpiados</div>
-            `;
-            
-            eventLog.prepend(logEntry);
-        });
-        
-        document.getElementById('btn-test').addEventListener('click', function() {
-            trackFacebookEvent('TestEvent', {
-                testing: true,
-                timestamp: new Date().toISOString(),
-                tool: 'Pixel Verifier'
-            });
-        });
-        
-        // Verificación continua del Pixel
-        function startPixelMonitoring() {
-            let checks = 0;
-            const maxChecks = 15; // 15 segundos máximo
-            
-            const checkInterval = setInterval(() => {
-                checks++;
-                const isActive = checkPixelStatus();
-                
-                if (isActive) {
-                    clearInterval(checkInterval);
-                    logEvent('Pixel completamente cargado', { 
-                        timeTaken: `${checks} segundos`,
-                        pixelId: '1560096578769877'
-                    });
-                } else if (checks >= maxChecks) {
-                    clearInterval(checkInterval);
-                    pixelStatusElement.textContent = '❌ PIXEL NO INICIALIZADO - Revisa la consola';
-                    pixelStatusElement.className = 'debug-value error';
-                    logEvent('Error: Pixel no se inicializó', { 
-                        attempts: checks,
-                        pixelId: '1560096578769877'
-                    });
-                    
-                    console.error('❌ Facebook Pixel no se inicializó después de', checks, 'segundos');
-                    console.log('💡 Posibles soluciones:');
-                    console.log('1. Verifica que no haya bloqueadores de anuncios');
-                    console.log('2. Revisa la conexión a internet');
-                    console.log('3. Verifica la consola para errores de JavaScript');
+            window.fbq = window.fbq || function() {
+                if (window.fbq.queue) {
+                    window.fbq.queue.push(arguments);
+                } else {
+                    console.log('Facebook Pixel queue not ready:', arguments);
                 }
-            }, 1000);
+            };
+            
+            if (!window._fbq) window._fbq = window.fbq;
+            window.fbq.push = window.fbq;
+            window.fbq.loaded = true;
+            window.fbq.version = '2.0';
+            window.fbq.queue = [];
+
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+            
+            script.onload = function() {
+                log('✅ Script de Facebook Pixel cargado', 'success');
+                
+                // Esperar un momento y luego inicializar
+                setTimeout(function() {
+                    try {
+                        if (typeof fbq !== 'undefined') {
+                            fbq('init', '1560096578769877');
+                            fbq('track', 'PageView');
+                            log('✅ Pixel inicializado con ID: 1560096578769877', 'success');
+                            window.pixelState.initialized = true;
+                        }
+                    } catch (error) {
+                        log(`❌ Error inicializando Pixel: ${error.message}`, 'error');
+                    }
+                    
+                    // Actualizar UI después de la inicialización
+                    setTimeout(updateUI, 500);
+                }, 100);
+            };
+            
+            script.onerror = function() {
+                log('❌ Error cargando el script de Facebook Pixel', 'error');
+            };
+            
+            document.head.appendChild(script);
         }
-        
-        // Iniciar cuando la página cargue
+
+        // INICIAR TODO CUANDO LA PÁGINA CARGUE
         document.addEventListener('DOMContentLoaded', function() {
-            // Iniciar monitoreo del Pixel
-            startPixelMonitoring();
+            log('🚀 Iniciando verificador de Facebook Pixel...');
             
-            // Mensaje inicial
-            logEvent('Sistema de verificación iniciado', { 
-                version: '3.0',
-                pixelId: '1560096578769877',
-                userAgent: navigator.userAgent.substring(0, 50) + '...'
-            });
+            // Cargar el Pixel
+            loadFacebookPixel();
             
-            console.log('🎯 Facebook Pixel Verifier iniciado');
-            console.log('📧 Pixel ID: 1560096578769877');
-            console.log('🔍 Monitoreando estado del Pixel...');
+            // Verificar estado periódicamente
+            setInterval(updateUI, 2000);
+            
+            // Primera verificación después de 1 segundo
+            setTimeout(updateUI, 1000);
         });
-        
-        // También puedes usar esta función en tu sitio web real
-        window.trackFacebookEvent = trackFacebookEvent;
+
+        // También exponer funciones globalmente para debugging
+        window.debugPixel = testPixel;
+        window.reinitPixel = forceReinit;
     </script>
 </body>
 </html>
