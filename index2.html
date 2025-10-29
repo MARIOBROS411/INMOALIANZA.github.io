@@ -1,653 +1,293 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook Pixel Activo ✅ - ID: 1560096578769877</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border: 3px solid #28a745;
-        }
-        
-        h1 {
-            color: #28a745;
-            margin-bottom: 15px;
-            font-size: 2.8rem;
-        }
-        
-        .success-badge {
-            background: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 1.3rem;
-            display: inline-block;
-            margin: 15px 0;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pixel-id {
-            background: #1877F2;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-family: monospace;
-            font-size: 1.2rem;
-            display: inline-block;
-            margin: 10px 0;
-        }
-        
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .panel h2 {
-            color: #1877F2;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #1877F2;
-        }
-        
-        .event-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .btn {
-            padding: 15px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-size: 1rem;
-        }
-        
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #218838;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-        }
-        
-        .btn-primary {
-            background: #1877F2;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #0e5ebe;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.3);
-        }
-        
-        .btn-warning {
-            background: #ffc107;
-            color: #212529;
-        }
-        
-        .btn-warning:hover {
-            background: #e0a800;
-            transform: translateY(-3px);
-        }
-        
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 3px solid #1877F2;
-        }
-        
-        .video-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #1a2a6c, #b21f1f);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-        
-        .play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid #1877F2;
-        }
-        
-        .play-btn:hover {
-            background: white;
-            transform: translate(-50%, -50%) scale(1.1);
-            box-shadow: 0 0 30px rgba(24, 119, 242, 0.5);
-        }
-        
-        .play-btn::after {
-            content: '';
-            width: 0;
-            height: 0;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-left: 25px solid #1877F2;
-            margin-left: 5px;
-        }
-        
-        .log-container {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            height: 400px;
-            overflow-y: auto;
-            border: 2px solid #e9ecef;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .log-entry {
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background: white;
-            border-left: 5px solid #1877F2;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-        
-        .log-entry.success {
-            border-left-color: #28a745;
-            background: #f8fff9;
-        }
-        
-        .log-entry.error {
-            border-left-color: #dc3545;
-            background: #fff5f5;
-        }
-        
-        .log-time {
-            font-size: 0.75rem;
-            color: #6c757d;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .log-event {
-            font-weight: bold;
-            color: #1877F2;
-            margin-bottom: 5px;
-        }
-        
-        .log-entry.success .log-event {
-            color: #28a745;
-        }
-        
-        .log-entry.error .log-event {
-            color: #dc3545;
-        }
-        
-        .stats-panel {
-            background: linear-gradient(135deg, #1877F2, #25d366);
-            color: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        .instructions {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-            border: 3px solid #28a745;
-        }
-        
-        .instructions h3 {
-            color: #28a745;
-            margin-bottom: 20px;
-        }
-        
-        .feature-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .feature-item {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #1877F2;
-        }
-        
-        @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
-            
-            .event-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .feature-list {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    
-    <!-- Facebook Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    
-    fbq('init', '1560096578769877');
-    fbq('track', 'PageView');
-    </script>
-    <noscript>
-    <img height="1" width="1" style="display:none" 
-         src="https://www.facebook.com/tr?id=1560096578769877&ev=PageView&noscript=1"/>
-    </noscript>
-    <!-- End Facebook Pixel Code -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asignación de Citas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: 'Montserrat', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #191C1F;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background: #1a2a6c;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Secciones */
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 800;
+      color: #1a2a6c;
+      margin-bottom: 40px;
+    }
+
+    /* Agenda */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .day-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+
+    .day-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .day-card h3 {
+      text-align: center;
+      color: #1a2a6c;
+      margin-bottom: 10px;
+    }
+
+    .time-slot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f0f2f5;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin: 6px 0;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .time-slot:hover { background: #e7eaf0; }
+
+    .time-slot.libre { color: green; }
+    .time-slot.ocupado { color: red; }
+    .time-slot.no-disponible { color: gray; text-decoration: line-through; }
+
+    /* Formulario requisitos */
+    .requisitos-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .requisitos-form label {
+      font-weight: 600;
+      color: #1a2a6c;
+    }
+
+    .requisitos-form input[type="file"] {
+      background: #f0f2f5;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #6c63ff;
+      color: #fff;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(108,99,255,0.3);
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .cta-button:hover {
+      background: #5848e5;
+      transform: translateY(-2px);
+    }
+
+    #mensaje-enviado {
+      text-align: center;
+      color: green;
+      font-weight: 600;
+      margin-top: 20px;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      background: #191C1F;
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 50px;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #6c63ff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .section-title { font-size: 28px; }
+    }
+  </style>
 </head>
+
 <body>
+  <header>
+    Asignación de Citas - Inmoalianza
+  </header>
+
+  <!-- Sección de Citas -->
+  <section class="section" id="citas">
     <div class="container">
-        <header>
-            <h1>🎉 ¡Facebook Pixel ACTIVO!</h1>
-            <div class="success-badge">✅ CONEXIÓN EXITOSA</div>
-            <div class="pixel-id">ID: 1560096578769877</div>
-            <p>Tu Pixel está funcionando correctamente. Ahora puedes probar todos los eventos.</p>
-        </header>
-        
-        <div class="content">
-            <div class="panel">
-                <h2>🚀 Simulador de Eventos</h2>
-                <p>Prueba diferentes tipos de eventos para verificar que se envían correctamente a Facebook:</p>
-                
-                <div class="event-grid">
-                    <button class="btn btn-success" onclick="trackEvent('InitiateCheckout')">
-                        💳 Iniciar Checkout
-                    </button>
-                    <button class="btn btn-success" onclick="trackEvent('Purchase')">
-                        🛒 Completa Compra
-                    </button>
-                    <button class="btn btn-primary" onclick="trackEvent('Lead')">
-                        📝 Generar Lead
-                    </button>
-                    <button class="btn btn-primary" onclick="trackEvent('Contact')">
-                        📞 Contactar
-                    </button>
-                    <button class="btn btn-primary" onclick="trackEvent('AddToCart')">
-                        🛍️ Agregar al Carrito
-                    </button>
-                    <button class="btn btn-primary" onclick="trackEvent('Subscribe')">
-                        ✉️ Suscribirse
-                    </button>
-                    <button class="btn btn-warning" onclick="trackEvent('CustomEvent')">
-                        ⚡ Evento Personalizado
-                    </button>
-                    <button class="btn btn-warning" onclick="trackMultipleEvents()">
-                        🔄 Múltiples Eventos
-                    </button>
-                </div>
-                
-                <div class="video-container">
-                    <div class="video-placeholder">🎬 Video Promocional</div>
-                    <div class="play-btn" onclick="trackEvent('ViewContent', {content_type: 'video'})"></div>
-                </div>
-                
-                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="clearLogs()">
-                    🗑️ Limpiar Registros
-                </button>
-            </div>
-            
-            <div class="panel">
-                <h2>📊 Registro de Eventos en Tiempo Real</h2>
-                <div class="log-container" id="eventLog">
-                    <div class="log-entry success">
-                        <div class="log-time" id="currentTime"></div>
-                        <div class="log-event">✅ PIXEL CONECTADO EXITOSAMENTE</div>
-                        <div>ID: 1560096578769877 - Listo para recibir eventos</div>
-                    </div>
-                </div>
-                
-                <div class="stats-panel">
-                    <div class="stats-grid">
-                        <div>
-                            <div class="stat-number" id="totalEvents">1</div>
-                            <div class="stat-label">Total Eventos</div>
-                        </div>
-                        <div>
-                            <div class="stat-number" id="successEvents">1</div>
-                            <div class="stat-label">Eventos Exitosos</div>
-                        </div>
-                        <div>
-                            <div class="stat-number" id="conversionEvents">0</div>
-                            <div class="stat-label">Conversiones</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="instructions">
-            <h3>🎯 ¿Qué puedes hacer ahora?</h3>
-            <div class="feature-list">
-                <div class="feature-item">
-                    <strong>📈 Verificar en Facebook</strong>
-                    <p>Los eventos aparecerán en tu Facebook Events Manager en unos minutos</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🔍 Testing Completo</strong>
-                    <p>Prueba todos los tipos de eventos para asegurar el tracking</p>
-                </div>
-                <div class="feature-item">
-                    <strong>🚀 Implementar en tu Sitio</strong>
-                    <p>Usa el mismo código del Pixel en tu sitio web real</p>
-                </div>
-                <div class="feature-item">
-                    <strong>📊 Monitoreo Continuo</strong>
-                    <p>Revisa regularmente que el Pixel siga funcionando</p>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="btn btn-success" onclick="testAllEvents()" style="font-size: 1.2rem; padding: 15px 30px;">
-                    🧪 EJECUTAR PRUEBA COMPLETA
-                </button>
-            </div>
-        </div>
+      <h2 class="section-title">📅 Selecciona tu Cita</h2>
+      <p style="text-align:center; max-width:700px; margin:0 auto 30px;">
+        Selecciona un día y una hora disponible para tu cita.<br>
+        <strong>Lunes a Viernes:</strong> 10:00 AM – 5:00 PM |
+        <strong>Sábado:</strong> 10:00 AM – 3:00 PM |
+        <strong>Domingo:</strong> 10:00 AM – 12:00 PM
+      </p>
+
+      <div id="agenda" class="agenda-grid"></div>
     </div>
+  </section>
 
-    <script>
-        // Contadores y estado
-        let eventCounters = {
-            total: 1,
-            success: 1,
-            conversions: 0
-        };
+  <!-- Sección de Requisitos -->
+  <section class="section" id="requisitos">
+    <div class="container">
+      <h2 class="section-title">📄 Requisitos para el Análisis</h2>
+      <p style="text-align:center; margin-bottom:25px;">Adjunta los siguientes documentos:</p>
 
-        // Actualizar contadores en la UI
-        function updateCounters() {
-            document.getElementById('totalEvents').textContent = eventCounters.total;
-            document.getElementById('successEvents').textContent = eventCounters.success;
-            document.getElementById('conversionEvents').textContent = eventCounters.conversions;
-        }
+      <form id="formRequisitos" class="requisitos-form">
+        <label>📘 Cédula o Pasaporte:</label>
+        <input type="file" required>
 
-        // Actualizar hora actual
-        function updateCurrentTime() {
-            document.getElementById('currentTime').textContent = new Date().toLocaleTimeString();
-        }
+        <label>👥 2 Referencias Personales:</label>
+        <input type="file" multiple required>
 
-        setInterval(updateCurrentTime, 1000);
-        updateCurrentTime();
+        <label>🗳️ Papeleta de Votación:</label>
+        <input type="file" required>
 
-        // Función principal para trackear eventos
-        function trackEvent(eventName, customParams = {}) {
-            eventCounters.total++;
-            
-            // Parámetros por defecto según el tipo de evento
-            const defaultParams = {
-                InitiateCheckout: {
-                    content_name: 'Producto Premium',
-                    currency: 'USD',
-                    value: 99.99,
-                    content_category: 'Software'
-                },
-                Purchase: {
-                    currency: 'USD',
-                    value: 99.99,
-                    content_ids: ['prod_premium_001'],
-                    contents: [{id: 'prod_premium_001', quantity: 1}]
-                },
-                Lead: {
-                    content_name: 'Formulario de Contacto',
-                    value: 0,
-                    currency: 'USD'
-                },
-                Contact: {
-                    method: 'formulario_web',
-                    type: 'consulta_general'
-                },
-                AddToCart: {
-                    content_ids: ['prod_premium_001'],
-                    contents: [{id: 'prod_premium_001', quantity: 1}],
-                    value: 99.99,
-                    currency: 'USD'
-                },
-                Subscribe: {
-                    content_name: 'Newsletter',
-                    method: 'formulario_popup'
-                },
-                ViewContent: {
-                    content_name: 'Video Promocional',
-                    content_type: 'video',
-                    content_id: 'video_001'
-                },
-                CustomEvent: {
-                    custom_parameter: 'valor_personalizado',
-                    test: true,
-                    source: 'pixel_verifier'
-                }
-            };
+        <label>💡 Planilla de Servicio Básico (agua o luz):</label>
+        <input type="file" required>
 
-            const parameters = { ...defaultParams[eventName], ...customParams };
-            
-            // Registrar en nuestro log
-            addLogEntry(eventName, parameters, 'info');
-            
-            // Enviar al Facebook Pixel
-            if (typeof fbq !== 'undefined') {
-                try {
-                    fbq('track', eventName, parameters);
-                    eventCounters.success++;
-                    
-                    // Marcar como conversión si es un evento importante
-                    if (['Purchase', 'Lead', 'InitiateCheckout', 'Subscribe'].includes(eventName)) {
-                        eventCounters.conversions++;
-                    }
-                    
-                    // Mostrar confirmación
-                    setTimeout(() => {
-                        addLogEntry(`${eventName} ✅ ENVIADO`, parameters, 'success');
-                    }, 300);
-                    
-                    console.log(`✅ Evento enviado a Facebook: ${eventName}`, parameters);
-                    
-                } catch (error) {
-                    addLogEntry(`❌ ERROR: ${eventName}`, {error: error.message}, 'error');
-                    console.error('Error enviando evento:', error);
-                }
-            } else {
-                addLogEntry(`❌ PIXEL NO DISPONIBLE: ${eventName}`, parameters, 'error');
-            }
-            
-            updateCounters();
-        }
+        <button type="submit" class="cta-button">Enviar para análisis</button>
+      </form>
 
-        // Función para trackear múltiples eventos
-        function trackMultipleEvents() {
-            const events = [
-                { name: 'ViewContent', params: {content_name: 'Página Principal'} },
-                { name: 'AddToCart', params: {value: 49.99} },
-                { name: 'InitiateCheckout', params: {value: 49.99} },
-                { name: 'Purchase', params: {value: 49.99} }
-            ];
-            
-            addLogEntry('🔄 INICIANDO SECUENCIA DE EVENTOS...', {}, 'info');
-            
-            events.forEach((event, index) => {
-                setTimeout(() => {
-                    trackEvent(event.name, event.params);
-                }, (index + 1) * 800);
-            });
-        }
+      <p id="mensaje-enviado">
+        ✅ Tu solicitud ha sido enviada correctamente.<br>
+        Será analizada en un lapso de <strong>24 a 48 horas</strong>.
+      </p>
+    </div>
+  </section>
 
-        // Función para prueba completa
-        function testAllEvents() {
-            addLogEntry('🧪 INICIANDO PRUEBA COMPLETA DEL PIXEL', {}, 'info');
-            
-            const testEvents = [
-                { name: 'ViewContent', delay: 500 },
-                { name: 'Lead', delay: 1500 },
-                { name: 'AddToCart', delay: 2500 },
-                { name: 'InitiateCheckout', delay: 3500 },
-                { name: 'Purchase', delay: 4500 },
-                { name: 'Subscribe', delay: 5500 },
-                { name: 'Contact', delay: 6500 }
-            ];
-            
-            testEvents.forEach((event, index) => {
-                setTimeout(() => {
-                    trackEvent(event.name);
-                }, event.delay);
-            });
-            
-            setTimeout(() => {
-                addLogEntry('🎉 PRUEBA COMPLETADA', {
-                    total_eventos: eventCounters.total,
-                    eventos_exitosos: eventCounters.success,
-                    conversiones: eventCounters.conversions
-                }, 'success');
-            }, 7500);
-        }
+  <footer>
+    <div>© 2025 Inmoalianza S.A.S Group — Todos los derechos reservados.</div>
+    <div style="margin-top:10px;">
+      <a href="#">Términos</a> |
+      <a href="#">Privacidad</a> |
+      <a href="#">Contacto</a>
+    </div>
+  </footer>
 
-        // Función para añadir entradas al log
-        function addLogEntry(eventName, parameters, type = 'info') {
-            const logContainer = document.getElementById('eventLog');
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type}`;
-            
-            const now = new Date();
-            entry.innerHTML = `
-                <div class="log-time">${now.toLocaleTimeString()}</div>
-                <div class="log-event">${eventName}</div>
-                <div style="font-size: 0.8rem; color: #666;">${JSON.stringify(parameters)}</div>
-            `;
-            
-            logContainer.prepend(entry);
-            
-            // Limitar a 30 entradas
-            if (logContainer.children.length > 30) {
-                logContainer.removeChild(logContainer.lastChild);
-            }
-        }
+  <script>
+    // Generación automática de horarios
+    const horarios = {
+      "Lunes": [10, 17],
+      "Martes": [10, 17],
+      "Miércoles": [10, 17],
+      "Jueves": [10, 17],
+      "Viernes": [10, 17],
+      "Sábado": [10, 15],
+      "Domingo": [10, 12]
+    };
 
-        // Función para limpiar logs
-        function clearLogs() {
-            const logContainer = document.getElementById('eventLog');
-            logContainer.innerHTML = '';
-            addLogEntry('🗑️ REGISTROS LIMPIADOS', {}, 'info');
-            eventCounters.total = 1;
-            eventCounters.success = 1;
-            eventCounters.conversions = 0;
-            updateCounters();
-        }
+    const agendaDiv = document.getElementById("agenda");
 
-        // Verificar estado del Pixel al cargar
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🎯 Facebook Pixel Verifier - CARGADO');
-            console.log('✅ Pixel ID: 1560096578769877');
-            console.log('🚀 Listo para probar eventos');
-            
-            // Pequeña demostración automática después de 2 segundos
-            setTimeout(() => {
-                addLogEntry('💡 Tip: Haz clic en cualquier botón para probar eventos', {}, 'info');
-            }, 2000);
+    Object.keys(horarios).forEach(dia => {
+      const [inicio, fin] = horarios[dia];
+      const card = document.createElement("div");
+      card.className = "day-card";
+
+      const title = document.createElement("h3");
+      title.textContent = dia;
+      card.appendChild(title);
+
+      for (let h = inicio; h <= fin; h++) {
+        const slot = document.createElement("div");
+        slot.className = "time-slot libre";
+        slot.textContent = `${h > 12 ? h - 12 : h}:00 ${h < 12 ? "AM" : "PM"}`;
+        slot.dataset.estado = "libre";
+
+        slot.addEventListener("click", () => {
+          if (slot.dataset.estado === "libre") {
+            slot.dataset.estado = "ocupado";
+            slot.className = "time-slot ocupado";
+          } else if (slot.dataset.estado === "ocupado") {
+            slot.dataset.estado = "no-disponible";
+            slot.className = "time-slot no-disponible";
+          } else {
+            slot.dataset.estado = "libre";
+            slot.className = "time-slot libre";
+          }
         });
 
-        // Exponer funciones globalmente para debugging
-        window.trackEvent = trackEvent;
-        window.debugPixel = () => console.log('Estado del Pixel:', typeof fbq !== 'undefined' ? 'ACTIVO' : 'INACTIVO');
-    </script>
+        card.appendChild(slot);
+      }
+
+      agendaDiv.appendChild(card);
+    });
+
+    // Envío del formulario de requisitos
+    document.getElementById("formRequisitos").addEventListener("submit", function(e) {
+      e.preventDefault();
+      document.getElementById("mensaje-enviado").style.display = "block";
+      this.reset();
+      window.scrollTo({ top: this.offsetTop, behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
