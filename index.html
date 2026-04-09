@@ -3,254 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inmoalianza - Simulador y Formalización</title>
+    <title>Calcula tu cuota - Inmoalianza</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --azul-oscuro: #005691;
             --azul-claro: #00AEEF;
-            --gris-fondo: #f4f7f9;
+            --gris-fondo: #f4f7f6;
             --blanco: #ffffff;
-            --text-dark: #1e293b;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* Reset para evitar desbordamientos */
+        * {
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Lato', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--gris-fondo);
-            margin: 0;
-            padding: 10px;
             display: flex;
             justify-content: center;
+            padding: 20px;
+            margin: 0;
         }
 
         .container {
+            background-color: var(--blanco);
             width: 100%;
             max-width: 900px;
-            background: var(--blanco);
+            padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        .header-app {
-            background-color: var(--azul-oscuro);
-            color: white;
-            padding: 20px;
+        .header {
             text-align: center;
-            border-bottom: 4px solid var(--azul-claro);
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--azul-oscuro);
+            padding-bottom: 10px;
         }
 
-        .header-app h1 { margin: 0; font-family: 'Poppins'; font-size: 1.2rem; letter-spacing: 2px; }
+        .header h1 {
+            color: var(--azul-oscuro);
+            margin: 0;
+            font-size: 20px;
+            text-transform: uppercase;
+        }
 
-        /* --- SECCIONES --- */
-        .section-padding { padding: 25px; }
-        
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
+            display: flex;
+            flex-direction: row; /* Horizontal por defecto */
+            flex-wrap: wrap;
             gap: 30px;
         }
 
-        @media (min-width: 768px) {
-            .main-content { grid-template-columns: 1fr 1fr; }
-            .header-app h1 { font-size: 1.8rem; }
+        .controls {
+            flex: 1.2;
+            min-width: 280px;
         }
 
-        /* --- FORMULARIO Y CONTROLES --- */
-        .input-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--text-dark); font-size: 0.9rem; }
-        
-        input[type="text"], input[type="date"], select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
+        .visuals {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
         }
 
         input[type="range"] {
             width: 100%;
-            height: 8px;
-            background: #ddd;
-            border-radius: 5px;
-            -webkit-appearance: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 22px; height: 22px;
-            background: var(--azul-oscuro);
-            border-radius: 50%;
             cursor: pointer;
         }
 
-        .value-display { font-size: 1.5rem; font-weight: 700; color: var(--azul-claro); margin-top: 5px; }
-
-        .select-btns { display: flex; gap: 8px; margin-top: 5px; }
-        .btn-year {
-            flex: 1; padding: 10px; border: 2px solid var(--azul-oscuro);
-            background: white; color: var(--azul-oscuro);
-            font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 0.8rem;
+        .value-display {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--azul-claro);
+            margin-top: 5px;
         }
-        .btn-year.active { background: var(--azul-oscuro); color: white; }
+
+        .select-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-year {
+            flex: 1;
+            padding: 12px 5px;
+            border: 2px solid var(--azul-oscuro);
+            background: none;
+            color: var(--azul-oscuro);
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-year.active {
+            background-color: var(--azul-oscuro);
+            color: white;
+        }
 
         .result-box {
-            background: var(--azul-oscuro);
+            background-color: var(--azul-oscuro);
             color: white;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 10px;
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
-        .result-box .amount { font-size: 2rem; font-weight: 900; }
+        .result-box .amount {
+            font-size: 30px;
+            font-weight: bold;
+            display: block;
+        }
 
-        /* --- GRÁFICO --- */
-        .visuals { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .chart-container { position: relative; height: 250px; width: 250px; }
+        .chart-container {
+            position: relative;
+            height: 230px;
+            width: 230px;
+        }
+
         .chart-label {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            text-align: center; font-size: 10px; font-weight: bold; color: #666; pointer-events: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            pointer-events: none;
         }
 
-        /* --- BOTÓN DE ACCIÓN --- */
-        .btn-main {
-            background: var(--azul-claro);
-            color: white; border: none; padding: 18px;
-            border-radius: 10px; font-size: 1.1rem; font-weight: 700;
-            cursor: pointer; width: 100%; text-transform: uppercase;
-            margin-top: 20px; transition: 0.3s;
-        }
-        .btn-main:hover { background: var(--azul-oscuro); }
-
-        /* --- CERTIFICADO --- */
-        #area-certificado {
-            display: none; padding: 40px 20px; background: white;
+        .info-text {
+            font-size: 11px;
+            color: #777;
+            margin-top: 15px;
+            line-height: 1.4;
+            text-align: center;
         }
 
-        .doc-header {
-            display: flex; flex-direction: column; align-items: center;
-            border-bottom: 3px solid var(--azul-oscuro);
-            padding-bottom: 15px; margin-bottom: 25px; gap: 10px;
-        }
-
-        .data-table { width: 100%; margin: 20px 0; border-collapse: collapse; }
-        .data-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
-        .data-table td:first-child { font-weight: 700; color: var(--azul-oscuro); }
-
-        .exp-box {
-            background: #fff5f5; border: 2px solid #f56565; color: #c53030;
-            padding: 15px; text-align: center; font-weight: 700; border-radius: 8px;
-        }
-
-        @media print {
-            .no-print { display: none !important; }
-            .container { box-shadow: none; max-width: 100%; }
-            #area-certificado { display: block !important; padding: 0; }
+        /* --- ADAPTACIÓN A MÓVILES --- */
+        @media (max-width: 650px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px 15px;
+            }
+            .header h1 {
+                font-size: 18px;
+            }
+            .main-content {
+                flex-direction: column; /* Apilar elementos verticalmente */
+            }
+            .controls, .visuals {
+                min-width: 100%;
+            }
+            .chart-container {
+                height: 200px;
+                width: 200px;
+            }
+            .btn-year {
+                font-size: 12px;
+                padding: 10px 2px;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-app">
-        <h1>INMOALIANZA >>></h1>
+    <div class="header">
+        <h1>Cuánto pagarías con Inmoalianza</h1>
     </div>
 
-    <div id="panel-simulador" class="section-padding no-print">
-        <div class="main-content">
-            <div class="controls">
-                <h3 style="color: var(--azul-oscuro); margin-top: 0;">1. Datos del Cliente</h3>
-                <div class="input-group">
-                    <label>Nombre Completo</label>
-                    <input type="text" id="nombreCli" placeholder="Juan Pérez">
-                </div>
-                <div class="input-group">
-                    <label>Cédula de Identidad</label>
-                    <input type="text" id="cedulaCli" placeholder="0000000000">
-                </div>
-                <div class="input-group">
-                    <label>Fecha de Caducidad</label>
-                    <input type="date" id="fechaCad">
-                </div>
-                
-                <h3 style="color: var(--azul-oscuro); margin-top: 30px;">2. Simulación de Crédito</h3>
-                <div class="input-group">
-                    <label>Monto del Inmueble</label>
-                    <input type="range" id="montoRange" min="20000" max="100000" step="10000" value="20000">
-                    <div class="value-display" id="montoText">$20,000</div>
-                </div>
-                <div class="input-group">
-                    <label>Plazo (Años)</label>
-                    <div class="select-btns">
-                        <button class="btn-year active" id="btn-5" onclick="setYear(5)">5 Años</button>
-                        <button class="btn-year" id="btn-10" onclick="setYear(10)">10 Años</button>
-                        <button class="btn-year" id="btn-15" onclick="setYear(15)">15 Años</button>
-                    </div>
+    <div class="main-content">
+        <div class="controls">
+            <div class="input-group">
+                <label>Monto del Crédito</label>
+                <input type="range" id="montoRange" min="20000" max="100000" step="10000" value="20000">
+                <div class="value-display" id="montoText">$20,000</div>
+            </div>
+
+            <div class="input-group">
+                <label>Plazo del Crédito</label>
+                <div class="select-btns">
+                    <button class="btn-year active" onclick="setYear(5)">5 Años</button>
+                    <button class="btn-year" onclick="setYear(10)">10 Años</button>
+                    <button class="btn-year" onclick="setYear(15)">15 Años</button>
                 </div>
             </div>
 
-            <div class="visuals">
-                <div class="chart-container">
-                    <canvas id="loanChart"></canvas>
-                    <div class="chart-label">ESTRUCTURA<br>DE PAGO</div>
-                </div>
-                
-                <div style="width: 100%; text-align: left; margin-top: 20px;">
-                    <label style="color: #666; font-size: 0.8rem;">Entrada mínima (5.75%):</label>
-                    <div id="entradaText" style="font-size: 1.3rem; font-weight: bold; color: var(--azul-claro);">$1,150.00</div>
-                </div>
+            <div class="input-group">
+                <label>Entrada mínima requerida (5.75%):</label>
+                <div class="value-display" id="entradaText" style="color: #666;">$1,150.00</div>
+            </div>
 
-                <div class="result-box" style="width: 100%;">
-                    <span style="font-size: 0.8rem; opacity: 0.9;">Cuota Mensual Aproximada:</span>
-                    <div class="amount" id="cuotaMensual">$410.00</div>
-                    <span style="font-size: 0.7rem;">Tasa Aplicada: <strong id="tasaText">4.60%</strong></span>
-                </div>
+            <div class="result-box">
+                <span>Tu cuota mensual estimada:</span>
+                <span class="amount" id="cuotaMensual">$410.00</span>
             </div>
         </div>
 
-        <button class="btn-main" onclick="generarCertificado()">Generar Certificado Oficial</button>
-    </div>
-
-    <div id="area-certificado">
-        <div class="doc-header">
-            <div style="font-family: 'Poppins'; font-weight: 700; color: var(--azul-oscuro); font-size: 1.8rem;">INMOALIANZA >>></div>
-            <div style="text-align: center; font-size: 0.7rem; color: #666;">
-                REF: IA-<span id="out-id"></span> | Emisión: <span id="out-hoy"></span>
+        <div class="visuals">
+            <div class="chart-container">
+                <canvas id="loanChart"></canvas>
+                <div class="chart-label">
+                    <b>DEUDA<br>TOTAL</b>
+                </div>
             </div>
-        </div>
-
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h2 style="margin:0; color: var(--azul-oscuro); text-transform: uppercase;">Crédito Hipotecario</h2>
-            <p style="font-size: 0.9rem; color: #64748b;">Certificado de Formalización Preliminar</p>
-        </div>
-
-        <div class="doc-body">
-            Se certifica que el beneficiario ha completado la simulación y proceso de formalización para un financiamiento inmobiliario directo bajo las siguientes condiciones:
-
-            <table class="data-table">
-                <tr><td>Beneficiario:</td><td id="out-n" style="font-weight: bold;"></td></tr>
-                <tr><td>Identificación:</td><td id="out-c"></td></tr>
-                <tr><td>Monto Propiedad:</td><td id="out-m"></td></tr>
-                <tr><td>Entrada Requerida (5.75%):</td><td id="out-e" style="color: var(--azul-claro); font-weight: bold;"></td></tr>
-                <tr><td>Tasa de Interés:</td><td id="out-tasa" style="font-weight: bold;"></td></tr>
-                <tr><td>Plazo Seleccionado:</td><td id="out-plazo"></td></tr>
-            </table>
-
-            <p style="font-size: 0.8rem; color: #666;">* El presente documento faculta al titular para la reserva del inmueble. Las condiciones se mantienen vigentes hasta la fecha de caducidad señalada.</p>
-        </div>
-
-        <div class="exp-box">
-            VIGENTE HASTA: <span id="out-f"></span>
-        </div>
-
-        <div class="no-print" style="display: flex; gap: 10px; margin-top: 30px;">
-            <button class="btn-main" style="flex: 1;" onclick="window.print()">Guardar PDF</button>
-            <button class="btn-main" style="flex: 1; background: #94a3b8;" onclick="location.reload()">Nuevo Cálculo</button>
+            <p class="info-text">
+                * Tasa de interés aplicada: <span id="tasaText">4.60%</span> anual.<br>
+                Valores referenciales sujetos a aprobación crediticia.
+            </p>
         </div>
     </div>
 </div>
@@ -274,8 +257,10 @@
 
     function setYear(year) {
         currentYear = year;
-        document.querySelectorAll('.btn-year').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('btn-' + year).classList.add('active');
+        document.querySelectorAll('.btn-year').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.innerText.includes(year)) btn.classList.add('active');
+        });
         updateCalculations();
     }
 
@@ -289,6 +274,7 @@
         const data = tablaData[montoActual];
         const cuota = data[currentYear];
         const entrada = data.entrada;
+        // Mantenemos la lógica de tasa de tu código original
         const tasa = currentYear === 5 ? "4.60%" : "2.30%";
         
         const totalPagado = cuota * currentYear * 12;
@@ -303,7 +289,11 @@
 
     function updateChart(capital, intereses) {
         const ctx = document.getElementById('loanChart').getContext('2d');
-        if (myChart) myChart.destroy();
+        
+        if (myChart) {
+            myChart.destroy();
+        }
+
         myChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -311,41 +301,28 @@
                 datasets: [{
                     data: [capital, intereses],
                     backgroundColor: ['#005691', '#00AEEF'],
+                    hoverOffset: 4,
                     borderWidth: 0
                 }]
             },
-            options: { cutout: '75%', plugins: { legend: { display: false } }, maintainAspectRatio: false }
+            options: {
+                cutout: '70%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { 
+                            boxWidth: 12,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
         });
     }
 
-    function generarCertificado() {
-        const nom = document.getElementById('nombreCli').value;
-        const ced = document.getElementById('cedulaCli').value;
-        const fec = document.getElementById('fechaCad').value;
-
-        if(!nom || !ced || !fec) {
-            alert("Por favor, completa los datos del cliente y la fecha de caducidad.");
-            return;
-        }
-
-        // Pasar datos al certificado
-        document.getElementById('out-n').innerText = nom.toUpperCase();
-        document.getElementById('out-c').innerText = ced;
-        document.getElementById('out-m').innerText = "$" + montoActual.toLocaleString();
-        document.getElementById('out-e').innerText = document.getElementById('entradaText').innerText;
-        document.getElementById('out-tasa').innerText = document.getElementById('tasaText').innerText + " ANUAL";
-        document.getElementById('out-plazo').innerText = currentYear + " AÑOS";
-        document.getElementById('out-hoy').innerText = new Date().toLocaleDateString();
-        document.getElementById('out-f').innerText = fec.split("-").reverse().join("/");
-        document.getElementById('out-id').innerText = Math.floor(Math.random()*9000+1000);
-
-        // Cambiar vista
-        document.getElementById('panel-simulador').style.display = 'none';
-        document.getElementById('area-certificado').style.display = 'block';
-        window.scrollTo(0,0);
-    }
-
-    window.onload = updateCalculations;
+    updateCalculations();
 </script>
 
 </body>
