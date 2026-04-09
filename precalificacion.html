@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inmoalianza - Formalización Hipotecaria</title>
+    <title>Inmoalianza - Formalización</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -74,8 +74,8 @@
 
         /* --- VISTA DEL CERTIFICADO --- */
         #area-certificado {
-            display: none; /* Se oculta al inicio */
-            padding: 50px;
+            display: none;
+            padding: 60px;
             background: white;
             border: 1px solid #eee;
         }
@@ -90,7 +90,7 @@
 
         .logo-doc { font-family: 'Poppins'; font-weight: 700; color: var(--azul-oscuro); font-size: 24px; }
 
-        .doc-body { line-height: 1.7; text-align: justify; color: #222; }
+        .doc-body { line-height: 1.8; text-align: justify; color: #1e293b; font-size: 16px; }
 
         .data-table {
             width: 100%;
@@ -98,33 +98,33 @@
             border-collapse: collapse;
         }
 
-        .data-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+        .data-table td { padding: 14px; border-bottom: 1px solid #f1f5f9; }
         .data-table td:first-child { font-weight: 700; color: var(--azul-oscuro); width: 45%; }
 
         .val-entrada { color: var(--azul-claro); font-weight: 800; font-size: 20px; }
 
         .exp-box {
             background-color: #fff5f5;
-            border: 2px dashed #f56565;
+            border: 2px solid #f56565;
             color: #c53030;
             padding: 15px;
             text-align: center;
             font-weight: 700;
             margin-top: 30px;
+            border-radius: 6px;
         }
 
         .no-print-btns {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
-        /* CSS PARA IMPRESIÓN / PDF */
         @media print {
             body { background: white; padding: 0; }
             .no-print-area, .header-app, .no-print-btns { display: none !important; }
             .container { box-shadow: none; max-width: 100%; }
-            #area-certificado { display: block !important; border: none; padding: 20px; }
+            #area-certificado { display: block !important; border: none; padding: 40px; }
         }
     </style>
 </head>
@@ -136,7 +136,7 @@
     </div>
 
     <div class="form-padding no-print-area" id="panel-entrada">
-        <h3 style="color: var(--azul-oscuro); margin-top: 0;">Formalización de Crédito</h3>
+        <h3 style="color: var(--azul-oscuro); margin-top: 0; text-align: center;">Formalización de Crédito</h3>
         <div class="grid-form">
             <div class="form-group">
                 <label>Nombre del Cliente</label>
@@ -144,10 +144,10 @@
             </div>
             <div class="form-group">
                 <label>Cédula</label>
-                <input type="text" id="c" placeholder="0000000000">
+                <input type="text" id="c" placeholder="Ej: 1712345678">
             </div>
             <div class="form-group">
-                <label>Monto del Inmueble</label>
+                <label>Monto de la Propiedad</label>
                 <select id="m">
                     <option value="20000">20,000</option>
                     <option value="30000">30,000</option>
@@ -174,36 +174,37 @@
                 <label>Fecha de Caducidad del Certificado</label>
                 <input type="date" id="f">
             </div>
-            <button class="btn-main" onclick="generar()">Generar Certificado Oficial</button>
+            <button class="btn-main" onclick="generar()">Generar Certificado</button>
         </div>
     </div>
 
     <div id="area-certificado">
         <div class="doc-header">
             <div class="logo-doc">INMOALIANZA >>></div>
-            <div style="text-align: right; font-size: 11px; color: #666;">
-                ID: <span id="out-id"></span><br>
-                Fecha: <span id="out-hoy"></span>
+            <div style="text-align: right; font-size: 11px; color: #64748b;">
+                Referencia: IA-FORM-<span id="out-id"></span><br>
+                Fecha de Emisión: <span id="out-hoy"></span>
             </div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 25px;">
-            <h2 style="margin:0; color: var(--azul-oscuro);">CERTIFICADO DE FORMALIZACIÓN</h2>
-            <p style="font-size: 12px; color: #666;">Crédito Hipotecario Inmediato</p>
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="margin:0; color: var(--azul-oscuro); text-transform: uppercase; letter-spacing: 1px;">Crédito Hipotecario</h2>
+            <p style="font-size: 14px; color: #64748b; margin-top: 5px;">Departamento de Créditos y Finanzas</p>
         </div>
 
         <div class="doc-body">
-            Se certifica que el cliente mencionado ha formalizado su interés de financiamiento. Este documento habilita al beneficiario para la aplicación del crédito hipotecario en el destino inmobiliario seleccionado.
+            Se certifica que el beneficiario mencionado ha completado el proceso de formalización preliminar para la obtención de un financiamiento inmobiliario directo bajo la tasa preferencial establecida:
             
             <table class="data-table">
-                <tr><td>Beneficiario:</td><td id="out-n"></td></tr>
-                <tr><td>Identificación:</td><td id="out-c"></td></tr>
-                <tr><td>Monto Propiedad:</td><td id="out-m"></td></tr>
-                <tr><td>Entrada Requerida (5.75%):</td><td id="out-e" class="val-entrada"></td></tr>
-                <tr><td>Uso Autorizado:</td><td id="out-u"></td></tr>
+                <tr><td>Beneficiario:</td><td id="out-n" style="font-weight: 700;"></td></tr>
+                <tr><td>Identificación:</td><td id="out-c" style="font-weight: 700;"></td></tr>
+                <tr><td>Monto de Propiedad:</td><td id="out-m" style="font-weight: 700;"></td></tr>
+                <tr><td>Entrada de Formalización (5.75%):</td><td id="out-e" class="val-entrada"></td></tr>
+                <tr><td>Tasa de Interés Aplicada:</td><td style="font-weight: 700;">2.30% ANUAL</td></tr>
+                <tr><td>Uso Autorizado:</td><td id="out-u" style="font-weight: 700;"></td></tr>
             </table>
 
-            <p style="font-size: 13px;">* El valor de la entrada debe ser liquidado antes de la fecha de caducidad para mantener las condiciones de tasa preferencial (4.60% / 2.30%).</p>
+            <p>Este documento faculta al titular para proceder con la reserva del activo inmobiliario. El valor de la entrada de formalización deberá ser liquidado dentro del periodo de vigencia aquí establecido.</p>
         </div>
 
         <div class="exp-box">
@@ -211,8 +212,8 @@
         </div>
 
         <div class="no-print-btns">
-            <button class="btn-main" style="background: var(--azul-claro);" onclick="window.print()">DESCARGAR / IMPRIMIR PDF</button>
-            <button class="btn-main" style="background: #999;" onclick="location.reload()">VOLVER</button>
+            <button class="btn-main" style="background: var(--azul-claro);" onclick="window.print()">GUARDAR COMO PDF</button>
+            <button class="btn-main" style="background: #94a3b8;" onclick="location.reload()">NUEVA CONSULTA</button>
         </div>
     </div>
 </div>
@@ -226,33 +227,30 @@
         const uso = document.getElementById('u').value;
 
         if (!nombre || !cedula || !fecha) {
-            alert("Por favor rellena todos los campos.");
+            alert("Por favor rellena el nombre, la cédula y selecciona una fecha de caducidad.");
             return;
         }
 
-        // Cálculos
         const entrada = monto * 0.0575;
-        const hoy = new Date().toLocaleDateString();
+        const hoy = new Date().toLocaleDateString('es-EC', { day: '2-digit', month: 'long', year: 'numeric' });
         
-        // Formatear fecha caducidad
         const fPartes = fecha.split("-");
-        const fFormateada = fPartes[2] + "/" + fPartes[1] + "/" + fPartes[0];
+        const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+        const fFormateada = fPartes[2] + " de " + meses[parseInt(fPartes[1]) - 1] + " de " + fPartes[0];
 
-        // Mostrar datos
         document.getElementById('out-n').innerText = nombre.toUpperCase();
         document.getElementById('out-c').innerText = cedula;
-        document.getElementById('out-m').innerText = "$" + monto.toLocaleString();
-        document.getElementById('out-e').innerText = "$" + entrada.toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('out-m').innerText = "$" + monto.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('out-e').innerText = "$" + entrada.toLocaleString('en-US', {minimumFractionDigits: 2});
         document.getElementById('out-u').innerText = uso;
         document.getElementById('out-hoy').innerText = hoy;
-        document.getElementById('out-f').innerText = fFormateada;
-        document.getElementById('out-id').innerText = Math.floor(Math.random() * 10000);
+        document.getElementById('out-f').innerText = fFormateada.toUpperCase();
+        document.getElementById('out-id').innerText = Math.floor(Math.random() * 9000 + 1000);
 
-        // Cambiar vista
         document.getElementById('panel-entrada').style.display = 'none';
         document.getElementById('area-certificado').style.display = 'block';
+        window.scrollTo(0,0);
     }
 </script>
-
 </body>
 </html>
