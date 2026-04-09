@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inmoalianza - Formalización Hipotecaria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-oscuro: #005691;
+            --azul-claro: #00AEEF;
+            --gris-fondo: #f4f7f9;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--gris-fondo);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header-app {
+            background-color: var(--azul-oscuro);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header-app h1 { margin: 0; font-family: 'Poppins'; font-size: 22px; letter-spacing: 2px; }
+
+        .form-padding { padding: 40px; }
+
+        .grid-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
+
+        label { font-weight: 700; margin-bottom: 8px; color: #444; font-size: 14px; }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn-main {
+            grid-column: span 2;
+            background-color: var(--azul-oscuro);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        /* --- VISTA DEL CERTIFICADO --- */
+        #area-certificado {
+            display: none; /* Se oculta al inicio */
+            padding: 50px;
+            background: white;
+            border: 1px solid #eee;
+        }
+
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 3px solid var(--azul-oscuro);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .logo-doc { font-family: 'Poppins'; font-weight: 700; color: var(--azul-oscuro); font-size: 24px; }
+
+        .doc-body { line-height: 1.7; text-align: justify; color: #222; }
+
+        .data-table {
+            width: 100%;
+            margin: 25px 0;
+            border-collapse: collapse;
+        }
+
+        .data-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+        .data-table td:first-child { font-weight: 700; color: var(--azul-oscuro); width: 45%; }
+
+        .val-entrada { color: var(--azul-claro); font-weight: 800; font-size: 20px; }
+
+        .exp-box {
+            background-color: #fff5f5;
+            border: 2px dashed #f56565;
+            color: #c53030;
+            padding: 15px;
+            text-align: center;
+            font-weight: 700;
+            margin-top: 30px;
+        }
+
+        .no-print-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* CSS PARA IMPRESIÓN / PDF */
+        @media print {
+            body { background: white; padding: 0; }
+            .no-print-area, .header-app, .no-print-btns { display: none !important; }
+            .container { box-shadow: none; max-width: 100%; }
+            #area-certificado { display: block !important; border: none; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-app">
+        <h1>INMOALIANZA >>></h1>
+    </div>
+
+    <div class="form-padding no-print-area" id="panel-entrada">
+        <h3 style="color: var(--azul-oscuro); margin-top: 0;">Formalización de Crédito</h3>
+        <div class="grid-form">
+            <div class="form-group">
+                <label>Nombre del Cliente</label>
+                <input type="text" id="n" placeholder="Nombre completo">
+            </div>
+            <div class="form-group">
+                <label>Cédula</label>
+                <input type="text" id="c" placeholder="0000000000">
+            </div>
+            <div class="form-group">
+                <label>Monto del Inmueble</label>
+                <select id="m">
+                    <option value="20000">20,000</option>
+                    <option value="30000">30,000</option>
+                    <option value="40000">40,000</option>
+                    <option value="50000">50,000</option>
+                    <option value="60000">60,000</option>
+                    <option value="70000">70,000</option>
+                    <option value="80000">80,000</option>
+                    <option value="90000">90,000</option>
+                    <option value="100000">100,000</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Uso del Crédito</label>
+                <select id="u">
+                    <option value="CASA">Casa</option>
+                    <option value="DEPARTAMENTO">Departamento</option>
+                    <option value="CONSTRUCCIÓN">Construcción</option>
+                    <option value="REMODELACIÓN">Remodelación</option>
+                    <option value="TERRENO">Terreno</option>
+                </select>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Fecha de Caducidad del Certificado</label>
+                <input type="date" id="f">
+            </div>
+            <button class="btn-main" onclick="generar()">Generar Certificado Oficial</button>
+        </div>
+    </div>
+
+    <div id="area-certificado">
+        <div class="doc-header">
+            <div class="logo-doc">INMOALIANZA >>></div>
+            <div style="text-align: right; font-size: 11px; color: #666;">
+                ID: <span id="out-id"></span><br>
+                Fecha: <span id="out-hoy"></span>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 25px;">
+            <h2 style="margin:0; color: var(--azul-oscuro);">CERTIFICADO DE FORMALIZACIÓN</h2>
+            <p style="font-size: 12px; color: #666;">Crédito Hipotecario Inmediato</p>
+        </div>
+
+        <div class="doc-body">
+            Se certifica que el cliente mencionado ha formalizado su interés de financiamiento. Este documento habilita al beneficiario para la aplicación del crédito hipotecario en el destino inmobiliario seleccionado.
+            
+            <table class="data-table">
+                <tr><td>Beneficiario:</td><td id="out-n"></td></tr>
+                <tr><td>Identificación:</td><td id="out-c"></td></tr>
+                <tr><td>Monto Propiedad:</td><td id="out-m"></td></tr>
+                <tr><td>Entrada Requerida (5.75%):</td><td id="out-e" class="val-entrada"></td></tr>
+                <tr><td>Uso Autorizado:</td><td id="out-u"></td></tr>
+            </table>
+
+            <p style="font-size: 13px;">* El valor de la entrada debe ser liquidado antes de la fecha de caducidad para mantener las condiciones de tasa preferencial (4.60% / 2.30%).</p>
+        </div>
+
+        <div class="exp-box">
+            VIGENTE HASTA EL: <span id="out-f"></span>
+        </div>
+
+        <div class="no-print-btns">
+            <button class="btn-main" style="background: var(--azul-claro);" onclick="window.print()">DESCARGAR / IMPRIMIR PDF</button>
+            <button class="btn-main" style="background: #999;" onclick="location.reload()">VOLVER</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function generar() {
+        const nombre = document.getElementById('n').value;
+        const cedula = document.getElementById('c').value;
+        const fecha = document.getElementById('f').value;
+        const monto = parseFloat(document.getElementById('m').value);
+        const uso = document.getElementById('u').value;
+
+        if (!nombre || !cedula || !fecha) {
+            alert("Por favor rellena todos los campos.");
+            return;
+        }
+
+        // Cálculos
+        const entrada = monto * 0.0575;
+        const hoy = new Date().toLocaleDateString();
+        
+        // Formatear fecha caducidad
+        const fPartes = fecha.split("-");
+        const fFormateada = fPartes[2] + "/" + fPartes[1] + "/" + fPartes[0];
+
+        // Mostrar datos
+        document.getElementById('out-n').innerText = nombre.toUpperCase();
+        document.getElementById('out-c').innerText = cedula;
+        document.getElementById('out-m').innerText = "$" + monto.toLocaleString();
+        document.getElementById('out-e').innerText = "$" + entrada.toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('out-u').innerText = uso;
+        document.getElementById('out-hoy').innerText = hoy;
+        document.getElementById('out-f').innerText = fFormateada;
+        document.getElementById('out-id').innerText = Math.floor(Math.random() * 10000);
+
+        // Cambiar vista
+        document.getElementById('panel-entrada').style.display = 'none';
+        document.getElementById('area-certificado').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
