@@ -274,21 +274,60 @@
         .tooltip .success-footer { color: #4ade80; font-weight: 600; }
         .tooltip .alert-footer { color: #f87171; }
 
+        /* Media query para dispositivos móviles */
         @media screen and (max-width: 768px) {
-            body { padding: 10px 5px; }
-            .container { padding: 20px 10px; border-radius: 12px; }
-            .logo-title { font-size: 1.8rem; }
-            .controls-wrapper { display: flex; flex-direction: column; width: 100%; padding: 12px; gap: 15px; }
-            .control-group { width: 100%; justify-content: space-between; }
-            .control-group select { width: 60%; }
-            .circles-container { flex-direction: column; gap: 20px; }
-            .circle-cell { width: 100%; }
+            body {
+                padding: 10px 5px;
+            }
+
+            .container {
+                padding: 20px 10px;
+                border-radius: 12px;
+            }
+
+            .logo-title {
+                font-size: 1.8rem;
+            }
+
+            .controls-wrapper {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                padding: 12px;
+                gap: 15px;
+            }
+
+            .control-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .control-group select {
+                width: 60%;
+            }
+
+            .circles-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .circle-cell {
+                width: 100%;
+            }
+
             .circle-inmo { width: 210px; height: 210px; }
             .circle-biess, .circle-banco { width: 180px; height: 180px; }
+
             .circle-title { font-size: 1rem; }
             .circle-rate { font-size: 1.35rem; }
             .circle-inmo .circle-rate { font-size: 1.55rem; }
-            .tooltip { width: 290px; padding: 14px; font-size: 0.85rem; bottom: 105%; }
+
+            .tooltip {
+                width: 290px;
+                padding: 14px;
+                font-size: 0.85rem;
+                bottom: 105%;
+            }
         }
     </style>
 </head>
@@ -298,6 +337,7 @@
         <div class="logo-title">INMOALIANZA</div>
         <div class="subtitle">Simulador de Propiedades e Intereses Interactivos</div>
 
+        <!-- Controles de Configuración -->
         <div class="controls-wrapper">
             <div class="control-group">
                 <label for="montoSelect">Valor Propiedad:</label>
@@ -315,37 +355,40 @@
             </div>
             
             <div class="control-group">
-                <label for="plazoSelect">Plazo (Inmo/Banco):</label>
+                <label for="plazoSelect">Plazo General:</label>
                 <select id="plazoSelect" onchange="updateValues()">
-                    <option value="5">5 Años</option>
-                    <option value="10" selected>10 Años</option>
-                    <option value="15">15 Años</option>
+                    <option value="5">5 Años (Inmo/Banco)</option>
+                    <option value="10" selected>10 Años (Inmo/Banco)</option>
+                    <option value="15">15 Años (Inmo/Banco)</option>
                 </select>
             </div>
         </div>
 
+        <!-- Estructura de Círculos Adaptable -->
         <div class="circles-container">
 
+            <!-- BIESS (Verde - FIJO A 25 AÑOS CON 10% DE ENTRADA) -->
             <div class="circle-cell">
                 <div class="comparison-circle circle-biess">
                     <div class="circle-title">BIESS</div>
                     <div class="circle-rate">7.15%</div>
-                    <div class="circle-hint">25 Años Obligatorios</div>
+                    <div class="circle-hint">25 Años Fijos</div>
                     
                     <div class="tooltip">
-                        <h4>BIESS (Plazo a 25 Años)</h4>
+                        <h4>BIESS (A 25 Años)</h4>
                         <ul>
                             <li><span class="label">Valor Propiedad:</span> <span class="value" id="biessMonto">$50,000.00</span></li>
                             <li><span class="label">Entrada (10%):</span> <span class="value" id="biessEntrada">$5,000.00</span></li>
-                            <li><span class="label">Saldo Financiado (90%):</span> <span class="value" id="biessFinanciado">$45,000.00</span></li>
+                            <li><span class="label">Monto Financiado:</span> <span class="value" id="biessFinanciado">$45,000.00</span></li>
                             <li><span class="label">Cuota Mensual:</span> <span class="value" id="biessCuota">~$325.00</span></li>
-                            <li><span class="label">Total Final Pagado:</span> <span class="value highlight-total" id="biessTotal">$102,500.00</span></li>
+                            <li><span class="label">Total Final:</span> <span class="value highlight-total" id="biessTotal">$102,500.00</span></li>
                         </ul>
-                        <div class="footer-text alert-footer">⚠️ **¡Terminas pagando casi el triple del saldo financiado original por el peso del interés compuesto!**</div>
+                        <div class="footer-text alert-footer">⚠️ ¡Por el interés compuesto a 25 años, terminas pagando casi el triple del valor neto financiado!</div>
                     </div>
                 </div>
             </div>
 
+            <!-- INMOALIANZA (Azul - Principal) -->
             <div class="circle-cell">
                 <div class="comparison-circle circle-inmo">
                     <div class="circle-title">INMOALIANZA</div>
@@ -357,15 +400,16 @@
                         <ul>
                             <li><span class="label">Valor Propiedad:</span> <span class="value highlight-blue" id="inmoMonto">$50,000.00</span></li>
                             <li><span class="label">Interés Fijo:</span> <span class="value" style="color: #38bdf8;">2.30%</span></li>
-                            <li><span class="label">Entrada Programada:</span> <span class="value" id="inmoEntrada">$2,875.00</span></li>
+                            <li><span class="label">Entrada:</span> <span class="value" id="inmoEntrada">$2,875.00</span></li>
                             <li><span class="label">Cuota Mensual:</span> <span class="value highlight-blue" id="inmoCuota">$512.50</span></li>
                             <li><span class="label">Total Final:</span> <span class="value highlight-total" id="inmoTotal">$64,375.00</span></li>
                         </ul>
-                        <div class="footer-text success-footer">¡Adjudicación y gestión directa! Capitalización real sin letras infinitas.</div>
+                        <div class="footer-text success-footer">¡Planificación inteligente sin intereses infinitos! El máximo ahorro.</div>
                     </div>
                 </div>
             </div>
 
+            <!-- BANCO TRADICIONAL (Rojo) -->
             <div class="circle-cell">
                 <div class="comparison-circle circle-banco">
                     <div class="circle-title">BANCO</div>
@@ -381,7 +425,7 @@
                             <li><span class="label">Cuota Mensual:</span> <span class="value" id="bancoCuota">~$610.00</span></li>
                             <li><span class="label">Total Final:</span> <span class="value highlight-total" id="bancoTotal">$83,200.00</span></li>
                         </ul>
-                        <div class="footer-text alert-footer">Costo elevado por seguros comerciales de la banca privada.</div>
+                        <div class="footer-text alert-footer">Costo muy elevado por interés compuesto y seguros comerciales.</div>
                     </div>
                 </div>
             </div>
@@ -390,5 +434,74 @@
     </div>
 
     <script>
+        // Datos reales de INMOALIANZA
         const tablaInmo = {
-            "200
+            "20000": { entrada: 1150.00, cuotas: { "5": 410.00, "10": 205.00, "15": 149.44 } },
+            "30000": { entrada: 1725.00, cuotas: { "5": 615.00, "10": 307.50, "15": 224.17 } },
+            "40000": { entrada: 2300.00, cuotas: { "5": 820.00, "10": 410.00, "15": 298.89 } },
+            "50000": { entrada: 2875.00, cuotas: { "5": 1025.00, "10": 512.50, "15": 373.61 } },
+            "60000": { entrada: 3450.00, cuotas: { "5": 1230.00, "10": 615.00, "15": 448.33 } },
+            "70000": { entrada: 4025.00, cuotas: { "5": 1435.00, "10": 717.50, "15": 523.06 } },
+            "80000": { entrada: 4600.00, cuotas: { "5": 1640.00, "10": 820.00, "15": 597.78 } },
+            "90000": { entrada: 5175.00, cuotas: { "5": 1845.00, "10": 922.50, "15": 672.50 } },
+            "100000": { entrada: 5750.00, cuotas: { "5": 2050.00, "10": 1025.00, "15": 747.22 } }
+        };
+
+        const tasasReferenciales = {
+            bancoRate: 0.1090,
+            bancoFactores: { "5": 0.0223, "10": 0.0141, "15": 0.0116 },
+            // Factor compuesto para amortización real a 25 años en el BIESS
+            biessFactor25Y: 0.00717
+        };
+
+        function formatMoneda(valor) {
+            return "$" + parseFloat(valor).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function updateValues() {
+            const montoSelect = document.getElementById("montoSelect").value;
+            const plazoSelect = document.getElementById("plazoSelect").value;
+            
+            const numMonto = parseFloat(montoSelect);
+            const textMontoFormateado = formatMoneda(numMonto);
+
+            // 1. ACTUALIZACIÓN DINÁMICA DE INMOALIANZA
+            const datosInmo = tablaInmo[montoSelect];
+            const cuotaInmo = datosInmo.cuotas[plazoSelect];
+            const entradaInmo = datosInmo.entrada;
+            const totalInmo = entradaInmo + (cuotaInmo * (parseInt(plazoSelect) * 12));
+
+            document.getElementById("inmoMonto").innerText = textMontoFormateado;
+            document.getElementById("inmoEntrada").innerText = formatMoneda(entradaInmo);
+            document.getElementById("inmoCuota").innerText = formatMoneda(cuotaInmo);
+            document.getElementById("inmoTotal").innerText = formatMoneda(totalInmo);
+
+            // 2. ACTUALIZACIÓN CRÍTICA DEL BIESS (FIJO A 25 AÑOS, 10% ENTRADA, 90% FINANCIADO)
+            const entradaBiess = numMonto * 0.10;
+            const financiadoBiess = numMonto - entradaBiess;
+            const cuotaBiess = financiadoBiess * tasasReferenciales.biessFactor25Y;
+            const totalBiess = entradaBiess + (cuotaBiess * 300); // 300 meses = 25 años
+
+            document.getElementById("biessMonto").innerText = textMontoFormateado;
+            document.getElementById("biessEntrada").innerText = formatMoneda(entradaBiess);
+            document.getElementById("biessFinanciado").innerText = formatMoneda(financiadoBiess);
+            document.getElementById("biessCuota").innerText = "~" + formatMoneda(cuotaBiess);
+            document.getElementById("biessTotal").innerText = formatMoneda(totalBiess);
+
+            // 3. ACTUALIZACIÓN DEL BANCO TRADICIONAL
+            const entradaBanco = numMonto * 0.20;
+            const financiadoBanco = numMonto - entradaBanco;
+            const factorBanco = tasasReferenciales.bancoFactores[plazoSelect];
+            const cuotaBanco = financiadoBanco * factorBanco;
+            const totalBanco = entradaBanco + (cuotaBanco * (parseInt(plazoSelect) * 12));
+
+            document.getElementById("bancoMonto").innerText = textMontoFormateado;
+            document.getElementById("bancoEntrada").innerText = formatMoneda(entradaBanco);
+            document.getElementById("bancoCuota").innerText = "~" + formatMoneda(cuotaBanco);
+            document.getElementById("bancoTotal").innerText = formatMoneda(totalBanco);
+        }
+
+        window.onload = updateValues;
+    </script>
+</body>
+</html>
