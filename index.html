@@ -3,327 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcula tu cuota - Inmoalianza</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Comparativa de Financiamiento - INMOALIANZA</title>
     <style>
         :root {
-            --azul-oscuro: #005691;
-            --azul-claro: #00AEEF;
-            --gris-fondo: #f4f7f6;
-            --blanco: #ffffff;
+            --inmo-blue: #0076a3;
+            --biess-green: #2ecc71;
+            --banco-red: #e74c3c;
+            --dark-bg: #1e293b;
+            --light-bg: #f8fafc;
         }
 
-        /* Reset para evitar desbordamientos */
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--gris-fondo);
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--light-bg);
             margin: 0;
+            padding: 20px 10px;
+            color: #334155;
+            display: block;
         }
 
         .container {
-            background-color: var(--blanco);
+            max-width: 1000px;
             width: 100%;
-            max-width: 900px;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .header {
+            margin: 0 auto;
+            background: white;
+            padding: 25px 15px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             text-align: center;
+        }
+
+        .logo-title {
+            color: var(--inmo-blue);
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1rem;
             margin-bottom: 25px;
-            border-bottom: 2px solid var(--azul-oscuro);
-            padding-bottom: 10px;
+            padding: 0 10px;
         }
 
-        .header h1 {
-            color: var(--azul-oscuro);
-            margin: 0;
-            font-size: 20px;
-            text-transform: uppercase;
+        /* Selectores de Configuración Responsivos */
+        .controls-wrapper {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .main-content {
+        .control-group {
             display: flex;
-            flex-direction: row; /* Horizontal por defecto */
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .control-group label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+
+        .control-group select {
+            padding: 8px 14px;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            border: 2px solid #cbd5e1;
+            background: white;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .control-group select:focus {
+            border-color: var(--inmo-blue);
+        }
+
+        /* Contenedor de Círculos Adaptable */
+        .circles-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
             flex-wrap: wrap;
             gap: 30px;
+            margin-top: 20px;
+            width: 100%;
         }
 
-        .controls {
-            flex: 1.2;
-            min-width: 280px;
+        .circle-cell {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
         }
 
-        .visuals {
-            flex: 1;
-            min-width: 280px;
+        /* Estilo Base del Círculo */
+        .comparison-circle {
+            position: relative;
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: flex-start;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
-            font-size: 14px;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            cursor: pointer;
-        }
-
-        .value-display {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--azul-claro);
-            margin-top: 5px;
-        }
-
-        .select-btns {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .btn-year {
-            flex: 1;
-            padding: 12px 5px;
-            border: 2px solid var(--azul-oscuro);
-            background: none;
-            color: var(--azul-oscuro);
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 13px;
-        }
-
-        .btn-year.active {
-            background-color: var(--azul-oscuro);
             color: white;
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            will-change: transform, box-shadow;
         }
 
-        .result-box {
-            background-color: var(--azul-oscuro);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
+        .comparison-circle:hover {
+            transform: scale(1.06);
         }
 
-        .result-box .amount {
-            font-size: 30px;
-            font-weight: bold;
-            display: block;
+        /* Colores y Tamaños de Escritorio */
+        .circle-inmo {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #005f85, var(--inmo-blue));
+            box-shadow: 0 10px 25px rgba(0, 118, 163, 0.35);
         }
 
-        .chart-container {
-            position: relative;
-            height: 230px;
-            width: 230px;
+        .circle-biess {
+            width: 210px;
+            height: 210px;
+            background: linear-gradient(135deg, #21a85d, var(--biess-green));
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.2);
         }
 
-        .chart-label {
+        .circle-banco {
+            width: 210px;
+            height: 210px;
+            background: linear-gradient(135deg, #bd3a2c, var(--banco-red));
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.2);
+        }
+
+        /* Textos internos */
+        .circle-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .circle-rate {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: rgba(255,255,255,0.18);
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .circle-inmo .circle-rate {
+            font-size: 1.9rem;
+        }
+
+        .circle-hint {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        /* Tooltip Flotante Mejorado */
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            width: 320px;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            text-align: left;
+            border-radius: 12px;
+            padding: 18px;
             position: absolute;
-            top: 50%;
+            z-index: 50;
+            bottom: 112%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            font-size: 13px;
-            color: #666;
+            transform: translateX(-50%) translateY(5px);
+            transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.25);
+            border: 1px solid rgba(255,255,255,0.08);
             pointer-events: none;
         }
 
-        .info-text {
-            font-size: 11px;
-            color: #777;
-            margin-top: 15px;
-            line-height: 1.4;
-            text-align: center;
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--dark-bg) transparent transparent transparent;
         }
 
-        /* --- ADAPTACIÓN A MÓVILES --- */
-        @media (max-width: 650px) {
-            body {
-                padding: 10px;
-            }
-            .container {
-                padding: 20px 15px;
-            }
-            .header h1 {
-                font-size: 18px;
-            }
-            .main-content {
-                flex-direction: column; /* Apilar elementos verticalmente */
-            }
-            .controls, .visuals {
-                min-width: 100%;
-            }
-            .chart-container {
-                height: 200px;
-                width: 200px;
-            }
-            .btn-year {
-                font-size: 12px;
-                padding: 10px 2px;
-            }
+        .comparison-circle:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Detalles de información en tooltip */
+        .tooltip h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 4px;
+            color: #fff;
+        }
+
+        .tooltip ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tooltip ul li {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tooltip ul li span.label {
+            color: #94a3b8;
+        }
+
+        .tooltip ul li span.value {
+            font-weight: 600;
+        }
+
+        .tooltip .highlight-blue {
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .tooltip .highlight-total {
+            color: #f59e0b;
+            font-weight: 700;
+        }
+
+        .tooltip .footer-text {
+            font-size: 0.8rem;
+            margin-top: 10px;
+            border-top: 1px dashed rgba(255,255,255,0.12);
+            padding-top: 8px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+        
+        .tooltip .success-footer { color: #4ade80; font-weight: 600; }
+        .tooltip .alert-footer { color: #f87171; }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 10px 5px; }
+            .container { padding: 20px 10px; border-radius: 12px; }
+            .logo-title { font-size: 1.8rem; }
+            .controls-wrapper { display: flex; flex-direction: column; width: 100%; padding: 12px; gap: 15px; }
+            .control-group { width: 100%; justify-content: space-between; }
+            .control-group select { width: 60%; }
+            .circles-container { flex-direction: column; gap: 20px; }
+            .circle-cell { width: 100%; }
+            .circle-inmo { width: 210px; height: 210px; }
+            .circle-biess, .circle-banco { width: 180px; height: 180px; }
+            .circle-title { font-size: 1rem; }
+            .circle-rate { font-size: 1.35rem; }
+            .circle-inmo .circle-rate { font-size: 1.55rem; }
+            .tooltip { width: 290px; padding: 14px; font-size: 0.85rem; bottom: 105%; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>Cuánto pagarías con Inmoalianza</h1>
-    </div>
+    <div class="container">
+        <div class="logo-title">INMOALIANZA</div>
+        <div class="subtitle">Simulador de Propiedades e Intereses Interactivos</div>
 
-    <div class="main-content">
-        <div class="controls">
-            <div class="input-group">
-                <label>Monto del Crédito</label>
-                <input type="range" id="montoRange" min="20000" max="100000" step="10000" value="20000">
-                <div class="value-display" id="montoText">$20,000</div>
+        <div class="controls-wrapper">
+            <div class="control-group">
+                <label for="montoSelect">Valor Propiedad:</label>
+                <select id="montoSelect" onchange="updateValues()">
+                    <option value="20000">$20,000</option>
+                    <option value="30000">$30,000</option>
+                    <option value="40000">$40,000</option>
+                    <option value="50000" selected>$50,000</option>
+                    <option value="60000">$60,000</option>
+                    <option value="70000">$70,000</option>
+                    <option value="80000">$80,000</option>
+                    <option value="90000">$90,000</option>
+                    <option value="100000">$100,000</option>
+                </select>
             </div>
-
-            <div class="input-group">
-                <label>Plazo del Crédito</label>
-                <div class="select-btns">
-                    <button class="btn-year active" onclick="setYear(5)">5 Años</button>
-                    <button class="btn-year" onclick="setYear(10)">10 Años</button>
-                    <button class="btn-year" onclick="setYear(15)">15 Años</button>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Entrada mínima requerida (5.75%):</label>
-                <div class="value-display" id="entradaText" style="color: #666;">$1,150.00</div>
-            </div>
-
-            <div class="result-box">
-                <span>Tu cuota mensual estimada:</span>
-                <span class="amount" id="cuotaMensual">$410.00</span>
+            
+            <div class="control-group">
+                <label for="plazoSelect">Plazo (Inmo/Banco):</label>
+                <select id="plazoSelect" onchange="updateValues()">
+                    <option value="5">5 Años</option>
+                    <option value="10" selected>10 Años</option>
+                    <option value="15">15 Años</option>
+                </select>
             </div>
         </div>
 
-        <div class="visuals">
-            <div class="chart-container">
-                <canvas id="loanChart"></canvas>
-                <div class="chart-label">
-                    <b>DEUDA<br>TOTAL</b>
+        <div class="circles-container">
+
+            <div class="circle-cell">
+                <div class="comparison-circle circle-biess">
+                    <div class="circle-title">BIESS</div>
+                    <div class="circle-rate">7.15%</div>
+                    <div class="circle-hint">25 Años Obligatorios</div>
+                    
+                    <div class="tooltip">
+                        <h4>BIESS (Plazo a 25 Años)</h4>
+                        <ul>
+                            <li><span class="label">Valor Propiedad:</span> <span class="value" id="biessMonto">$50,000.00</span></li>
+                            <li><span class="label">Entrada (10%):</span> <span class="value" id="biessEntrada">$5,000.00</span></li>
+                            <li><span class="label">Saldo Financiado (90%):</span> <span class="value" id="biessFinanciado">$45,000.00</span></li>
+                            <li><span class="label">Cuota Mensual:</span> <span class="value" id="biessCuota">~$325.00</span></li>
+                            <li><span class="label">Total Final Pagado:</span> <span class="value highlight-total" id="biessTotal">$102,500.00</span></li>
+                        </ul>
+                        <div class="footer-text alert-footer">⚠️ **¡Terminas pagando casi el triple del saldo financiado original por el peso del interés compuesto!**</div>
+                    </div>
                 </div>
             </div>
-            <p class="info-text">
-                * Tasa de interés aplicada: <span id="tasaText">4.60%</span> anual.<br>
-                Valores referenciales sujetos a aprobación crediticia.
-            </p>
+
+            <div class="circle-cell">
+                <div class="comparison-circle circle-inmo">
+                    <div class="circle-title">INMOALIANZA</div>
+                    <div class="circle-rate">2.30%</div>
+                    <div class="circle-hint">Pasa el mouse / Toca</div>
+
+                    <div class="tooltip">
+                        <h4>INMOALIANZA</h4>
+                        <ul>
+                            <li><span class="label">Valor Propiedad:</span> <span class="value highlight-blue" id="inmoMonto">$50,000.00</span></li>
+                            <li><span class="label">Interés Fijo:</span> <span class="value" style="color: #38bdf8;">2.30%</span></li>
+                            <li><span class="label">Entrada Programada:</span> <span class="value" id="inmoEntrada">$2,875.00</span></li>
+                            <li><span class="label">Cuota Mensual:</span> <span class="value highlight-blue" id="inmoCuota">$512.50</span></li>
+                            <li><span class="label">Total Final:</span> <span class="value highlight-total" id="inmoTotal">$64,375.00</span></li>
+                        </ul>
+                        <div class="footer-text success-footer">¡Adjudicación y gestión directa! Capitalización real sin letras infinitas.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="circle-cell">
+                <div class="comparison-circle circle-banco">
+                    <div class="circle-title">BANCO</div>
+                    <div class="circle-rate">10.90%</div>
+                    <div class="circle-hint">Pasa el mouse / Toca</div>
+
+                    <div class="tooltip">
+                        <h4>BANCA PRIVADA</h4>
+                        <ul>
+                            <li><span class="label">Valor Propiedad:</span> <span class="value" id="bancoMonto">$50,000.00</span></li>
+                            <li><span class="label">Interés Anual:</span> <span class="value">10.90%</span></li>
+                            <li><span class="label">Entrada Requerida (20%):</span> <span class="value" id="bancoEntrada">$10,000.00</span></li>
+                            <li><span class="label">Cuota Mensual:</span> <span class="value" id="bancoCuota">~$610.00</span></li>
+                            <li><span class="label">Total Final:</span> <span class="value highlight-total" id="bancoTotal">$83,200.00</span></li>
+                        </ul>
+                        <div class="footer-text alert-footer">Costo elevado por seguros comerciales de la banca privada.</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
 
-<script>
-    let currentYear = 5;
-    let montoActual = 20000;
-    let myChart;
-
-    const tablaData = {
-        20000: { 5: 410.00, 10: 205.00, 15: 149.44, entrada: 1150 },
-        30000: { 5: 615.00, 10: 307.50, 15: 224.17, entrada: 1725 },
-        40000: { 5: 820.00, 10: 410.00, 15: 298.89, entrada: 2300 },
-        50000: { 5: 1025.00, 10: 512.50, 15: 373.61, entrada: 2875 },
-        60000: { 5: 1230.00, 10: 615.00, 15: 448.33, entrada: 3450 },
-        70000: { 5: 1435.00, 10: 717.50, 15: 523.06, entrada: 4025 },
-        80000: { 5: 1640.00, 10: 820.00, 15: 597.78, entrada: 4600 },
-        90000: { 5: 1845.00, 10: 922.50, 15: 672.50, entrada: 5175 },
-        100000: { 5: 2050.00, 10: 1025.00, 15: 747.22, entrada: 5750 }
-    };
-
-    function setYear(year) {
-        currentYear = year;
-        document.querySelectorAll('.btn-year').forEach(btn => {
-            btn.classList.remove('active');
-            if(btn.innerText.includes(year)) btn.classList.add('active');
-        });
-        updateCalculations();
-    }
-
-    document.getElementById('montoRange').addEventListener('input', function(e) {
-        montoActual = parseInt(e.target.value);
-        document.getElementById('montoText').innerText = `$${montoActual.toLocaleString()}`;
-        updateCalculations();
-    });
-
-    function updateCalculations() {
-        const data = tablaData[montoActual];
-        const cuota = data[currentYear];
-        const entrada = data.entrada;
-        // Mantenemos la lógica de tasa de tu código original
-        const tasa = currentYear === 5 ? "4.60%" : "2.30%";
-        
-        const totalPagado = cuota * currentYear * 12;
-        const intereses = totalPagado - montoActual;
-
-        document.getElementById('cuotaMensual').innerText = `$${cuota.toFixed(2)}`;
-        document.getElementById('entradaText').innerText = `$${entrada.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('tasaText').innerText = tasa;
-
-        updateChart(montoActual, intereses);
-    }
-
-    function updateChart(capital, intereses) {
-        const ctx = document.getElementById('loanChart').getContext('2d');
-        
-        if (myChart) {
-            myChart.destroy();
-        }
-
-        myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Capital', 'Intereses'],
-                datasets: [{
-                    data: [capital, intereses],
-                    backgroundColor: ['#005691', '#00AEEF'],
-                    hoverOffset: 4,
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                cutout: '70%',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { 
-                            boxWidth: 12,
-                            font: { size: 11 }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    updateCalculations();
-</script>
-
-</body>
-</html>
+    <script>
+        const tablaInmo = {
+            "200
