@@ -457,8 +457,8 @@ function render() {
   <div class="entry-row" style="margin-bottom:28px">
     <div class="entry-card"><div class="ec-lbl">INMOALIANZA</div>
       <div class="ec-pct ec-pct-inmo">5.75%</div>
-      <div class="ec-amount">${fb(d.inmo.entrada)}</div>
-      <div class="ec-note">Financia el 94.25%</div></div>
+      <div class="ec-amount">${fb(d.inmo.entrada)} <span style="color:var(--muted)">(aparte)</span></div>
+      <div class="ec-note">Financia el 100% de la propiedad</div></div>
     <div class="entry-card"><div class="ec-lbl">BIESS</div>
       <div class="ec-pct ec-pct-biess">10%</div>
       <div class="ec-amount">${fb(d.biess.entrada)}</div>
@@ -531,7 +531,7 @@ function render() {
   // insight
   const insightHTML = `
   <div class="insight">
-    Con <strong>${fk(monto)}</strong> a <strong>${plazo} años</strong>, INMOALIANZA te financia el 94.25% con entrada de solo <strong>${fb(d.inmo.entrada)}</strong>, cuota de <strong>${fc(iCuota)}/mes</strong> y apenas <strong>${fb(iInt)}</strong> en intereses totales.<br>
+    Con <strong>${fk(monto)}</strong> a <strong>${plazo} años</strong>, INMOALIANZA te financia el 100% de la propiedad. La entrada de solo <strong>${fb(d.inmo.entrada)}</strong> es un pago aparte (no se resta del crédito), con cuota de <strong>${fc(iCuota)}/mes</strong> y apenas <strong>${fb(iInt)}</strong> en intereses totales.<br>
     El <span class="a">BIESS</span> exige el <span class="a">10% de entrada (${fb(d.biess.entrada)})</span>, te ata a <span class="a">25 años</span> y acumula <span class="a">${fb(bInt)}</span> en intereses — <span class="a">${fb(savB)} más</span>. 
     Un <span class="r">banco</span> pide el <span class="r">20% de entrada (${fb(d.banco.entrada)})</span> y genera <span class="r">${fb(kInt)}</span> en intereses — <span class="r">${fb(savK)} más</span> que INMOALIANZA.
   </div>`;
