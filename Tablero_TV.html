@@ -3,181 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Comercial — Tablero en Vivo</title>
+<title>Arena Comercial</title>
 <style>
   :root{
-    --void:#080B14;
-    --panel:#111726;
-    --panel-2:#161e30;
-    --line:#232c42;
-    --gold:#F4B400;
-    --gold-glow:rgba(244,180,0,.35);
-    --silver:#C7CDD9;
-    --bronze:#CD7F32;
-    --cyan:#17E9C0;
-    --cyan-dim:rgba(23,233,192,.15);
-    --text:#EDEFF5;
-    --muted:#8892A8;
-    --font-display: 'Arial Narrow', 'Arial Black', Impact, sans-serif;
+    --bg:#0A0C10;
+    --panel:#0F1216;
+    --line:#1E2228;
+    --line-soft:#171A1F;
+    --gold:#D4A017;
+    --silver:#B8BDC7;
+    --bronze:#A66A3C;
+    --accent:#3DDC97;
+    --text:#F2F3F5;
+    --muted:#6B7280;
+    --muted-2:#454B54;
+    --font-display: 'Helvetica Neue', Arial, sans-serif;
     --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'SF Mono', 'Courier New', monospace;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{background:var(--void); color:var(--text); font-family:var(--font-body); width:100%; min-height:100vh; overflow-x:hidden;}
-  body{
-    background:
-      radial-gradient(ellipse 1200px 600px at 50% -10%, rgba(23,233,192,.08), transparent 60%),
-      radial-gradient(ellipse 900px 500px at 100% 100%, rgba(244,180,0,.06), transparent 60%),
-      var(--void);
-  }
+  html,body{background:var(--bg); color:var(--text); font-family:var(--font-body); width:100%; min-height:100vh;}
 
+  /* ---------- TOP BAR (solo marca + en vivo, sin botones) ---------- */
   .topbar{
-    position:sticky; top:0; z-index:50;
     display:flex; align-items:center; justify-content:space-between;
-    padding:14px 28px;
-    background:rgba(8,11,20,.85);
-    backdrop-filter:blur(10px);
+    padding:22px 40px;
     border-bottom:1px solid var(--line);
   }
-  .brand{display:flex; align-items:center; gap:12px;}
-  .brand .mark{
-    width:34px; height:34px; border-radius:8px;
-    background:linear-gradient(135deg, var(--gold), var(--cyan));
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-display); font-weight:900; color:#0a0d16; font-size:18px;
+  .brand{display:flex; align-items:baseline; gap:14px;}
+  .brand .name{font-size:15px; font-weight:700; letter-spacing:3px; text-transform:uppercase;}
+  .brand .divider{width:1px; height:14px; background:var(--line);}
+  .brand .sub{font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;}
+  .live-pill{display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-weight:600;}
+  .live-dot{width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.3}}
+
+  .stage{max-width:1360px; margin:0 auto; padding:36px 40px 60px;}
+
+  /* ---------- progress ---------- */
+  .progress-track{height:2px; background:var(--line); margin-bottom:36px;}
+  .progress-fill{height:100%; background:var(--accent); width:0%;}
+
+  .tv-header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:30px; flex-wrap:wrap; gap:8px;}
+  .tv-title{font-size:13px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--muted);}
+  .tv-title .accent{color:var(--text);}
+  .tv-title-main{font-size:32px; font-weight:800; letter-spacing:-.5px; margin-top:4px;}
+  .tv-meta{color:var(--muted-2); font-size:11.5px; letter-spacing:.3px;}
+
+  /* ---------- podium (rediseñado: tabla-escalón, sin glow) ---------- */
+  .podium{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:2px;}
+  .podium-card{background:var(--panel); padding:30px 22px; text-align:center; position:relative;}
+  .rank-num{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); letter-spacing:2px; margin-bottom:18px;}
+  .podium-card.p1{background:#121510;}
+  .podium-card.p1 .rank-num{color:var(--gold);}
+  .podium-card.p2 .rank-num{color:var(--silver);}
+  .podium-card.p3 .rank-num{color:var(--bronze);}
+  .podium-name{font-size:16px; font-weight:700; margin-bottom:6px; letter-spacing:.2px;}
+  .p1 .podium-name{font-size:19px;}
+  .podium-sub{font-size:10.5px; color:var(--muted); margin-bottom:22px; text-transform:uppercase; letter-spacing:1px;}
+  .podium-value{font-family:var(--font-mono); font-weight:700; font-size:34px; color:var(--text); line-height:1;}
+  .p1 .podium-value{font-size:46px; color:var(--gold);}
+  .podium-value-label{font-size:10px; color:var(--muted-2); text-transform:uppercase; letter-spacing:1.5px; margin-top:6px;}
+  .empty-slot{opacity:.25; font-size:12px; padding:26px 0;}
+
+  /* ---------- lista resto ---------- */
+  .rest-list{border:1px solid var(--line); border-top:none;}
+  .rest-row{
+    display:grid; grid-template-columns:48px 1fr auto; gap:16px; align-items:center;
+    padding:13px 22px; border-top:1px solid var(--line-soft);
   }
-  .brand .name{font-family:var(--font-display); letter-spacing:.5px; font-size:20px; font-weight:800; text-transform:uppercase;}
-  .brand .sub{font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase;}
-  .topbar-right{display:flex; align-items:center; gap:14px;}
-  .live-pill{
-    display:flex; align-items:center; gap:6px;
-    background:var(--cyan-dim); border:1px solid rgba(23,233,192,.4);
-    padding:6px 12px; border-radius:100px; font-size:12px; color:var(--cyan); font-weight:600;
-  }
-  .live-dot{width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:pulse 1.6s infinite;}
-  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.35}}
-  .mode-switch{display:flex; background:var(--panel); border:1px solid var(--line); border-radius:100px; padding:3px; gap:2px;}
-  .mode-switch button{
-    border:none; background:transparent; color:var(--muted); padding:7px 16px; border-radius:100px;
-    font-size:12px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; cursor:pointer; transition:.2s;
-    font-family:var(--font-body);
-  }
-  .mode-switch button.active{background:var(--cyan); color:#062018;}
+  .rest-row .pos{font-family:var(--font-mono); color:var(--muted-2); font-weight:700; font-size:13px;}
+  .rest-row .who{font-weight:600; font-size:13.5px;}
+  .rest-row .who .tag{color:var(--muted); font-weight:400; font-size:11px; text-transform:uppercase; margin-left:10px; letter-spacing:.4px;}
+  .rest-row .val{font-family:var(--font-mono); font-weight:700; color:var(--text); font-size:14px;}
+  .bar-mini{height:2px; background:var(--line); margin-top:8px; overflow:hidden;}
+  .bar-mini > div{height:100%; background:var(--muted-2);}
 
-  .stage{max-width:1400px; margin:0 auto; padding:28px;}
-
-  .tv-header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:10px;}
-  .tv-title{font-family:var(--font-display); text-transform:uppercase; font-size:38px; font-weight:900; letter-spacing:1px;}
-  .tv-title .accent{color:var(--gold);}
-  .tv-meta{color:var(--muted); font-size:13px;}
-  .progress-track{height:4px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:30px;}
-  .progress-fill{height:100%; background:linear-gradient(90deg, var(--cyan), var(--gold)); width:0%;}
-
-  .podium{display:grid; grid-template-columns:1fr 1.15fr 1fr; align-items:end; gap:18px; margin-bottom:34px;}
-  .podium-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 18px; text-align:center; position:relative; overflow:hidden;}
-  .podium-card.p1{
-    border-color:var(--gold); padding-top:32px; padding-bottom:32px;
-    box-shadow:0 0 60px -10px var(--gold-glow), inset 0 0 0 1px rgba(244,180,0,.2);
-    background:linear-gradient(180deg, rgba(244,180,0,.10), var(--panel) 55%);
-  }
-  .podium-card.p2{border-color:rgba(199,205,217,.4);}
-  .podium-card.p3{border-color:rgba(205,127,50,.5);}
-  .medal{width:52px; height:52px; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:900; font-size:22px; color:#0a0d16;}
-  .p1 .medal{width:64px; height:64px; font-size:28px; background:radial-gradient(circle at 35% 30%, #fff3c4, var(--gold)); box-shadow:0 0 24px var(--gold-glow);}
-  .p2 .medal{background:radial-gradient(circle at 35% 30%, #fff, var(--silver));}
-  .p3 .medal{background:radial-gradient(circle at 35% 30%, #f0c090, var(--bronze));}
-  .podium-name{font-size:17px; font-weight:800; margin-bottom:4px; text-transform:uppercase; letter-spacing:.3px;}
-  .p1 .podium-name{font-size:21px;}
-  .podium-sub{font-size:11.5px; color:var(--muted); margin-bottom:14px; text-transform:uppercase; letter-spacing:.5px;}
-  .podium-value{font-family:var(--font-display); font-weight:900; font-size:38px; color:var(--cyan); line-height:1;}
-  .p1 .podium-value{font-size:52px; color:var(--gold);}
-  .podium-value-label{font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px;}
-  .empty-slot{opacity:.3; font-size:13px; padding:30px 0;}
-
-  .rest-list{background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden;}
-  .rest-row{display:grid; grid-template-columns:44px 1fr auto; gap:14px; align-items:center; padding:12px 20px; border-bottom:1px solid var(--line);}
-  .rest-row:last-child{border-bottom:none;}
-  .rest-row .pos{font-family:var(--font-display); color:var(--muted); font-weight:800; font-size:16px;}
-  .rest-row .who{font-weight:700; font-size:14.5px;}
-  .rest-row .who .tag{color:var(--muted); font-weight:400; font-size:12px; text-transform:uppercase; margin-left:8px;}
-  .rest-row .val{font-family:var(--font-display); font-weight:800; color:var(--cyan); font-size:16px;}
-  .bar-mini{height:5px; background:var(--void); border-radius:3px; margin-top:6px; overflow:hidden;}
-  .bar-mini > div{height:100%; background:var(--cyan);}
-
-  .summary-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:16px;}
-  .summary-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 16px; text-align:center;}
-  .summary-card .cat{font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; font-weight:700;}
-  .summary-card .medal{margin-bottom:10px;}
-  .summary-card .podium-name{font-size:15px;}
-  .summary-card .podium-value{font-size:30px;}
+  /* ---------- resumen general ---------- */
+  .summary-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .summary-card{background:var(--panel); padding:26px 16px; text-align:center;}
+  .summary-card .cat{font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:var(--muted); margin-bottom:16px; font-weight:700;}
+  .summary-card .rank-num{margin-bottom:10px;}
+  .summary-card .podium-name{font-size:14px;}
+  .summary-card .podium-value{font-size:26px;}
 
   @media (max-width:900px){
-    .podium{grid-template-columns:1fr; grid-template-rows:auto;}
-    .podium-card.p1{order:-1;}
-    .summary-grid{grid-template-columns:repeat(2,1fr);}
+    .podium, .summary-grid{grid-template-columns:1fr;}
+    .stage{padding:24px 20px 40px;}
+    .topbar{padding:18px 20px;}
   }
 
-  .tabs{display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;}
+  /* ---------- EDITOR (oculto, solo vía #editar) ---------- */
+  #editView{display:none;}
+  .edit-topbar{
+    display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--line);
+  }
+  .edit-topbar .back{font-size:12px; color:var(--muted); text-decoration:none; letter-spacing:.5px;}
+  .tabs{display:flex; gap:6px; margin-bottom:22px; flex-wrap:wrap;}
   .tab{
-    background:var(--panel); border:1px solid var(--line); color:var(--muted); padding:9px 18px; border-radius:100px;
-    font-size:13px; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:.4px; transition:.2s;
+    background:transparent; border:1px solid var(--line); color:var(--muted); padding:8px 16px;
+    font-size:12px; font-weight:600; cursor:pointer; text-transform:uppercase; letter-spacing:.5px; transition:.15s;
   }
-  .tab.active{background:var(--cyan); color:#062018; border-color:var(--cyan);}
-  .editor-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;}
-  .editor-toolbar h2{font-family:var(--font-display); text-transform:uppercase; font-size:24px; letter-spacing:.5px;}
+  .tab.active{background:var(--text); color:var(--bg); border-color:var(--text);}
+  .editor-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+  .editor-toolbar h2{font-size:20px; font-weight:800; letter-spacing:-.3px;}
   .btn{
-    background:var(--cyan); color:#062018; border:none; padding:10px 18px; border-radius:9px;
-    font-weight:800; font-size:13px; cursor:pointer; text-transform:uppercase; letter-spacing:.4px;
+    background:var(--text); color:var(--bg); border:none; padding:10px 18px; font-weight:700; font-size:12px;
+    cursor:pointer; text-transform:uppercase; letter-spacing:.5px;
   }
-  .btn.secondary{background:var(--panel-2); color:var(--text); border:1px solid var(--line);}
-  .table-wrap{background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow-x:auto;}
-  table{width:100%; border-collapse:collapse; font-size:13.5px;}
-  thead th{text-align:left; padding:12px 14px; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid var(--line); white-space:nowrap;}
-  tbody td{padding:6px 14px; border-bottom:1px solid var(--line); white-space:nowrap;}
+  .btn.secondary{background:transparent; color:var(--muted); border:1px solid var(--line);}
+  .table-wrap{border:1px solid var(--line); overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{text-align:left; padding:10px 14px; color:var(--muted); font-size:10.5px; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid var(--line); white-space:nowrap;}
+  tbody td{padding:5px 14px; border-bottom:1px solid var(--line-soft); white-space:nowrap;}
   tbody tr:last-child td{border-bottom:none;}
-  tbody tr:hover{background:rgba(23,233,192,.04);}
-  tbody tr.rank-1{background:rgba(244,180,0,.06);}
-  .cell-rank{font-family:var(--font-display); font-weight:800; color:var(--muted); width:36px;}
-  .rank-1 .cell-rank{color:var(--gold);}
-  .rank-2 .cell-rank{color:var(--silver);}
-  .rank-3 .cell-rank{color:var(--bronze);}
-  input.field{background:var(--void); border:1px solid var(--line); color:var(--text); padding:7px 9px; border-radius:7px; font-size:13px; width:100%; min-width:80px; font-family:var(--font-body);}
-  input.field:focus{outline:none; border-color:var(--cyan);}
-  input.field.num{width:80px; text-align:right;}
-  .pct-badge{display:inline-block; padding:3px 9px; border-radius:100px; font-size:11.5px; font-weight:800; background:var(--void); color:var(--cyan);}
-  .footer-note{color:var(--muted); font-size:12px; margin-top:16px; text-align:center; line-height:1.6;}
+  tbody tr.rank-1{background:rgba(212,160,23,.06);}
+  .cell-rank{font-family:var(--font-mono); font-weight:700; color:var(--muted-2); width:30px;}
+  input.field{background:var(--bg); border:1px solid var(--line); color:var(--text); padding:6px 8px; font-size:12.5px; width:100%; min-width:76px; font-family:var(--font-body);}
+  input.field:focus{outline:none; border-color:var(--accent);}
+  input.field.num{width:76px; text-align:right;}
+  .pct-badge{font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--accent);}
+  .footer-note{color:var(--muted-2); font-size:11px; margin-top:18px; text-align:center; line-height:1.7;}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="brand">
-    <div class="mark">A</div>
-    <div>
+<!-- ===== TV / EN VIVO (sin ningún botón de modo) ===== -->
+<div id="tvView">
+  <div class="topbar">
+    <div class="brand">
       <div class="name">Arena Comercial</div>
-      <div class="sub" id="mesLabel">Gamificación · —</div>
+      <div class="divider"></div>
+      <div class="sub" id="mesLabel">—</div>
     </div>
+    <div class="live-pill"><span class="live-dot"></span>En vivo</div>
   </div>
-  <div class="topbar-right">
-    <div class="live-pill"><span class="live-dot"></span><span id="liveLabel">En vivo</span></div>
-    <div class="mode-switch">
-      <button id="btnTV" class="active">Modo TV</button>
-      <button id="btnEdit">Modo Edición</button>
-    </div>
-  </div>
-</div>
-
-<div class="stage">
-  <div id="tvView">
+  <div class="stage">
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     <div id="tvContent"></div>
   </div>
+</div>
 
-  <div id="editView" style="display:none;">
+<!-- ===== EDITOR (oculto — se activa solo con #editar en la URL) ===== -->
+<div id="editView">
+  <div class="edit-topbar">
+    <div class="brand">
+      <div class="name">Editor de datos</div>
+      <div class="divider"></div>
+      <div class="sub" id="mesLabelEdit">—</div>
+    </div>
+    <a class="back" href="#" id="btnVolver">← Ver en vivo</a>
+  </div>
+  <div class="stage">
     <div class="tabs" id="editTabs"></div>
     <div class="editor-toolbar">
       <h2 id="editTitle"></h2>
       <div style="display:flex; gap:10px;">
-        <button class="btn secondary" id="btnReset">Restablecer datos</button>
+        <button class="btn secondary" id="btnReset">Restablecer</button>
         <button class="btn" id="btnAddRow">+ Agregar persona</button>
       </div>
     </div>
@@ -187,7 +169,7 @@
         <tbody id="editTbody"></tbody>
       </table>
     </div>
-    <div class="footer-note">Los cambios se guardan solos y se ven en la pantalla de TV en unos segundos.<br>Aquí puedes agregar personas nuevas y actualizar sus datos.</div>
+    <div class="footer-note">Los cambios se guardan solos y se ven en la pantalla en vivo en unos segundos.</div>
   </div>
 </div>
 
@@ -195,7 +177,7 @@
 /* ============ CONFIG DE CATEGORÍAS ============ */
 const CATS = {
   asesores: {
-    label:"Asesores", icon:"🎯", metricLabel:"Cierres",
+    label:"Asesores", metricLabel:"Cierres",
     fields:[
       {k:"nombre",label:"Nombre",type:"text"},
       {k:"cierres",label:"Cierres",type:"num"},
@@ -206,7 +188,7 @@ const CATS = {
     valueLabel:"cierres", isPct:false
   },
   consultores: {
-    label:"Consultores", icon:"📋", metricLabel:"Contratos",
+    label:"Consultores", metricLabel:"Contratos",
     fields:[
       {k:"nombre",label:"Nombre",type:"text"},
       {k:"contratos",label:"Contratos",type:"num"},
@@ -218,7 +200,7 @@ const CATS = {
     valueLabel:"contratos", isPct:false
   },
   supervisores: {
-    label:"Supervisores", icon:"🔧", metricLabel:"Puntuación",
+    label:"Supervisores", metricLabel:"Puntuación",
     fields:[
       {k:"nombre",label:"Nombre",type:"text"},
       {k:"propios",label:"Cierres propios",type:"num"},
@@ -229,10 +211,10 @@ const CATS = {
     ],
     metric:r=>(r.propios*3)+(r.equipo*1)+(r.activas*2), pct:r=>r.metaPropios>0? r.propios/r.metaPropios:0,
     sub:r=>"Ger. "+(r.gerente||"—"), valueLabel:"pts", isPct:false,
-    formulaNote:"Puntuación = cierres propios ×3 + contratos equipo ×1 + personas activas ×2"
+    formulaNote:"Puntuación = propios ×3 + equipo ×1 + activas ×2"
   },
   gerentes: {
-    label:"Gerentes", icon:"🏢", metricLabel:"Cumplimiento",
+    label:"Gerentes", metricLabel:"Cumplimiento",
     fields:[
       {k:"nombre",label:"Nombre",type:"text"},
       {k:"facturacion",label:"Facturación $",type:"num"},
@@ -245,7 +227,7 @@ const CATS = {
     sub:r=>(r.region||"—"), valueLabel:"%", isPct:true
   },
   subdirectores: {
-    label:"Sub Directores", icon:"🏆", metricLabel:"Cumplimiento",
+    label:"Sub Directores", metricLabel:"Cumplimiento",
     fields:[
       {k:"nombre",label:"Nombre",type:"text"},
       {k:"produccion",label:"Producción mes $",type:"num"},
@@ -320,7 +302,6 @@ function seedData(){
 }
 
 let DATA = null;
-let mode = "tv";
 let editCat = "asesores";
 let tvIndex = 0;
 const TV_SCREENS = ["resumen", ...CAT_ORDER];
@@ -360,11 +341,11 @@ function renderResumen(){
     const cfg = CATS[key];
     const rows = sortedRows(key);
     const top = rows[0];
-    if(!top) return `<div class="summary-card"><div class="cat">${cfg.icon} ${cfg.label}</div><div class="empty-slot">Sin datos</div></div>`;
+    if(!top) return `<div class="summary-card"><div class="cat">${cfg.label}</div><div class="empty-slot">Sin datos</div></div>`;
     const val = cfg.isPct ? fmtPct(cfg.metric(top)) : Math.round(cfg.metric(top))+"";
     return `<div class="summary-card">
-      <div class="cat">${cfg.icon} ${cfg.label}</div>
-      <div class="medal">🥇</div>
+      <div class="cat">${cfg.label}</div>
+      <div class="rank-num">N.º 1</div>
       <div class="podium-name">${top.nombre}</div>
       <div class="podium-sub">${cfg.sub(top)}</div>
       <div class="podium-value">${val}</div>
@@ -372,8 +353,11 @@ function renderResumen(){
     </div>`;
   }).join("");
   return `<div class="tv-header">
-      <div class="tv-title">TOP <span class="accent">1</span> DE CADA EQUIPO</div>
-      <div class="tv-meta">Resumen general · mes ${DATA.mes}</div>
+      <div>
+        <div class="tv-title">Resumen general</div>
+        <div class="tv-title-main">Líder de cada equipo</div>
+      </div>
+      <div class="tv-meta">Mes ${DATA.mes}</div>
     </div>
     <div class="summary-grid">${cards}</div>`;
 }
@@ -382,13 +366,13 @@ function renderCategoriaTV(key){
   const rows = sortedRows(key);
   const podium = [rows[1], rows[0], rows[2]];
   const posClass = ["p2","p1","p3"];
-  const posMedal = ["🥈","🥇","🥉"];
+  const posLabel = ["N.º 2","N.º 1","N.º 3"];
 
   let podiumHtml = podium.map((r,i)=>{
     if(!r) return `<div class="podium-card ${posClass[i]}"><div class="empty-slot">Sin datos aún</div></div>`;
     const val = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
     return `<div class="podium-card ${posClass[i]}">
-      <div class="medal">${posMedal[i]}</div>
+      <div class="rank-num">${posLabel[i]}</div>
       <div class="podium-name">${r.nombre}</div>
       <div class="podium-sub">${cfg.sub(r)}</div>
       <div class="podium-value">${val}</div>
@@ -400,7 +384,7 @@ function renderCategoriaTV(key){
     const pct = Math.min(cfg.pct(r),1);
     const val = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
     return `<div class="rest-row">
-      <div class="pos">${i+4}</div>
+      <div class="pos">${String(i+4).padStart(2,"0")}</div>
       <div class="who">${r.nombre}<span class="tag">${cfg.sub(r)}</span>
         <div class="bar-mini"><div style="width:${(pct*100).toFixed(0)}%"></div></div>
       </div>
@@ -410,8 +394,11 @@ function renderCategoriaTV(key){
   if(!restHtml) restHtml = `<div class="rest-row"><div class="who" style="color:var(--muted)">No hay más registros en esta categoría.</div></div>`;
 
   return `<div class="tv-header">
-      <div class="tv-title">${cfg.icon} <span class="accent">${cfg.label.toUpperCase()}</span></div>
-      <div class="tv-meta">Métrica: ${cfg.metricLabel} · mes ${DATA.mes}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
+      <div>
+        <div class="tv-title">${cfg.label}</div>
+        <div class="tv-title-main">Ranking del mes</div>
+      </div>
+      <div class="tv-meta">${cfg.metricLabel} · mes ${DATA.mes}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
     </div>
     <div class="podium">${podiumHtml}</div>
     <div class="rest-list">${restHtml}</div>`;
@@ -432,12 +419,12 @@ function startCycle(){
   }, CYCLE_MS);
 }
 
-/* ============ RENDER EDITOR (sin eliminar) ============ */
+/* ============ RENDER EDITOR ============ */
 function renderEditTabs(){
   const wrap = document.getElementById("editTabs");
   wrap.innerHTML = CAT_ORDER.map(key=>{
     const cfg = CATS[key];
-    return `<button class="tab ${key===editCat?'active':''}" data-cat="${key}">${cfg.icon} ${cfg.label}</button>`;
+    return `<button class="tab ${key===editCat?'active':''}" data-cat="${key}">${cfg.label}</button>`;
   }).join("");
   wrap.querySelectorAll(".tab").forEach(btn=>{
     btn.addEventListener("click", ()=>{ editCat = btn.dataset.cat; renderEditor(); });
@@ -446,7 +433,7 @@ function renderEditTabs(){
 function renderEditor(){
   renderEditTabs();
   const cfg = CATS[editCat];
-  document.getElementById("editTitle").textContent = cfg.icon+" "+cfg.label;
+  document.getElementById("editTitle").textContent = cfg.label;
 
   const thead = document.getElementById("editThead");
   thead.innerHTML = "<tr><th>#</th>"+cfg.fields.map(f=>`<th>${f.label}</th>`).join("")+`<th>${cfg.metricLabel}</th></tr>`;
@@ -454,7 +441,7 @@ function renderEditor(){
   const rowsSorted = sortedRows(editCat);
   const tbody = document.getElementById("editTbody");
   tbody.innerHTML = rowsSorted.map((r, idx)=>{
-    const rankClass = idx===0?"rank-1": idx===1?"rank-2": idx===2?"rank-3":"";
+    const rankClass = idx===0?"rank-1":"";
     const origIndex = DATA[editCat].indexOf(r);
     const cells = cfg.fields.map(f=>{
       const v = r[f.k] ?? (f.type==="num"?0:"");
@@ -500,23 +487,28 @@ document.getElementById("btnReset").addEventListener("click", async ()=>{
     renderTV();
   }
 });
-document.getElementById("btnTV").addEventListener("click", ()=>{
-  mode="tv";
-  document.getElementById("btnTV").classList.add("active");
-  document.getElementById("btnEdit").classList.remove("active");
-  document.getElementById("tvView").style.display="block";
-  document.getElementById("editView").style.display="none";
+document.getElementById("btnVolver").addEventListener("click", (e)=>{
+  e.preventDefault();
+  location.hash = "";
+  showTV();
+});
+
+/* ============ NAVEGACIÓN POR HASH (#editar oculto) ============ */
+function showTV(){
+  document.getElementById("tvView").style.display = "block";
+  document.getElementById("editView").style.display = "none";
   tvIndex = 0; renderTV(); startCycle();
-});
-document.getElementById("btnEdit").addEventListener("click", ()=>{
-  mode="edit";
-  document.getElementById("btnEdit").classList.add("active");
-  document.getElementById("btnTV").classList.remove("active");
-  document.getElementById("tvView").style.display="none";
-  document.getElementById("editView").style.display="block";
+}
+function showEditor(){
   clearInterval(cycleTimer); clearInterval(progressTimer);
+  document.getElementById("tvView").style.display = "none";
+  document.getElementById("editView").style.display = "block";
   renderEditor();
-});
+}
+function routeFromHash(){
+  if(location.hash === "#editar"){ showEditor(); } else { showTV(); }
+}
+window.addEventListener("hashchange", routeFromHash);
 
 /* ============ POLLING (tiempo real) ============ */
 let lastSnapshot = "";
@@ -528,8 +520,9 @@ async function poll(){
       lastSnapshot = res.value;
       if(!isTyping){
         DATA = JSON.parse(res.value);
-        if(mode==="tv") renderTV(); else renderEditor();
-        document.getElementById("mesLabel").textContent = "Gamificación · mes "+DATA.mes;
+        if(location.hash === "#editar") renderEditor(); else renderTV();
+        document.getElementById("mesLabel").textContent = "Mes "+DATA.mes;
+        document.getElementById("mesLabelEdit").textContent = "Mes "+DATA.mes;
       }
     }
   }catch(e){}
@@ -540,9 +533,9 @@ setInterval(poll, 4000);
 (async function init(){
   await loadData();
   lastSnapshot = JSON.stringify(DATA);
-  document.getElementById("mesLabel").textContent = "Gamificación · mes "+DATA.mes;
-  renderTV();
-  startCycle();
+  document.getElementById("mesLabel").textContent = "Mes "+DATA.mes;
+  document.getElementById("mesLabelEdit").textContent = "Mes "+DATA.mes;
+  routeFromHash();
 })();
 </script>
 </body>
