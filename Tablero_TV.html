@@ -3,150 +3,208 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Comercial</title>
+<title>Editor — Arena Comercial</title>
 
-<!-- ⚠️ FIREBASE: SDK compat -->
+<!-- ⚠️ FIREBASE: SDK compat (funciona en cualquier hosting, incluido Netlify) -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
 
 <style>
   :root{
     --bg:#0A0C10; --panel:#0F1216; --line:#1E2228; --line-soft:#171A1F;
-    --gold:#D4A017; --silver:#B8BDC7; --bronze:#A66A3C; --accent:#3DDC97;
-    --text:#F2F3F5; --muted:#6B7280; --muted-2:#454B54;
+    --gold:#D4A017; --accent:#3DDC97; --text:#F2F3F5; --muted:#6B7280; --muted-2:#454B54;
     --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     --font-mono:'SF Mono','Courier New',monospace;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{background:var(--bg); color:var(--text); font-family:var(--font-body); width:100%; min-height:100vh;}
-  .topbar{display:flex; align-items:center; justify-content:space-between; padding:22px 40px; border-bottom:1px solid var(--line);}
+  html,body{background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh;}
+  .topbar{display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--line);}
   .brand{display:flex; align-items:baseline; gap:14px;}
-  .brand .name{font-size:15px; font-weight:700; letter-spacing:3px; text-transform:uppercase;}
+  .brand .name{font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase;}
   .divider{width:1px; height:14px; background:var(--line);}
   .sub{font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;}
-  .live-pill{display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-weight:600;}
-  .live-dot{width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); animation:pulse 1.8s infinite;}
-  .live-dot.off{background:#E5484D; box-shadow:0 0 6px #E5484D; animation:none;}
-  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.3}}
+  .status{display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:600;}
+  .status-dot{width:6px; height:6px; border-radius:50%;}
+  .status.ok .status-dot{background:var(--accent); box-shadow:0 0 6px var(--accent);}
+  .status.err .status-dot{background:#E5484D; box-shadow:0 0 6px #E5484D;}
+  .status.ok{color:var(--accent);}
+  .status.err{color:#E5484D;}
 
-  .stage{max-width:1360px; margin:0 auto; padding:36px 40px 60px;}
-  .progress-track{height:2px; background:var(--line); margin-bottom:36px;}
-  .progress-fill{height:100%; background:var(--accent); width:0%;}
-
-  .tv-header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:30px; flex-wrap:wrap; gap:8px;}
-  .tv-title{font-size:13px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--muted);}
-  .tv-title-main{font-size:32px; font-weight:800; letter-spacing:-.5px; margin-top:4px;}
-  .tv-meta{color:var(--muted-2); font-size:11.5px; letter-spacing:.3px;}
-
-  .podium{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:2px;}
-  .podium-card{background:var(--panel); padding:30px 22px; text-align:center;}
-  .rank-num{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); letter-spacing:2px; margin-bottom:18px;}
-  .podium-card.p1{background:#121510;}
-  .podium-card.p1 .rank-num{color:var(--gold);}
-  .podium-card.p2 .rank-num{color:var(--silver);}
-  .podium-card.p3 .rank-num{color:var(--bronze);}
-  .podium-name{font-size:16px; font-weight:700; margin-bottom:6px;}
-  .p1 .podium-name{font-size:19px;}
-  .podium-sub{font-size:10.5px; color:var(--muted); margin-bottom:22px; text-transform:uppercase; letter-spacing:1px;}
-  .podium-value{font-family:var(--font-mono); font-weight:700; font-size:34px; color:var(--text); line-height:1;}
-  .p1 .podium-value{font-size:46px; color:var(--gold);}
-  .podium-value-label{font-size:10px; color:var(--muted-2); text-transform:uppercase; letter-spacing:1.5px; margin-top:6px;}
-  .empty-slot{opacity:.25; font-size:12px; padding:26px 0;}
-
-  .rest-list{border:1px solid var(--line); border-top:none;}
-  .rest-row{display:grid; grid-template-columns:48px 1fr auto; gap:16px; align-items:center; padding:13px 22px; border-top:1px solid var(--line-soft);}
-  .rest-row .pos{font-family:var(--font-mono); color:var(--muted-2); font-weight:700; font-size:13px;}
-  .rest-row .who{font-weight:600; font-size:13.5px;}
-  .rest-row .who .tag{color:var(--muted); font-weight:400; font-size:11px; text-transform:uppercase; margin-left:10px;}
-  .rest-row .val{font-family:var(--font-mono); font-weight:700; font-size:14px;}
-  .bar-mini{height:2px; background:var(--line); margin-top:8px; overflow:hidden;}
-  .bar-mini > div{height:100%; background:var(--muted-2);}
-
-  .summary-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
-  .summary-card{background:var(--panel); padding:26px 16px; text-align:center;}
-  .summary-card .cat{font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:var(--muted); margin-bottom:16px; font-weight:700;}
-  .summary-card .podium-name{font-size:14px;}
-  .summary-card .podium-value{font-size:26px;}
-
-  .status-msg{text-align:center; padding:80px 0; color:var(--muted); font-size:14px;}
-  .status-msg.err{color:#ff9a9d;}
-
-  @media (max-width:900px){
-    .podium, .summary-grid{grid-template-columns:1fr;}
-    .stage{padding:24px 20px 40px;}
-    .topbar{padding:18px 20px;}
+  .stage{max-width:1300px; margin:0 auto; padding:28px 40px 60px;}
+  .error-banner{
+    display:none; background:rgba(229,72,77,.12); border:1px solid rgba(229,72,77,.4); color:#ff9a9d;
+    padding:12px 16px; font-size:13px; margin-bottom:20px; font-family:var(--font-mono);
   }
+  .tabs{display:flex; gap:6px; margin-bottom:22px; flex-wrap:wrap;}
+  .tab{background:transparent; border:1px solid var(--line); color:var(--muted); padding:8px 16px; font-size:12px; font-weight:600; cursor:pointer; text-transform:uppercase; letter-spacing:.5px;}
+  .tab.active{background:var(--text); color:var(--bg); border-color:var(--text);}
+  .editor-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+  .editor-toolbar h2{font-size:20px; font-weight:800;}
+  .btn{background:var(--text); color:var(--bg); border:none; padding:10px 18px; font-weight:700; font-size:12px; cursor:pointer; text-transform:uppercase; letter-spacing:.5px;}
+  .btn.secondary{background:transparent; color:var(--muted); border:1px solid var(--line);}
+  .table-wrap{border:1px solid var(--line); overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{text-align:left; padding:10px 14px; color:var(--muted); font-size:10.5px; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid var(--line); white-space:nowrap;}
+  tbody td{padding:5px 14px; border-bottom:1px solid var(--line-soft); white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr.rank-1{background:rgba(212,160,23,.06);}
+  .cell-rank{font-family:var(--font-mono); font-weight:700; color:var(--muted-2); width:30px;}
+  input.field{background:var(--bg); border:1px solid var(--line); color:var(--text); padding:6px 8px; font-size:12.5px; width:100%; min-width:76px;}
+  input.field:focus{outline:none; border-color:var(--accent);}
+  input.field.num{width:76px; text-align:right;}
+  .pct-badge{font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--accent);}
+  .footer-note{color:var(--muted-2); font-size:11px; margin-top:18px; text-align:center; line-height:1.7;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="brand">
-    <div class="name">Arena Comercial</div>
+    <div class="name">Editor de datos</div>
     <div class="divider"></div>
     <div class="sub" id="mesLabel">—</div>
   </div>
-  <div class="live-pill"><span class="live-dot" id="liveDot"></span><span id="liveLabel">Conectando…</span></div>
+  <div class="status ok" id="statusPill"><span class="status-dot"></span><span id="statusLabel">Conectando…</span></div>
 </div>
 
 <div class="stage">
-  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-  <div id="tvContent"><div class="status-msg">Conectando con la base de datos…</div></div>
+  <div class="error-banner" id="errorBanner"></div>
+  <div class="tabs" id="editTabs"></div>
+  <div class="editor-toolbar">
+    <h2 id="editTitle"></h2>
+    <div style="display:flex; gap:10px;">
+      <button class="btn secondary" id="btnReset">Restablecer</button>
+      <button class="btn" id="btnAddRow">+ Agregar persona</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead id="editThead"></thead>
+      <tbody id="editTbody"></tbody>
+    </table>
+  </div>
+  <div class="footer-note">Los cambios se guardan solos y se ven en el tablero TV en tiempo real.</div>
 </div>
 
 <script>
 /* =========================================================
-   ⚠️ PEGA AQUÍ EL MISMO firebaseConfig QUE USASTE EN
-   tablero_editor.html (deben ser idénticos)
+   ⚠️ PEGA AQUÍ TU CONFIG DE FIREBASE (Configuración del
+   proyecto → General → Tus apps → ícono </>)
    ========================================================= */
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  databaseURL: "https://TU_PROYECTO-default-rtdb.firebaseio.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyD5oom7DJdoWQlUPDkmCJtlsHtUWuK_2c4",
+  authDomain: "area-comercial-574f9.firebaseapp.com",
+  databaseURL: "https://area-comercial-574f9-default-rtdb.firebaseio.com", /* ⚠️ CONFIRMA esta línea contra la que ves arriba de tu Realtime Database */
+  projectId: "area-comercial-574f9",
+  storageBucket: "area-comercial-574f9.firebasestorage.app",
+  messagingSenderId: "336038746184",
+  appId: "1:336038746184:web:b913c1622d21ae52cba07d"
 };
 /* ========================================================= */
 
 let db, dataRef;
-function setLive(ok, label){
-  document.getElementById("liveDot").classList.toggle("off", !ok);
-  document.getElementById("liveLabel").textContent = label;
-}
 try{
   firebase.initializeApp(firebaseConfig);
   db = firebase.database();
   dataRef = db.ref("gamificacion/data");
 }catch(e){
-  document.getElementById("tvContent").innerHTML = `<div class="status-msg err">No se pudo conectar a Firebase.<br>Revisa el firebaseConfig. Detalle: ${e.message}</div>`;
-  setLive(false, "Error");
+  showError("No se pudo conectar a Firebase. Revisa que pegaste bien el firebaseConfig. Detalle: "+e.message);
+}
+
+function showError(msg){
+  const b = document.getElementById("errorBanner");
+  b.style.display = "block";
+  b.textContent = "⚠ " + msg;
+  setStatus(false);
+}
+function setStatus(ok, label){
+  const pill = document.getElementById("statusPill");
+  const lbl = document.getElementById("statusLabel");
+  pill.className = "status " + (ok ? "ok" : "err");
+  lbl.textContent = label || (ok ? "Sincronizado" : "Error de conexión");
 }
 
 /* ============ CONFIG DE CATEGORÍAS ============ */
 const CATS = {
   asesores: { label:"Asesores", metricLabel:"Cierres",
-    metric:r=>r.cierres, pct:r=>r.meta>0? r.cierres/r.meta:0, sub:r=>"Sup. "+(r.supervisor||"—"), valueLabel:"cierres", isPct:false },
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"cierres",label:"Cierres",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"}],
+    metric:r=>r.cierres, isPct:false },
   consultores: { label:"Consultores", metricLabel:"Contratos",
-    metric:r=>r.contratos, pct:r=>r.meta>0? r.contratos/r.meta:0, sub:r=>(r.sucursal||"—"), valueLabel:"contratos", isPct:false },
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"contratos",label:"Contratos",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"},{k:"sucursal",label:"Sucursal",type:"text"}],
+    metric:r=>r.contratos, isPct:false },
   supervisores: { label:"Supervisores", metricLabel:"Puntuación",
-    metric:r=>(r.propios*3)+(r.equipo*1)+(r.activas*2), pct:r=>r.metaPropios>0? r.propios/r.metaPropios:0,
-    sub:r=>"Ger. "+(r.gerente||"—"), valueLabel:"pts", isPct:false, formulaNote:"Puntuación = propios ×3 + equipo ×1 + activas ×2" },
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"propios",label:"Cierres propios",type:"num"},{k:"equipo",label:"Contratos equipo",type:"num"},{k:"activas",label:"Personas activas",type:"num"},{k:"metaPropios",label:"Meta propios",type:"num"},{k:"gerente",label:"Gerente",type:"text"}],
+    metric:r=>(r.propios*3)+(r.equipo*1)+(r.activas*2), isPct:false },
   gerentes: { label:"Gerentes", metricLabel:"Cumplimiento",
-    metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0, pct:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0,
-    sub:r=>(r.region||"—"), valueLabel:"%", isPct:true },
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"facturacion",label:"Facturación $",type:"num"},{k:"equipo",label:"Personas equipo",type:"num"},{k:"metaProduccion",label:"Meta producción $",type:"num"},{k:"contratos",label:"Contratos",type:"num"},{k:"region",label:"Región",type:"text"}],
+    metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion : 0, isPct:true },
   subdirectores: { label:"Sub Directores", metricLabel:"Cumplimiento",
-    metric:r=>r.metaProduccion>0? r.produccion/r.metaProduccion:0, pct:r=>r.metaProduccion>0? r.produccion/r.metaProduccion:0,
-    sub:r=>(r.region||"—"), valueLabel:"%", isPct:true },
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"produccion",label:"Producción mes $",type:"num"},{k:"equipo",label:"Personas equipo",type:"num"},{k:"metaProduccion",label:"Meta producción $",type:"num"},{k:"contratos",label:"Contratos",type:"num"},{k:"region",label:"Región",type:"text"}],
+    metric:r=>r.metaProduccion>0? r.produccion/r.metaProduccion : 0, isPct:true },
 };
 const CAT_ORDER = ["asesores","consultores","supervisores","gerentes","subdirectores"];
-const TV_SCREENS = ["resumen", ...CAT_ORDER];
-const CYCLE_MS = 11000;
+
+function seedData(){
+  return {
+    mes:"2026-06",
+    asesores:[
+      {nombre:"Liliana Suárez",cierres:3,meta:4,supervisor:"Daysy"},
+      {nombre:"Eduardo González",cierres:2,meta:4,supervisor:"Daysy"},
+      {nombre:"Ayleen Nazareno",cierres:2,meta:4,supervisor:"Rubia"},
+      {nombre:"Joel Paredes",cierres:2,meta:4,supervisor:"Domenica"},
+      {nombre:"Rafaella Salazar",cierres:1,meta:4,supervisor:"Rubia"},
+      {nombre:"Tito Bravo",cierres:1,meta:4,supervisor:"Daysy"},
+      {nombre:"Melissa Grandes",cierres:1,meta:4,supervisor:"Hanameel"},
+      {nombre:"Gustavo Calderón",cierres:1,meta:4,supervisor:"Ariana"},
+      {nombre:"Sulay Rivera",cierres:1,meta:4,supervisor:"Ariana"},
+      {nombre:"Stefania González",cierres:0,meta:4,supervisor:"Domenica"},
+      {nombre:"Blasco Vela",cierres:0,meta:4,supervisor:"Rubia"},
+      {nombre:"Scarlet Barrientos",cierres:0,meta:4,supervisor:"Rubia"},
+      {nombre:"Abigail Coello",cierres:0,meta:4,supervisor:"Rubia"},
+      {nombre:"Stefani Mera",cierres:0,meta:4,supervisor:"Domenica"},
+      {nombre:"Anthony Solís",cierres:0,meta:4,supervisor:"Domenica"},
+      {nombre:"Joyce Lema",cierres:0,meta:4,supervisor:"Daysy"},
+      {nombre:"Andrea Páez",cierres:0,meta:4,supervisor:"Daysy"},
+      {nombre:"Deiby Sánchez",cierres:0,meta:4,supervisor:"Daysy"},
+      {nombre:"Liz Liberio",cierres:0,meta:4,supervisor:"Daysy"},
+      {nombre:"José Macías",cierres:0,meta:4,supervisor:"Daysy"},
+      {nombre:"Amanda González",cierres:0,meta:4,supervisor:"Ariana"},
+      {nombre:"Adriana Noboa",cierres:0,meta:4,supervisor:"Rubia"},
+      {nombre:"Samuel Alvarado",cierres:0,meta:4,supervisor:"Rubia"},
+      {nombre:"Allan Yépez",cierres:0,meta:4,supervisor:"Ariana"},
+    ],
+    consultores:[
+      {nombre:"Mishell Morales",contratos:2,meta:5,supervisor:"Domenica",sucursal:"Guayaquil"},
+      {nombre:"Fernando Salazar",contratos:1,meta:5,supervisor:"Domenica",sucursal:"Guayaquil"},
+      {nombre:"Keni Rivera",contratos:1,meta:5,supervisor:"Daisy",sucursal:"Guayaquil"},
+      {nombre:"Kary Castro",contratos:1,meta:5,supervisor:"Daisy",sucursal:"Guayaquil"},
+      {nombre:"Melissa Grandes",contratos:1,meta:5,supervisor:"Hanameel",sucursal:"Quito"},
+      {nombre:"Lisbeth Chávez",contratos:0,meta:5,supervisor:"Hanameel",sucursal:"Quito"},
+      {nombre:"Nohelia Mendieta",contratos:0,meta:5,supervisor:"Hanameel",sucursal:"Quito"},
+    ],
+    supervisores:[
+      {nombre:"Daysy",propios:4,equipo:9,activas:10,metaPropios:12,gerente:"Steven"},
+      {nombre:"Domenica",propios:3,equipo:3,activas:9,metaPropios:12,gerente:"Steven"},
+      {nombre:"Ariana",propios:5,equipo:4,activas:5,metaPropios:12,gerente:"Steven"},
+      {nombre:"Rubia",propios:1,equipo:4,activas:7,metaPropios:12,gerente:"Steven"},
+      {nombre:"Hanameel",propios:0,equipo:0,activas:10,metaPropios:12,gerente:"Derian"},
+      {nombre:"Samir",propios:1,equipo:0,activas:8,metaPropios:12,gerente:"Hugo"},
+      {nombre:"Bryan",propios:1,equipo:0,activas:3,metaPropios:12,gerente:"Gabriel"},
+      {nombre:"Milena",propios:0,equipo:0,activas:1,metaPropios:12,gerente:"Gabriel"},
+    ],
+    gerentes:[
+      {nombre:"Steveen Cayetano",facturacion:41485,equipo:33,metaProduccion:40000,contratos:16,region:"Guayaquil"},
+      {nombre:"Hugo Mora",facturacion:2000,equipo:9,metaProduccion:40000,contratos:1,region:"Quito"},
+      {nombre:"Derian Vera",facturacion:1500,equipo:11,metaProduccion:40000,contratos:1,region:"Quito"},
+    ],
+    subdirectores:[
+      {nombre:"Carla Botero",produccion:44985,equipo:55,metaProduccion:90000,contratos:0,region:"Nacional"},
+    ],
+  };
+}
 
 let DATA = null;
-let tvIndex = 0;
-let cycleTimer=null, progressTimer=null;
+let editCat = "asesores";
 
 function fmtPct(x){ return (x*100).toFixed(0)+"%"; }
 function sortedRows(catKey){
@@ -155,105 +213,94 @@ function sortedRows(catKey){
     .sort((a,b)=> cfg.metric(b) - cfg.metric(a));
 }
 
-function renderTV(){
-  const screen = TV_SCREENS[tvIndex];
-  const el = document.getElementById("tvContent");
-  el.innerHTML = screen==="resumen" ? renderResumen() : renderCategoriaTV(screen);
+async function saveData(){
+  try{
+    await dataRef.set(DATA);
+    setStatus(true, "Guardado ✓");
+    setTimeout(()=> setStatus(true, "Sincronizado"), 1200);
+  }catch(e){
+    showError("Error al guardar: "+e.message+" — revisa las reglas de tu Realtime Database (deben permitir escritura).");
+  }
 }
-function renderResumen(){
-  let cards = CAT_ORDER.map(key=>{
+
+function renderEditTabs(){
+  const wrap = document.getElementById("editTabs");
+  wrap.innerHTML = CAT_ORDER.map(key=>{
     const cfg = CATS[key];
-    const rows = sortedRows(key);
-    const top = rows[0];
-    if(!top) return `<div class="summary-card"><div class="cat">${cfg.label}</div><div class="empty-slot">Sin datos</div></div>`;
-    const val = cfg.isPct ? fmtPct(cfg.metric(top)) : Math.round(cfg.metric(top))+"";
-    return `<div class="summary-card">
-      <div class="cat">${cfg.label}</div>
-      <div class="rank-num">N.º 1</div>
-      <div class="podium-name">${top.nombre}</div>
-      <div class="podium-sub">${cfg.sub(top)}</div>
-      <div class="podium-value">${val}</div>
-      <div class="podium-value-label">${cfg.metricLabel}</div>
-    </div>`;
+    return `<button class="tab ${key===editCat?'active':''}" data-cat="${key}">${cfg.label}</button>`;
   }).join("");
-  return `<div class="tv-header">
-      <div><div class="tv-title">Resumen general</div><div class="tv-title-main">Líder de cada equipo</div></div>
-      <div class="tv-meta">Mes ${DATA.mes}</div>
-    </div>
-    <div class="summary-grid">${cards}</div>`;
+  wrap.querySelectorAll(".tab").forEach(btn=>{
+    btn.addEventListener("click", ()=>{ editCat = btn.dataset.cat; renderEditor(); });
+  });
 }
-function renderCategoriaTV(key){
-  const cfg = CATS[key];
-  const rows = sortedRows(key);
-  const podium = [rows[1], rows[0], rows[2]];
-  const posClass = ["p2","p1","p3"];
-  const posLabel = ["N.º 2","N.º 1","N.º 3"];
+function renderEditor(){
+  renderEditTabs();
+  const cfg = CATS[editCat];
+  document.getElementById("editTitle").textContent = cfg.label;
 
-  let podiumHtml = podium.map((r,i)=>{
-    if(!r) return `<div class="podium-card ${posClass[i]}"><div class="empty-slot">Sin datos aún</div></div>`;
-    const val = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
-    return `<div class="podium-card ${posClass[i]}">
-      <div class="rank-num">${posLabel[i]}</div>
-      <div class="podium-name">${r.nombre}</div>
-      <div class="podium-sub">${cfg.sub(r)}</div>
-      <div class="podium-value">${val}</div>
-      <div class="podium-value-label">${cfg.valueLabel}</div>
-    </div>`;
+  const thead = document.getElementById("editThead");
+  thead.innerHTML = "<tr><th>#</th>"+cfg.fields.map(f=>`<th>${f.label}</th>`).join("")+`<th>${cfg.metricLabel}</th></tr>`;
+
+  const rowsSorted = sortedRows(editCat);
+  const tbody = document.getElementById("editTbody");
+  tbody.innerHTML = rowsSorted.map((r, idx)=>{
+    const rankClass = idx===0?"rank-1":"";
+    const origIndex = DATA[editCat].indexOf(r);
+    const cells = cfg.fields.map(f=>{
+      const v = r[f.k] ?? (f.type==="num"?0:"");
+      return `<td><input class="field ${f.type==='num'?'num':''}" type="${f.type==='num'?'number':'text'}"
+        value="${String(v).replace(/"/g,'&quot;')}" data-idx="${origIndex}" data-field="${f.k}"></td>`;
+    }).join("");
+    const metricVal = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
+    return `<tr class="${rankClass}"><td class="cell-rank">${idx+1}</td>${cells}<td><span class="pct-badge">${metricVal}</span></td></tr>`;
   }).join("");
 
-  let restHtml = rows.slice(3,10).map((r,i)=>{
-    const pct = Math.min(cfg.pct(r),1);
-    const val = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
-    return `<div class="rest-row">
-      <div class="pos">${String(i+4).padStart(2,"0")}</div>
-      <div class="who">${r.nombre}<span class="tag">${cfg.sub(r)}</span>
-        <div class="bar-mini"><div style="width:${(pct*100).toFixed(0)}%"></div></div>
-      </div>
-      <div class="val">${val}</div>
-    </div>`;
-  }).join("");
-  if(!restHtml) restHtml = `<div class="rest-row"><div class="who" style="color:var(--muted)">No hay más registros en esta categoría.</div></div>`;
-
-  return `<div class="tv-header">
-      <div><div class="tv-title">${cfg.label}</div><div class="tv-title-main">Ranking del mes</div></div>
-      <div class="tv-meta">${cfg.metricLabel} · mes ${DATA.mes}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
-    </div>
-    <div class="podium">${podiumHtml}</div>
-    <div class="rest-list">${restHtml}</div>`;
+  tbody.querySelectorAll("input.field").forEach(inp=>{
+    inp.addEventListener("change", async ()=>{
+      const idx = Number(inp.dataset.idx);
+      const field = inp.dataset.field;
+      const isNum = inp.classList.contains("num");
+      DATA[editCat][idx][field] = isNum ? (parseFloat(inp.value)||0) : inp.value;
+      await saveData();
+      renderEditor();
+    });
+  });
 }
 
-function startCycle(){
-  clearInterval(cycleTimer); clearInterval(progressTimer);
-  let elapsed = 0;
-  const fill = document.getElementById("progressFill");
-  progressTimer = setInterval(()=>{
-    elapsed += 100;
-    fill.style.width = Math.min(100, (elapsed/CYCLE_MS)*100)+"%";
-  },100);
-  cycleTimer = setInterval(()=>{
-    tvIndex = (tvIndex+1) % TV_SCREENS.length;
-    elapsed = 0;
-    renderTV();
-  }, CYCLE_MS);
-}
+document.getElementById("btnAddRow").addEventListener("click", async ()=>{
+  const cfg = CATS[editCat];
+  const blank = {};
+  cfg.fields.forEach(f=> blank[f.k] = f.type==="num" ? 0 : "");
+  if(editCat==="supervisores") blank.metaPropios = 12;
+  if(editCat==="asesores") blank.meta = 4;
+  if(editCat==="consultores") blank.meta = 5;
+  DATA[editCat].push(blank);
+  await saveData();
+  renderEditor();
+});
+document.getElementById("btnReset").addEventListener("click", async ()=>{
+  if(confirm("¿Restablecer todos los datos a los valores originales? Esto no se puede deshacer.")){
+    DATA = seedData();
+    await saveData();
+    renderEditor();
+  }
+});
 
-/* ============ TIEMPO REAL: escucha cambios en vivo (push, sin polling) ============ */
+/* ============ INIT: escucha en tiempo real (onValue) ============ */
 if(dataRef){
   dataRef.on("value", (snapshot)=>{
     const val = snapshot.val();
     if(val){
       DATA = val;
-      document.getElementById("mesLabel").textContent = "Mes "+DATA.mes;
-      setLive(true, "En vivo");
-      renderTV();
-      if(!cycleTimer) startCycle();
     }else{
-      document.getElementById("tvContent").innerHTML = `<div class="status-msg">Esperando datos del editor…</div>`;
-      setLive(true, "Sin datos");
+      DATA = seedData();
+      dataRef.set(DATA);
     }
+    document.getElementById("mesLabel").textContent = "Mes "+DATA.mes;
+    setStatus(true, "Sincronizado");
+    renderEditor();
   }, (err)=>{
-    document.getElementById("tvContent").innerHTML = `<div class="status-msg err">Error al conectar: ${err.message}</div>`;
-    setLive(false, "Error");
+    showError("No se pudo leer la base de datos: "+err.message);
   });
 }
 </script>
