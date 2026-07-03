@@ -4,95 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Editor — Arena Comercial</title>
+
+<!-- ⚠️ FIREBASE: SDK compat (funciona en cualquier hosting, incluido Netlify) -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+
 <style>
   :root{
-    --void:#080B14; --panel:#111726; --panel-2:#161e30; --line:#232c42;
-    --gold:#F4B400; --silver:#C7CDD9; --bronze:#CD7F32; --cyan:#17E9C0; --cyan-dim:rgba(23,233,192,.15);
-    --text:#EDEFF5; --muted:#8892A8;
-    --font-display:'Arial Narrow','Arial Black',Impact,sans-serif;
+    --bg:#0A0C10; --panel:#0F1216; --line:#1E2228; --line-soft:#171A1F;
+    --gold:#D4A017; --accent:#3DDC97; --text:#F2F3F5; --muted:#6B7280; --muted-2:#454B54;
     --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:'SF Mono','Courier New',monospace;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{background:var(--void); color:var(--text); font-family:var(--font-body); min-height:100vh;}
-  body{background:radial-gradient(ellipse 1200px 600px at 50% -10%, rgba(23,233,192,.08), transparent 60%), var(--void);}
+  html,body{background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh;}
+  .topbar{display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--line);}
+  .brand{display:flex; align-items:baseline; gap:14px;}
+  .brand .name{font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase;}
+  .divider{width:1px; height:14px; background:var(--line);}
+  .sub{font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;}
+  .status{display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:600;}
+  .status-dot{width:6px; height:6px; border-radius:50%;}
+  .status.ok .status-dot{background:var(--accent); box-shadow:0 0 6px var(--accent);}
+  .status.err .status-dot{background:#E5484D; box-shadow:0 0 6px #E5484D;}
+  .status.ok{color:var(--accent);}
+  .status.err{color:#E5484D;}
 
-  .topbar{
-    position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between;
-    padding:14px 28px; background:rgba(8,11,20,.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+  .stage{max-width:1300px; margin:0 auto; padding:28px 40px 60px;}
+  .error-banner{
+    display:none; background:rgba(229,72,77,.12); border:1px solid rgba(229,72,77,.4); color:#ff9a9d;
+    padding:12px 16px; font-size:13px; margin-bottom:20px; font-family:var(--font-mono);
   }
-  .brand{display:flex; align-items:center; gap:12px;}
-  .brand .mark{
-    width:34px; height:34px; border-radius:8px; background:linear-gradient(135deg, var(--gold), var(--cyan));
-    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:900; color:#0a0d16; font-size:18px;
-  }
-  .brand .name{font-family:var(--font-display); letter-spacing:.5px; font-size:20px; font-weight:800; text-transform:uppercase;}
-  .brand .sub{font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase;}
-  .save-pill{
-    display:flex; align-items:center; gap:6px; background:var(--cyan-dim); border:1px solid rgba(23,233,192,.4);
-    padding:6px 12px; border-radius:100px; font-size:12px; color:var(--cyan); font-weight:600; transition:.3s;
-  }
-  .save-pill.saved{background:rgba(23,233,192,.3);}
-  .dot{width:7px; height:7px; border-radius:50%; background:var(--cyan);}
-
-  .stage{max-width:1300px; margin:0 auto; padding:28px;}
-  .tabs{display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;}
-  .tab{
-    background:var(--panel); border:1px solid var(--line); color:var(--muted); padding:9px 18px; border-radius:100px;
-    font-size:13px; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:.4px; transition:.2s;
-  }
-  .tab.active{background:var(--cyan); color:#062018; border-color:var(--cyan);}
-  .editor-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;}
-  .editor-toolbar h2{font-family:var(--font-display); text-transform:uppercase; font-size:24px; letter-spacing:.5px;}
-  .editor-toolbar .note{font-size:12px; color:var(--muted); margin-top:4px;}
-  .btn{
-    background:var(--cyan); color:#062018; border:none; padding:10px 18px; border-radius:9px;
-    font-weight:800; font-size:13px; cursor:pointer; text-transform:uppercase; letter-spacing:.4px;
-  }
-  .table-wrap{background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow-x:auto;}
-  table{width:100%; border-collapse:collapse; font-size:13.5px;}
-  thead th{
-    text-align:left; padding:12px 14px; color:var(--muted); font-size:11px; text-transform:uppercase;
-    letter-spacing:.6px; border-bottom:1px solid var(--line); white-space:nowrap;
-  }
-  tbody td{padding:6px 14px; border-bottom:1px solid var(--line); white-space:nowrap;}
+  .tabs{display:flex; gap:6px; margin-bottom:22px; flex-wrap:wrap;}
+  .tab{background:transparent; border:1px solid var(--line); color:var(--muted); padding:8px 16px; font-size:12px; font-weight:600; cursor:pointer; text-transform:uppercase; letter-spacing:.5px;}
+  .tab.active{background:var(--text); color:var(--bg); border-color:var(--text);}
+  .editor-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+  .editor-toolbar h2{font-size:20px; font-weight:800;}
+  .btn{background:var(--text); color:var(--bg); border:none; padding:10px 18px; font-weight:700; font-size:12px; cursor:pointer; text-transform:uppercase; letter-spacing:.5px;}
+  .btn.secondary{background:transparent; color:var(--muted); border:1px solid var(--line);}
+  .table-wrap{border:1px solid var(--line); overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{text-align:left; padding:10px 14px; color:var(--muted); font-size:10.5px; text-transform:uppercase; letter-spacing:.6px; border-bottom:1px solid var(--line); white-space:nowrap;}
+  tbody td{padding:5px 14px; border-bottom:1px solid var(--line-soft); white-space:nowrap;}
   tbody tr:last-child td{border-bottom:none;}
-  tbody tr:hover{background:rgba(23,233,192,.04);}
-  tbody tr.rank-1{background:rgba(244,180,0,.06);}
-  .cell-rank{font-family:var(--font-display); font-weight:800; color:var(--muted); width:36px;}
-  .rank-1 .cell-rank{color:var(--gold);}
-  .rank-2 .cell-rank{color:var(--silver);}
-  .rank-3 .cell-rank{color:var(--bronze);}
-  input.field{
-    background:var(--void); border:1px solid var(--line); color:var(--text); padding:7px 9px; border-radius:7px;
-    font-size:13px; width:100%; min-width:80px; font-family:var(--font-body);
-  }
-  input.field:focus{outline:none; border-color:var(--cyan);}
-  input.field.num{width:80px; text-align:right;}
-  .pct-badge{display:inline-block; padding:3px 9px; border-radius:100px; font-size:11.5px; font-weight:800; background:var(--void); color:var(--cyan);}
-  .footer-note{color:var(--muted); font-size:12px; margin-top:16px; text-align:center; line-height:1.6;}
+  tbody tr.rank-1{background:rgba(212,160,23,.06);}
+  .cell-rank{font-family:var(--font-mono); font-weight:700; color:var(--muted-2); width:30px;}
+  input.field{background:var(--bg); border:1px solid var(--line); color:var(--text); padding:6px 8px; font-size:12.5px; width:100%; min-width:76px;}
+  input.field:focus{outline:none; border-color:var(--accent);}
+  input.field.num{width:76px; text-align:right;}
+  .pct-badge{font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--accent);}
+  .footer-note{color:var(--muted-2); font-size:11px; margin-top:18px; text-align:center; line-height:1.7;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="brand">
-    <div class="mark">A</div>
-    <div>
-      <div class="name">Editor de datos</div>
-      <div class="sub" id="mesLabel">Arena Comercial · —</div>
-    </div>
+    <div class="name">Editor de datos</div>
+    <div class="divider"></div>
+    <div class="sub" id="mesLabel">—</div>
   </div>
-  <div class="save-pill" id="savePill"><span class="dot"></span><span id="saveLabel">Sincronizado</span></div>
+  <div class="status ok" id="statusPill"><span class="status-dot"></span><span id="statusLabel">Conectando…</span></div>
 </div>
 
 <div class="stage">
+  <div class="error-banner" id="errorBanner"></div>
   <div class="tabs" id="editTabs"></div>
   <div class="editor-toolbar">
-    <div>
-      <h2 id="editTitle"></h2>
-      <div class="note">Los cambios se reflejan en la pantalla de TV en unos segundos.</div>
+    <h2 id="editTitle"></h2>
+    <div style="display:flex; gap:10px;">
+      <button class="btn secondary" id="btnReset">Restablecer</button>
+      <button class="btn" id="btnAddRow">+ Agregar persona</button>
     </div>
-    <button class="btn" id="btnAddRow">+ Agregar persona</button>
   </div>
   <div class="table-wrap">
     <table>
@@ -100,69 +83,64 @@
       <tbody id="editTbody"></tbody>
     </table>
   </div>
-  <div class="footer-note">Este archivo es solo de edición. La pantalla de TV se muestra en el otro archivo (Tablero_TV.html) y se actualiza sola con lo que cambies aquí.</div>
+  <div class="footer-note">Los cambios se guardan solos y se ven en el tablero TV en tiempo real.</div>
 </div>
 
 <script>
-/* ============ CONFIG DE CATEGORÍAS (igual que el archivo de TV) ============ */
+/* =========================================================
+   ⚠️ PEGA AQUÍ TU CONFIG DE FIREBASE (Configuración del
+   proyecto → General → Tus apps → ícono </>)
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROYECTO.firebaseapp.com",
+  databaseURL: "https://TU_PROYECTO-default-rtdb.firebaseio.com",
+  projectId: "TU_PROYECTO",
+  storageBucket: "TU_PROYECTO.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "TU_APP_ID"
+};
+/* ========================================================= */
+
+let db, dataRef;
+try{
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  dataRef = db.ref("gamificacion/data");
+}catch(e){
+  showError("No se pudo conectar a Firebase. Revisa que pegaste bien el firebaseConfig. Detalle: "+e.message);
+}
+
+function showError(msg){
+  const b = document.getElementById("errorBanner");
+  b.style.display = "block";
+  b.textContent = "⚠ " + msg;
+  setStatus(false);
+}
+function setStatus(ok, label){
+  const pill = document.getElementById("statusPill");
+  const lbl = document.getElementById("statusLabel");
+  pill.className = "status " + (ok ? "ok" : "err");
+  lbl.textContent = label || (ok ? "Sincronizado" : "Error de conexión");
+}
+
+/* ============ CONFIG DE CATEGORÍAS ============ */
 const CATS = {
-  asesores: {
-    label:"Asesores", icon:"🎯", metricLabel:"Cierres",
-    fields:[
-      {k:"nombre",label:"Nombre",type:"text"},
-      {k:"cierres",label:"Cierres",type:"num"},
-      {k:"meta",label:"Meta",type:"num"},
-      {k:"supervisor",label:"Supervisor",type:"text"},
-    ],
-    metric:r=>r.cierres, isPct:false
-  },
-  consultores: {
-    label:"Consultores", icon:"📋", metricLabel:"Contratos",
-    fields:[
-      {k:"nombre",label:"Nombre",type:"text"},
-      {k:"contratos",label:"Contratos",type:"num"},
-      {k:"meta",label:"Meta",type:"num"},
-      {k:"supervisor",label:"Supervisor",type:"text"},
-      {k:"sucursal",label:"Sucursal",type:"text"},
-    ],
-    metric:r=>r.contratos, isPct:false
-  },
-  supervisores: {
-    label:"Supervisores", icon:"🔧", metricLabel:"Puntuación",
-    fields:[
-      {k:"nombre",label:"Nombre",type:"text"},
-      {k:"propios",label:"Cierres propios",type:"num"},
-      {k:"equipo",label:"Contratos equipo",type:"num"},
-      {k:"activas",label:"Personas activas",type:"num"},
-      {k:"metaPropios",label:"Meta propios",type:"num"},
-      {k:"gerente",label:"Gerente",type:"text"},
-    ],
-    metric:r=>(r.propios*3)+(r.equipo*1)+(r.activas*2), isPct:false
-  },
-  gerentes: {
-    label:"Gerentes", icon:"🏢", metricLabel:"Cumplimiento",
-    fields:[
-      {k:"nombre",label:"Nombre",type:"text"},
-      {k:"facturacion",label:"Facturación $",type:"num"},
-      {k:"equipo",label:"Personas equipo",type:"num"},
-      {k:"metaProduccion",label:"Meta producción $",type:"num"},
-      {k:"contratos",label:"Contratos",type:"num"},
-      {k:"region",label:"Región",type:"text"},
-    ],
-    metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion : 0, isPct:true
-  },
-  subdirectores: {
-    label:"Sub Directores", icon:"🏆", metricLabel:"Cumplimiento",
-    fields:[
-      {k:"nombre",label:"Nombre",type:"text"},
-      {k:"produccion",label:"Producción mes $",type:"num"},
-      {k:"equipo",label:"Personas equipo",type:"num"},
-      {k:"metaProduccion",label:"Meta producción $",type:"num"},
-      {k:"contratos",label:"Contratos",type:"num"},
-      {k:"region",label:"Región",type:"text"},
-    ],
-    metric:r=>r.metaProduccion>0? r.produccion/r.metaProduccion : 0, isPct:true
-  }
+  asesores: { label:"Asesores", metricLabel:"Cierres",
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"cierres",label:"Cierres",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"}],
+    metric:r=>r.cierres, isPct:false },
+  consultores: { label:"Consultores", metricLabel:"Contratos",
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"contratos",label:"Contratos",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"},{k:"sucursal",label:"Sucursal",type:"text"}],
+    metric:r=>r.contratos, isPct:false },
+  supervisores: { label:"Supervisores", metricLabel:"Puntuación",
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"propios",label:"Cierres propios",type:"num"},{k:"equipo",label:"Contratos equipo",type:"num"},{k:"activas",label:"Personas activas",type:"num"},{k:"metaPropios",label:"Meta propios",type:"num"},{k:"gerente",label:"Gerente",type:"text"}],
+    metric:r=>(r.propios*3)+(r.equipo*1)+(r.activas*2), isPct:false },
+  gerentes: { label:"Gerentes", metricLabel:"Cumplimiento",
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"facturacion",label:"Facturación $",type:"num"},{k:"equipo",label:"Personas equipo",type:"num"},{k:"metaProduccion",label:"Meta producción $",type:"num"},{k:"contratos",label:"Contratos",type:"num"},{k:"region",label:"Región",type:"text"}],
+    metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion : 0, isPct:true },
+  subdirectores: { label:"Sub Directores", metricLabel:"Cumplimiento",
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"produccion",label:"Producción mes $",type:"num"},{k:"equipo",label:"Personas equipo",type:"num"},{k:"metaProduccion",label:"Meta producción $",type:"num"},{k:"contratos",label:"Contratos",type:"num"},{k:"region",label:"Región",type:"text"}],
+    metric:r=>r.metaProduccion>0? r.produccion/r.metaProduccion : 0, isPct:true },
 };
 const CAT_ORDER = ["asesores","consultores","supervisores","gerentes","subdirectores"];
 
@@ -227,42 +205,29 @@ function seedData(){
 
 let DATA = null;
 let editCat = "asesores";
-const STORAGE_KEY = "gamificacion:data";
 
-async function loadData(){
-  try{
-    const res = await window.storage.get(STORAGE_KEY, true);
-    if(res && res.value){ DATA = JSON.parse(res.value); return; }
-    throw new Error("no data");
-  }catch(e){
-    DATA = seedData();
-    await saveData();
-  }
-}
-async function saveData(){
-  const pill = document.getElementById("savePill");
-  const label = document.getElementById("saveLabel");
-  try{
-    await window.storage.set(STORAGE_KEY, JSON.stringify(DATA), true);
-    pill.classList.add("saved"); label.textContent = "Guardado ✓";
-    setTimeout(()=>{ pill.classList.remove("saved"); label.textContent="Sincronizado"; }, 1200);
-  }catch(e){
-    label.textContent = "Error al guardar";
-    console.error(e);
-  }
-}
 function fmtPct(x){ return (x*100).toFixed(0)+"%"; }
 function sortedRows(catKey){
   const cfg = CATS[catKey];
-  return [...DATA[catKey]].filter(r=>r.nombre && r.nombre.trim()!=="")
+  return [...(DATA[catKey]||[])].filter(r=>r.nombre && r.nombre.trim()!=="")
     .sort((a,b)=> cfg.metric(b) - cfg.metric(a));
+}
+
+async function saveData(){
+  try{
+    await dataRef.set(DATA);
+    setStatus(true, "Guardado ✓");
+    setTimeout(()=> setStatus(true, "Sincronizado"), 1200);
+  }catch(e){
+    showError("Error al guardar: "+e.message+" — revisa las reglas de tu Realtime Database (deben permitir escritura).");
+  }
 }
 
 function renderEditTabs(){
   const wrap = document.getElementById("editTabs");
   wrap.innerHTML = CAT_ORDER.map(key=>{
     const cfg = CATS[key];
-    return `<button class="tab ${key===editCat?'active':''}" data-cat="${key}">${cfg.icon} ${cfg.label}</button>`;
+    return `<button class="tab ${key===editCat?'active':''}" data-cat="${key}">${cfg.label}</button>`;
   }).join("");
   wrap.querySelectorAll(".tab").forEach(btn=>{
     btn.addEventListener("click", ()=>{ editCat = btn.dataset.cat; renderEditor(); });
@@ -271,7 +236,7 @@ function renderEditTabs(){
 function renderEditor(){
   renderEditTabs();
   const cfg = CATS[editCat];
-  document.getElementById("editTitle").textContent = cfg.icon+" "+cfg.label;
+  document.getElementById("editTitle").textContent = cfg.label;
 
   const thead = document.getElementById("editThead");
   thead.innerHTML = "<tr><th>#</th>"+cfg.fields.map(f=>`<th>${f.label}</th>`).join("")+`<th>${cfg.metricLabel}</th></tr>`;
@@ -279,7 +244,7 @@ function renderEditor(){
   const rowsSorted = sortedRows(editCat);
   const tbody = document.getElementById("editTbody");
   tbody.innerHTML = rowsSorted.map((r, idx)=>{
-    const rankClass = idx===0?"rank-1": idx===1?"rank-2": idx===2?"rank-3":"";
+    const rankClass = idx===0?"rank-1":"";
     const origIndex = DATA[editCat].indexOf(r);
     const cells = cfg.fields.map(f=>{
       const v = r[f.k] ?? (f.type==="num"?0:"");
@@ -287,11 +252,7 @@ function renderEditor(){
         value="${String(v).replace(/"/g,'&quot;')}" data-idx="${origIndex}" data-field="${f.k}"></td>`;
     }).join("");
     const metricVal = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
-    return `<tr class="${rankClass}">
-      <td class="cell-rank">${idx+1}</td>
-      ${cells}
-      <td><span class="pct-badge">${metricVal}</span></td>
-    </tr>`;
+    return `<tr class="${rankClass}"><td class="cell-rank">${idx+1}</td>${cells}<td><span class="pct-badge">${metricVal}</span></td></tr>`;
   }).join("");
 
   tbody.querySelectorAll("input.field").forEach(inp=>{
@@ -317,12 +278,31 @@ document.getElementById("btnAddRow").addEventListener("click", async ()=>{
   await saveData();
   renderEditor();
 });
+document.getElementById("btnReset").addEventListener("click", async ()=>{
+  if(confirm("¿Restablecer todos los datos a los valores originales? Esto no se puede deshacer.")){
+    DATA = seedData();
+    await saveData();
+    renderEditor();
+  }
+});
 
-(async function init(){
-  await loadData();
-  document.getElementById("mesLabel").textContent = "Arena Comercial · mes "+DATA.mes;
-  renderEditor();
-})();
+/* ============ INIT: escucha en tiempo real (onValue) ============ */
+if(dataRef){
+  dataRef.on("value", (snapshot)=>{
+    const val = snapshot.val();
+    if(val){
+      DATA = val;
+    }else{
+      DATA = seedData();
+      dataRef.set(DATA);
+    }
+    document.getElementById("mesLabel").textContent = "Mes "+DATA.mes;
+    setStatus(true, "Sincronizado");
+    renderEditor();
+  }, (err)=>{
+    showError("No se pudo leer la base de datos: "+err.message);
+  });
+}
 </script>
 </body>
 </html>
