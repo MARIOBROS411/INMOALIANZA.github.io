@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arena Comercial — Tablero TV</title>
+<style>
+  :root{
+    --void:#080B14; --panel:#111726; --line:#232c42;
+    --gold:#F4B400; --gold-glow:rgba(244,180,0,.35); --silver:#C7CDD9; --bronze:#CD7F32;
+    --cyan:#17E9C0; --cyan-dim:rgba(23,233,192,.15);
+    --text:#EDEFF5; --muted:#8892A8;
+    --font-display:'Arial Narrow','Arial Black',Impact,sans-serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:var(--void); color:var(--text); font-family:var(--font-body); min-height:100vh; overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse 1200px 600px at 50% -10%, rgba(23,233,192,.08), transparent 60%),
+      radial-gradient(ellipse 900px 500px at 100% 100%, rgba(244,180,0,.06), transparent 60%),
+      var(--void);
+  }
+  .topbar{
+    position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between;
+    padding:14px 28px; background:rgba(8,11,20,.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand .mark{
+    width:34px; height:34px; border-radius:8px; background:linear-gradient(135deg, var(--gold), var(--cyan));
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:900; color:#0a0d16; font-size:18px;
+  }
+  .brand .name{font-family:var(--font-display); letter-spacing:.5px; font-size:20px; font-weight:800; text-transform:uppercase;}
+  .brand .sub{font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase;}
+  .live-pill{
+    display:flex; align-items:center; gap:6px; background:var(--cyan-dim); border:1px solid rgba(23,233,192,.4);
+    padding:6px 12px; border-radius:100px; font-size:12px; color:var(--cyan); font-weight:600;
+  }
+  .live-dot{width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.35}}
+
+  .stage{max-width:1400px; margin:0 auto; padding:28px;}
+  .progress-track{height:4px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:30px;}
+  .progress-fill{height:100%; background:linear-gradient(90deg, var(--cyan), var(--gold)); width:0%;}
+  .tv-header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:10px;}
+  .tv-title{font-family:var(--font-display); text-transform:uppercase; font-size:38px; font-weight:900; letter-spacing:1px;}
+  .tv-title .accent{color:var(--gold);}
+  .tv-meta{color:var(--muted); font-size:13px;}
+
+  .podium{display:grid; grid-template-columns:1fr 1.15fr 1fr; align-items:end; gap:18px; margin-bottom:34px;}
+  .podium-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 18px; text-align:center; position:relative; overflow:hidden;}
+  .podium-card.p1{
+    border-color:var(--gold); padding-top:32px; padding-bottom:32px;
+    box-shadow:0 0 60px -10px var(--gold-glow), inset 0 0 0 1px rgba(244,180,0,.2);
+    background:linear-gradient(180deg, rgba(244,180,0,.10), var(--panel) 55%);
+  }
+  .podium-card.p2{border-color:rgba(199,205,217,.4);}
+  .podium-card.p3{border-color:rgba(205,127,50,.5);}
+  .medal{width:52px; height:52px; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:900; font-size:22px; color:#0a0d16;}
+  .p1 .medal{width:64px; height:64px; font-size:28px; background:radial-gradient(circle at 35% 30%, #fff3c4, var(--gold)); box-shadow:0 0 24px var(--gold-glow);}
+  .p2 .medal{background:radial-gradient(circle at 35% 30%, #fff, var(--silver));}
+  .p3 .medal{background:radial-gradient(circle at 35% 30%, #f0c090, var(--bronze));}
+  .podium-name{font-size:17px; font-weight:800; margin-bottom:4px; text-transform:uppercase; letter-spacing:.3px;}
+  .p1 .podium-name{font-size:21px;}
+  .podium-sub{font-size:11.5px; color:var(--muted); margin-bottom:14px; text-transform:uppercase; letter-spacing:.5px;}
+  .podium-value{font-family:var(--font-display); font-weight:900; font-size:38px; color:var(--cyan); line-height:1;}
+  .p1 .podium-value{font-size:52px; color:var(--gold);}
+  .podium-value-label{font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px;}
+  .empty-slot{opacity:.3; font-size:13px; padding:30px 0;}
+
+  .rest-list{background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden;}
+  .rest-row{display:grid; grid-template-columns:44px 1fr auto; gap:14px; align-items:center; padding:12px 20px; border-bottom:1px solid var(--line);}
+  .rest-row:last-child{border-bottom:none;}
+  .rest-row .pos{font-family:var(--font-display); color:var(--muted); font-weight:800; font-size:16px;}
+  .rest-row .who{font-weight:700; font-size:14.5px;}
+  .rest-row .who .tag{color:var(--muted); font-weight:400; font-size:12px; text-transform:uppercase; margin-left:8px;}
+  .rest-row .val{font-family:var(--font-display); font-weight:800; color:var(--cyan); font-size:16px;}
+  .bar-mini{height:5px; background:var(--void); border-radius:3px; margin-top:6px; overflow:hidden;}
+  .bar-mini > div{height:100%; background:var(--cyan);}
+
+  .summary-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:16px;}
+  .summary-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 16px; text-align:center;}
+  .summary-card .cat{font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; font-weight:700;}
+  .summary-card .medal{margin-bottom:10px;}
+  .summary-card .podium-name{font-size:15px;}
+  .summary-card .podium-value{font-size:30px;}
+
+  @media (max-width:900px){
+    .podium{grid-template-columns:1fr; grid-template-rows:auto;}
+    .podium-card.p1{order:-1;}
+    .summary-grid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="mark">A</div>
+    <div>
+      <div class="name">Arena Comercial</div>
+      <div class="sub" id="mesLabel">Gamificación · —</div>
+    </div>
+  </div>
+  <div class="live-pill"><span class="live-dot"></span><span>En vivo</span></div>
+</div>
+
+<div class="stage">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div id="tvContent"></div>
+</div>
+
+<script>
+/* ============ CONFIG DE CATEGORÍAS (idéntico al Editor) ============ */
+const CATS = {
+  asesores: {
+    label:"Asesores", icon:"🎯", metricLabel:"Cierres",
+    metric:r=>r.cierres, pct:r=>r.meta>0? r.cierres/r.meta:0, sub:r=>"Sup. "+(r.supervisor||"—"),
+    valueLabel:"cierres", isPct:false
+  },
+  consultores: {
+    label:"Consultores", icon:"📋", metricLabel:"Contratos",
+    metric:r=>r.contratos, pct:r=>r.meta>0? r.contratos/r.meta:0, sub:r=>(r.sucursal||"—"),
+    valueLabel:"contratos", isPct:false
+  },
+  supervisores: {
+    label:"Supervisores", icon:"🔧", metricLabel:"Puntuación",
+    metric:r=>(r.propios*3)+(r.equipo*1)+(r.activas*2), pct:r=>r.metaPropios>0? r.propios/r.metaPropios:0,
+    sub:r=>"Ger. "+(r.gerente||"—"), valueLabel:"pts", isPct:false,
+    formulaNote:"Puntuación = cierres propios ×3 + contratos equipo ×1 + personas activas ×2"
+  },
+  gerentes: {
+    label:"Gerentes", icon:"🏢", metricLabel:"Cumplimiento",
+    metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0, pct:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0,
+    sub:r=>(r.region||"—"), valueLabel:"%", isPct:true
+  },
+  subdirectores: {
+    label:"Sub Directores", icon:"🏆", metricLabel:"Cumplimiento",
+    metric:r=>r.metaProduccion>0? r.produccion/r.metaProduccion:0, pct:r=>r.metaProduccion>0? r.produccion/r.metaProduccion:0,
+    sub:r=>(r.region||"—"), valueLabel:"%", isPct:true
+  }
+};
+const CAT_ORDER = ["asesores","consultores","supervisores","gerentes","subdirectores"];
+const TV_SCREENS = ["resumen", ...CAT_ORDER];
+const CYCLE_MS = 11000;
+const POLL_MS = 4000;
+const STORAGE_KEY = "gamificacion:data";
+
+let DATA = null;
+let tvIndex = 0;
+let cycleTimer=null, progressTimer=null;
+let lastSnapshot = "";
+
+async function loadData(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if(res && res.value){ DATA = JSON.parse(res.value); lastSnapshot = res.value; return true; }
+  }catch(e){}
+  return false;
+}
+
+function fmtPct(x){ return (x*100).toFixed(0)+"%"; }
+function sortedRows(catKey){
+  const cfg = CATS[catKey];
+  return [...(DATA[catKey]||[])].filter(r=>r.nombre && r.nombre.trim()!=="")
+    .sort((a,b)=> cfg.metric(b) - cfg.metric(a));
+}
+
+function renderTV(){
+  const screen = TV_SCREENS[tvIndex];
+  const el = document.getElementById("tvContent");
+  el.innerHTML = screen==="resumen" ? renderResumen() : renderCategoriaTV(screen);
+}
+function renderResumen(){
+  let cards = CAT_ORDER.map(key=>{
+    const cfg = CATS[key];
+    const rows = sortedRows(key);
+    const top = rows[0];
+    if(!top) return `<div class="summary-card"><div class="cat">${cfg.icon} ${cfg.label}</div><div class="empty-slot">Sin datos</div></div>`;
+    const val = cfg.isPct ? fmtPct(cfg.metric(top)) : Math.round(cfg.metric(top))+"";
+    return `<div class="summary-card">
+      <div class="cat">${cfg.icon} ${cfg.label}</div>
+      <div class="medal">🥇</div>
+      <div class="podium-name">${top.nombre}</div>
+      <div class="podium-sub">${cfg.sub(top)}</div>
+      <div class="podium-value">${val}</div>
+      <div class="podium-value-label">${cfg.metricLabel}</div>
+    </div>`;
+  }).join("");
+  return `<div class="tv-header">
+      <div class="tv-title">TOP <span class="accent">1</span> DE CADA EQUIPO</div>
+      <div class="tv-meta">Resumen general · mes ${DATA.mes}</div>
+    </div>
+    <div class="summary-grid">${cards}</div>`;
+}
+function renderCategoriaTV(key){
+  const cfg = CATS[key];
+  const rows = sortedRows(key);
+  const podium = [rows[1], rows[0], rows[2]];
+  const posClass = ["p2","p1","p3"];
+  const posMedal = ["🥈","🥇","🥉"];
+
+  let podiumHtml = podium.map((r,i)=>{
+    if(!r) return `<div class="podium-card ${posClass[i]}"><div class="empty-slot">Sin datos aún</div></div>`;
+    const val = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
+    return `<div class="podium-card ${posClass[i]}">
+      <div class="medal">${posMedal[i]}</div>
+      <div class="podium-name">${r.nombre}</div>
+      <div class="podium-sub">${cfg.sub(r)}</div>
+      <div class="podium-value">${val}</div>
+      <div class="podium-value-label">${cfg.valueLabel}</div>
+    </div>`;
+  }).join("");
+
+  let restHtml = rows.slice(3,10).map((r,i)=>{
+    const pct = Math.min(cfg.pct(r),1);
+    const val = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
+    return `<div class="rest-row">
+      <div class="pos">${i+4}</div>
+      <div class="who">${r.nombre}<span class="tag">${cfg.sub(r)}</span>
+        <div class="bar-mini"><div style="width:${(pct*100).toFixed(0)}%"></div></div>
+      </div>
+      <div class="val">${val}</div>
+    </div>`;
+  }).join("");
+  if(!restHtml) restHtml = `<div class="rest-row"><div class="who" style="color:var(--muted)">No hay más registros en esta categoría.</div></div>`;
+
+  return `<div class="tv-header">
+      <div class="tv-title">${cfg.icon} <span class="accent">${cfg.label.toUpperCase()}</span></div>
+      <div class="tv-meta">Métrica: ${cfg.metricLabel} · mes ${DATA.mes}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
+    </div>
+    <div class="podium">${podiumHtml}</div>
+    <div class="rest-list">${restHtml}</div>`;
+}
+
+function startCycle(){
+  clearInterval(cycleTimer); clearInterval(progressTimer);
+  let elapsed = 0;
+  const fill = document.getElementById("progressFill");
+  progressTimer = setInterval(()=>{
+    elapsed += 100;
+    fill.style.width = Math.min(100, (elapsed/CYCLE_MS)*100)+"%";
+  },100);
+  cycleTimer = setInterval(()=>{
+    tvIndex = (tvIndex+1) % TV_SCREENS.length;
+    elapsed = 0;
+    renderTV();
+  }, CYCLE_MS);
+}
+
+async function poll(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if(res && res.value && res.value !== lastSnapshot){
+      lastSnapshot = res.value;
+      DATA = JSON.parse(res.value);
+      document.getElementById("mesLabel").textContent = "Gamificación · mes "+DATA.mes;
+      renderTV();
+    }
+  }catch(e){}
+}
+
+(async function init(){
+  const el = document.getElementById("tvContent");
+  el.innerHTML = `<div class="tv-header"><div class="tv-title">Esperando datos…</div></div>
+    <div class="empty-slot" style="text-align:center; padding:60px 0;">Abre y guarda algo en el archivo Tablero_Editor.html primero.</div>`;
+  let ok = await loadData();
+  if(!ok){
+    // reintenta cada 3s hasta que el editor haya guardado datos
+    const retry = setInterval(async ()=>{
+      ok = await loadData();
+      if(ok){ clearInterval(retry); afterLoad(); }
+    }, 3000);
+    return;
+  }
+  afterLoad();
+  function afterLoad(){
+    document.getElementById("mesLabel").textContent = "Gamificación · mes "+DATA.mes;
+    renderTV();
+    startCycle();
+    setInterval(poll, POLL_MS);
+  }
+})();
+</script>
+</body>
+</html>
