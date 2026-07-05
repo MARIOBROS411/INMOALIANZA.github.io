@@ -292,6 +292,7 @@ function renderTop5(key){
     <div class="rest-list">${rowsHtml}</div>`;
 }
 
+function renderCategoriaTV(key){
   const cfg = CATS[key];
   const rows = sortedRows(key);
   const podium = [rows[1], rows[0], rows[2]];
