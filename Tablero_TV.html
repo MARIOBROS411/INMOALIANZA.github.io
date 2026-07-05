@@ -87,6 +87,11 @@
   .rest-row .who{font-weight:700; font-size:14px;}
   .rest-row .who .tag{color:var(--muted); font-weight:500; font-size:11.5px; text-transform:uppercase; margin-left:10px; letter-spacing:.4px;}
   .rest-row .val{font-family:var(--font-mono); font-weight:800; color:var(--accent); font-size:15px;}
+  .top5-row .pos{font-size:20px;}
+  .top5-row.top5-1{background:rgba(242,183,5,.06);}
+  .top5-row.top5-1 .who{font-size:15px;}
+  .top5-row.top5-1 .val{color:var(--gold); font-size:17px;}
+  .top5-row:not(.top5-1):not(.top5-2):not(.top5-3) .pos{font-family:var(--font-mono); font-size:15px; color:var(--muted-2);}
   .bar-mini{height:3px; background:var(--bg); border-radius:3px; margin-top:7px; overflow:hidden;}
   .bar-mini > div{height:100%; background:var(--accent);}
 
@@ -212,7 +217,9 @@ function renderTV(){
   const screens = tvScreens();
   const screen = screens[tvIndex % screens.length];
   const el = document.getElementById("tvContent");
-  el.innerHTML = screen==="resumen" ? renderResumen() : renderCategoriaTV(screen);
+  if(screen==="resumen"){ el.innerHTML = renderResumen(); }
+  else if(TOP5_CATS.includes(screen)){ el.innerHTML = renderTop5(screen); }
+  else{ el.innerHTML = renderCategoriaTV(screen); }
 }
 function renderResumen(){
   let cards = catsVisibles().map(key=>{
@@ -236,7 +243,55 @@ function renderResumen(){
     </div>
     <div class="summary-grid">${cards}</div>`;
 }
-function renderCategoriaTV(key){
+const TOP5_CATS = ["asesores","consultores","supervisores"];
+
+/* Ranking tipo competencia: si hay empate, comparten el mismo lugar
+   (ej. 1, 1, 3, 4, 4 — nunca salta a "2" si dos empatan en 1). */
+function withRanks(rows, metricFn){
+  let rank = 0, prevVal = null;
+  return rows.map((r,i)=>{
+    const val = metricFn(r);
+    if(prevVal === null || val !== prevVal){ rank = i+1; }
+    prevVal = val;
+    return { row:r, rank, val };
+  });
+}
+
+function renderTop5(key){
+  const cfg = CATS[key];
+  const rows = sortedRows(key);
+  const ranked = withRanks(rows, cfg.metric);
+  const top5 = ranked.filter(x => x.rank <= 5);
+
+  if(top5.length === 0){
+    return `<div class="tv-header">
+        <div><div class="tv-title">${cfg.label}</div><div class="tv-title-main">Top 5 del mes</div></div>
+        <div class="tv-meta">${cfg.metricLabel}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
+      </div>
+      <div class="rest-list"><div class="rest-row"><div class="who" style="color:var(--muted)">Sin datos aún en esta categoría.</div></div></div>`;
+  }
+
+  const medalFor = r => r===1?"🥇": r===2?"🥈": r===3?"🥉": null;
+  let rowsHtml = top5.map(({row:r, rank, val})=>{
+    const pct = Math.min(cfg.pct(r),1);
+    const displayVal = cfg.isPct ? fmtPct(val) : Math.round(val)+"";
+    const medal = medalFor(rank);
+    return `<div class="rest-row top5-row ${rank<=3?'top5-'+rank:''}">
+      <div class="pos">${medal ? medal : rank+"."}</div>
+      <div class="who">${r.nombre}<span class="tag">${cfg.sub(r)}</span>
+        <div class="bar-mini"><div style="width:${(pct*100).toFixed(0)}%"></div></div>
+      </div>
+      <div class="val">${displayVal}</div>
+    </div>`;
+  }).join("");
+
+  return `<div class="tv-header">
+      <div><div class="tv-title">${cfg.label}</div><div class="tv-title-main">Top 5 del mes</div></div>
+      <div class="tv-meta">${cfg.metricLabel}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
+    </div>
+    <div class="rest-list">${rowsHtml}</div>`;
+}
+
   const cfg = CATS[key];
   const rows = sortedRows(key);
   const podium = [rows[1], rows[0], rows[2]];
