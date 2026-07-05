@@ -99,6 +99,14 @@
 
 <div class="stage">
   <div class="error-banner" id="errorBanner"></div>
+  <div style="background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; font-weight:800;">Mes mostrado en el tablero</div>
+    <select id="selMes" class="field" style="width:140px;"></select>
+    <input id="inpAnio" class="field num" type="number" style="width:90px;" />
+    <button class="btn secondary" id="btnGuardarMes" style="padding:8px 14px;">Guardar mes</button>
+    <button class="btn secondary" id="btnMesAuto" style="padding:8px 14px;">Usar automático</button>
+    <div style="font-size:11px; color:var(--muted-2);" id="mesModoLabel"></div>
+  </div>
   <div class="tabs" id="editTabs"></div>
   <div class="editor-toolbar">
     <div>
@@ -156,12 +164,37 @@ function setStatus(ok, label){
   lbl.textContent = label || (ok ? "Sincronizado" : "Error de conexión");
 }
 
-/* Mes calculado automáticamente por el sistema — nunca queda desactualizado */
-function mesActualLabel(){
-  const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-  const d = new Date();
-  return "Ranking mensual · " + meses[d.getMonth()] + " " + d.getFullYear();
+/* Mes: automático por defecto (fecha del sistema), pero se puede ajustar a mano */
+const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+function mesAutoIdx(){ return new Date().getMonth(); }
+function anioAutoVal(){ return new Date().getFullYear(); }
+function mesLabelDesde(mesIdx, anio){ return "Ranking mensual · " + MESES[mesIdx] + " " + anio; }
+
+function initMesControls(){
+  const sel = document.getElementById("selMes");
+  sel.innerHTML = MESES.map((m,i)=>`<option value="${i}">${m}</option>`).join("");
 }
+function pintarMesUI(){
+  const modoAuto = !DATA.mesManual;
+  const mesIdx = modoAuto ? mesAutoIdx() : DATA.mesManual.mesIdx;
+  const anio = modoAuto ? anioAutoVal() : DATA.mesManual.anio;
+  document.getElementById("selMes").value = mesIdx;
+  document.getElementById("inpAnio").value = anio;
+  document.getElementById("mesModoLabel").textContent = modoAuto ? "(automático — según la fecha del sistema)" : "(ajustado manualmente)";
+  document.getElementById("mesLabel").textContent = mesLabelDesde(mesIdx, anio);
+}
+document.getElementById("btnGuardarMes").addEventListener("click", async ()=>{
+  const mesIdx = Number(document.getElementById("selMes").value);
+  const anio = Number(document.getElementById("inpAnio").value) || anioAutoVal();
+  DATA.mesManual = { mesIdx, anio };
+  await saveData();
+  pintarMesUI();
+});
+document.getElementById("btnMesAuto").addEventListener("click", async ()=>{
+  DATA.mesManual = null;
+  await saveData();
+  pintarMesUI();
+});
 
 /* ============ CONFIG DE CATEGORÍAS ============ */
 const CATS = {
@@ -337,7 +370,7 @@ document.getElementById("btnReset").addEventListener("click", async ()=>{
   }
 });
 
-document.getElementById("mesLabel").textContent = mesActualLabel();
+initMesControls();
 
 if(dataRef){
   dataRef.on("value", (snapshot)=>{
@@ -349,6 +382,7 @@ if(dataRef){
       dataRef.set(DATA);
     }
     setStatus(true, "Sincronizado");
+    pintarMesUI();
     renderEditor();
   }, (err)=>{
     showError("No se pudo leer la base de datos: "+err.message);
