@@ -96,6 +96,7 @@
   .dual-val > div{text-align:center;}
   .dual-num{display:block; font-family:var(--font-mono); font-weight:800; font-size:16px; color:var(--text);}
   .dual-lbl{display:block; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-top:2px;}
+  .dual-num-puntos{color:var(--gold);}
   .bar-mini{height:3px; background:var(--bg); border-radius:3px; margin-top:7px; overflow:hidden;}
   .bar-mini > div{height:100%; background:var(--accent);}
 
@@ -182,9 +183,10 @@ const CATS = {
   consultores: { label:"Consultores", metricLabel:"Contratos",
     metric:r=>r.contratos, pct:r=>r.meta>0? r.contratos/r.meta:0, sub:r=>(r.sucursal||"—"), valueLabel:"contratos", isPct:false },
   supervisores: { label:"Supervisores", metricLabel:"",
-    metric:r=>(r.propios||0)+(r.equipo||0), pct:r=>r.metaPropios>0? r.propios/r.metaPropios:0,
+    metric:r=>(r.puntos||0), pct:r=>r.metaPropios>0? r.propios/r.metaPropios:0,
     sub:r=>"Ger. "+(r.gerente||"—"), isPct:false, dual:true,
-    valA:r=>r.propios||0, valALabel:"Propios", valB:r=>r.equipo||0, valBLabel:"Equipo" },
+    valA:r=>r.propios||0, valALabel:"Propios", valB:r=>r.equipo||0, valBLabel:"Equipo",
+    valC:r=>r.puntos||0, valCLabel:"Puntos" },
   gerentes: { label:"Gerentes", metricLabel:"Cumplimiento",
     metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0, pct:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0,
     sub:r=>(r.region||"—"), valueLabel:"%", isPct:true },
@@ -236,6 +238,7 @@ function renderResumen(){
       ? `<div class="dual-val" style="justify-content:center; margin-top:2px;">
            <div><span class="dual-num">${cfg.valA(top)}</span><span class="dual-lbl">${cfg.valALabel}</span></div>
            <div><span class="dual-num">${cfg.valB(top)}</span><span class="dual-lbl">${cfg.valBLabel}</span></div>
+           ${cfg.valC ? `<div><span class="dual-num dual-num-puntos">${cfg.valC(top)}</span><span class="dual-lbl">${cfg.valCLabel}</span></div>` : ""}
          </div>`
       : `<div class="podium-value">${cfg.isPct ? fmtPct(cfg.metric(top)) : Math.round(cfg.metric(top))+""}</div>
          <div class="podium-value-label">${cfg.metricLabel}</div>`;
@@ -289,6 +292,7 @@ function renderTop5(key){
       ? `<div class="dual-val">
            <div><span class="dual-num">${cfg.valA(r)}</span><span class="dual-lbl">${cfg.valALabel}</span></div>
            <div><span class="dual-num">${cfg.valB(r)}</span><span class="dual-lbl">${cfg.valBLabel}</span></div>
+           ${cfg.valC ? `<div><span class="dual-num dual-num-puntos">${cfg.valC(r)}</span><span class="dual-lbl">${cfg.valCLabel}</span></div>` : ""}
          </div>`
       : `<div class="val">${cfg.isPct ? fmtPct(val) : Math.round(val)+""}</div>`;
     return `<div class="rest-row top5-row ${rank<=3?'top5-'+rank:''}">
