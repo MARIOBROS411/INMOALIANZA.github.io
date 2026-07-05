@@ -205,8 +205,8 @@ document.getElementById("btnMesAuto").addEventListener("click", async ()=>{
 
 /* ============ CONFIG DE CATEGORÍAS ============ */
 const CATS = {
-  asesores: { label:"Asesores", metricLabel:"Cierres",
-    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"cierres",label:"Cierres",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"}],
+  asesores: { label:"Asesores", metricLabel:"Contratos",
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"cierres",label:"Contratos",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"}],
     metric:r=>r.cierres, isPct:false },
   consultores: { label:"Consultores", metricLabel:"Contratos",
     fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"contratos",label:"Contratos",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"},{k:"sucursal",label:"Sucursal",type:"text"}],
