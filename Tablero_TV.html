@@ -177,8 +177,8 @@ function mesActualLabel(){
 
 /* ============ CONFIG DE CATEGORÍAS ============ */
 const CATS = {
-  asesores: { label:"Asesores", metricLabel:"Cierres",
-    metric:r=>r.cierres, pct:r=>r.meta>0? r.cierres/r.meta:0, sub:r=>"Sup. "+(r.supervisor||"—"), valueLabel:"cierres", isPct:false },
+  asesores: { label:"Asesores", metricLabel:"Contratos",
+    metric:r=>r.cierres, pct:r=>r.meta>0? r.cierres/r.meta:0, sub:r=>"Sup. "+(r.supervisor||"—"), valueLabel:"contratos", isPct:false },
   consultores: { label:"Consultores", metricLabel:"Contratos",
     metric:r=>r.contratos, pct:r=>r.meta>0? r.contratos/r.meta:0, sub:r=>(r.sucursal||"—"), valueLabel:"contratos", isPct:false },
   supervisores: { label:"Supervisores", metricLabel:"",
