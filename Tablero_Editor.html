@@ -107,6 +107,13 @@
     <button class="btn secondary" id="btnMesAuto" style="padding:8px 14px;">Usar automático</button>
     <div style="font-size:11px; color:var(--muted-2);" id="mesModoLabel"></div>
   </div>
+  <div style="background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:22px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;">
+      <input type="checkbox" id="chkNivelesAltos" style="width:18px; height:18px; accent-color:var(--gold);">
+      Mostrar Gerentes y Sub Directores en el tablero
+    </label>
+    <div style="font-size:11px; color:var(--muted-2);">Si está apagado, el tablero solo muestra hasta Supervisores (sus datos se conservan, solo se ocultan).</div>
+  </div>
   <div class="tabs" id="editTabs"></div>
   <div class="editor-toolbar">
     <div>
@@ -214,7 +221,21 @@ const CATS = {
     fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"produccion",label:"Producción mes $",type:"num"},{k:"equipo",label:"Personas equipo",type:"num"},{k:"metaProduccion",label:"Meta producción $",type:"num"},{k:"contratos",label:"Contratos",type:"num"},{k:"region",label:"Región",type:"text"}],
     metric:r=>r.metaProduccion>0? r.produccion/r.metaProduccion : 0, isPct:true },
 };
-const CAT_ORDER = ["asesores","consultores","supervisores","gerentes","subdirectores"];
+const CAT_ORDER_ALL = ["asesores","consultores","supervisores","gerentes","subdirectores"];
+function catsVisibles(){
+  return CAT_ORDER_ALL.filter(k => (k!=="gerentes" && k!=="subdirectores") || DATA.mostrarNivelesAltos);
+}
+/* Arregla el problema de Firebase: si una lista queda con huecos (por eliminar
+   personas), Firebase la puede devolver como "objeto" en vez de arreglo, y
+   entonces .push()/.splice() dejan de funcionar. Esto lo normaliza siempre. */
+function normalizarDatos(d){
+  CAT_ORDER_ALL.forEach(cat=>{
+    if(!Array.isArray(d[cat])){
+      d[cat] = d[cat] ? Object.values(d[cat]) : [];
+    }
+  });
+  return d;
+}
 
 function seedData(){
   return {
@@ -296,7 +317,7 @@ async function saveData(){
 
 function renderEditTabs(){
   const wrap = document.getElementById("editTabs");
-  wrap.innerHTML = CAT_ORDER.map(key=>{
+  wrap.innerHTML = catsVisibles().map(key=>{
     const cfg = CATS[key];
     return `<button class="tab ${key===editCat?'active':''}" data-cat="${key}">${cfg.label}</button>`;
   }).join("");
@@ -305,6 +326,7 @@ function renderEditTabs(){
   });
 }
 function renderEditor(){
+  if(!catsVisibles().includes(editCat)) editCat = "asesores";
   renderEditTabs();
   const cfg = CATS[editCat];
   document.getElementById("editTitle").textContent = cfg.label;
@@ -352,15 +374,20 @@ function renderEditor(){
 }
 
 document.getElementById("btnAddRow").addEventListener("click", async ()=>{
-  const cfg = CATS[editCat];
-  const blank = {};
-  cfg.fields.forEach(f=> blank[f.k] = f.type==="num" ? 0 : "");
-  if(editCat==="supervisores") blank.metaPropios = 12;
-  if(editCat==="asesores") blank.meta = 4;
-  if(editCat==="consultores") blank.meta = 5;
-  DATA[editCat].push(blank);
-  await saveData();
-  renderEditor();
+  try{
+    const cfg = CATS[editCat];
+    const blank = {};
+    cfg.fields.forEach(f=> blank[f.k] = f.type==="num" ? 0 : "");
+    if(editCat==="supervisores") blank.metaPropios = 12;
+    if(editCat==="asesores") blank.meta = 4;
+    if(editCat==="consultores") blank.meta = 5;
+    if(!Array.isArray(DATA[editCat])) DATA[editCat] = [];
+    DATA[editCat].push(blank);
+    await saveData();
+    renderEditor();
+  }catch(e){
+    showError("No se pudo agregar la persona: "+e.message);
+  }
 });
 document.getElementById("btnReset").addEventListener("click", async ()=>{
   if(confirm("¿Restablecer todos los datos a los valores originales? Esto no se puede deshacer.")){
@@ -370,17 +397,24 @@ document.getElementById("btnReset").addEventListener("click", async ()=>{
   }
 });
 
+document.getElementById("chkNivelesAltos").addEventListener("change", async (e)=>{
+  DATA.mostrarNivelesAltos = e.target.checked;
+  await saveData();
+  renderEditor();
+});
+
 initMesControls();
 
 if(dataRef){
   dataRef.on("value", (snapshot)=>{
     const val = snapshot.val();
     if(val){
-      DATA = val;
+      DATA = normalizarDatos(val);
     }else{
       DATA = seedData();
       dataRef.set(DATA);
     }
+    document.getElementById("chkNivelesAltos").checked = !!DATA.mostrarNivelesAltos;
     setStatus(true, "Sincronizado");
     pintarMesUI();
     renderEditor();
