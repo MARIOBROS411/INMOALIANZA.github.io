@@ -182,8 +182,19 @@ const CATS = {
     metric:r=>r.metaProduccion>0? r.produccion/r.metaProduccion:0, pct:r=>r.metaProduccion>0? r.produccion/r.metaProduccion:0,
     sub:r=>(r.region||"—"), valueLabel:"%", isPct:true },
 };
-const CAT_ORDER = ["asesores","consultores","supervisores","gerentes","subdirectores"];
-const TV_SCREENS = ["resumen", ...CAT_ORDER];
+const CAT_ORDER_ALL = ["asesores","consultores","supervisores","gerentes","subdirectores"];
+function catsVisibles(){
+  return CAT_ORDER_ALL.filter(k => (k!=="gerentes" && k!=="subdirectores") || DATA.mostrarNivelesAltos);
+}
+function normalizarDatos(d){
+  CAT_ORDER_ALL.forEach(cat=>{
+    if(!Array.isArray(d[cat])){
+      d[cat] = d[cat] ? Object.values(d[cat]) : [];
+    }
+  });
+  return d;
+}
+function tvScreens(){ return ["resumen", ...catsVisibles()]; }
 const CYCLE_MS = 11000;
 
 let DATA = null;
@@ -198,12 +209,13 @@ function sortedRows(catKey){
 }
 
 function renderTV(){
-  const screen = TV_SCREENS[tvIndex];
+  const screens = tvScreens();
+  const screen = screens[tvIndex % screens.length];
   const el = document.getElementById("tvContent");
   el.innerHTML = screen==="resumen" ? renderResumen() : renderCategoriaTV(screen);
 }
 function renderResumen(){
-  let cards = CAT_ORDER.map(key=>{
+  let cards = catsVisibles().map(key=>{
     const cfg = CATS[key];
     const rows = sortedRows(key);
     const top = rows[0];
@@ -273,7 +285,7 @@ function startCycle(){
     fill.style.width = Math.min(100, (elapsed/CYCLE_MS)*100)+"%";
   },100);
   cycleTimer = setInterval(()=>{
-    tvIndex = (tvIndex+1) % TV_SCREENS.length;
+    tvIndex = (tvIndex+1) % tvScreens().length;
     elapsed = 0;
     renderTV();
   }, CYCLE_MS);
@@ -284,7 +296,7 @@ if(dataRef){
   dataRef.on("value", (snapshot)=>{
     const val = snapshot.val();
     if(val){
-      DATA = val;
+      DATA = normalizarDatos(val);
       document.getElementById("mesLabel").textContent = mesActualLabel();
       setLive(true, "En vivo");
       renderTV();
