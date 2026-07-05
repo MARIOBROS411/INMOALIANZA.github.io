@@ -211,9 +211,9 @@ const CATS = {
   consultores: { label:"Consultores", metricLabel:"Contratos",
     fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"contratos",label:"Contratos",type:"num"},{k:"meta",label:"Meta",type:"num"},{k:"supervisor",label:"Supervisor",type:"text"},{k:"sucursal",label:"Sucursal",type:"text"}],
     metric:r=>r.contratos, isPct:false },
-  supervisores: { label:"Supervisores", metricLabel:"Total",
-    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"propios",label:"Cierres propios",type:"num"},{k:"equipo",label:"Contratos equipo",type:"num"},{k:"activas",label:"Personas activas",type:"num"},{k:"metaPropios",label:"Meta propios",type:"num"},{k:"gerente",label:"Gerente",type:"text"}],
-    metric:r=>(r.propios||0)+(r.equipo||0), isPct:false },
+  supervisores: { label:"Supervisores", metricLabel:"Puntos",
+    fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"propios",label:"Cierres propios",type:"num"},{k:"equipo",label:"Contratos equipo",type:"num"},{k:"puntos",label:"Puntos",type:"num"},{k:"activas",label:"Personas activas",type:"num"},{k:"metaPropios",label:"Meta propios",type:"num"},{k:"gerente",label:"Gerente",type:"text"}],
+    metric:r=>(r.puntos||0), isPct:false },
   gerentes: { label:"Gerentes", metricLabel:"Cumplimiento",
     fields:[{k:"nombre",label:"Nombre",type:"text"},{k:"facturacion",label:"Facturación $",type:"num"},{k:"equipo",label:"Personas equipo",type:"num"},{k:"metaProduccion",label:"Meta producción $",type:"num"},{k:"contratos",label:"Contratos",type:"num"},{k:"region",label:"Región",type:"text"}],
     metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion : 0, isPct:true },
@@ -275,14 +275,14 @@ function seedData(){
       {nombre:"Nohelia Mendieta",contratos:0,meta:5,supervisor:"Hanameel",sucursal:"Quito"},
     ],
     supervisores:[
-      {nombre:"Daysy",propios:4,equipo:9,activas:10,metaPropios:12,gerente:"Steven"},
-      {nombre:"Domenica",propios:3,equipo:3,activas:9,metaPropios:12,gerente:"Steven"},
-      {nombre:"Ariana",propios:5,equipo:4,activas:5,metaPropios:12,gerente:"Steven"},
-      {nombre:"Rubia",propios:1,equipo:4,activas:7,metaPropios:12,gerente:"Steven"},
-      {nombre:"Hanameel",propios:0,equipo:0,activas:10,metaPropios:12,gerente:"Derian"},
-      {nombre:"Samir",propios:1,equipo:0,activas:8,metaPropios:12,gerente:"Hugo"},
-      {nombre:"Bryan",propios:1,equipo:0,activas:3,metaPropios:12,gerente:"Gabriel"},
-      {nombre:"Milena",propios:0,equipo:0,activas:1,metaPropios:12,gerente:"Gabriel"},
+      {nombre:"Daysy",propios:4,equipo:9,puntos:41,activas:10,metaPropios:12,gerente:"Steven"},
+      {nombre:"Domenica",propios:3,equipo:3,puntos:30,activas:9,metaPropios:12,gerente:"Steven"},
+      {nombre:"Ariana",propios:5,equipo:4,puntos:29,activas:5,metaPropios:12,gerente:"Steven"},
+      {nombre:"Rubia",propios:1,equipo:4,puntos:21,activas:7,metaPropios:12,gerente:"Steven"},
+      {nombre:"Hanameel",propios:0,equipo:0,puntos:20,activas:10,metaPropios:12,gerente:"Derian"},
+      {nombre:"Samir",propios:1,equipo:0,puntos:19,activas:8,metaPropios:12,gerente:"Hugo"},
+      {nombre:"Bryan",propios:1,equipo:0,puntos:9,activas:3,metaPropios:12,gerente:"Gabriel"},
+      {nombre:"Milena",propios:0,equipo:0,puntos:2,activas:1,metaPropios:12,gerente:"Gabriel"},
     ],
     gerentes:[
       {nombre:"Steveen Cayetano",facturacion:41485,equipo:33,metaProduccion:40000,contratos:16,region:"Guayaquil"},
@@ -303,6 +303,13 @@ function sortedRows(catKey){
   const cfg = CATS[catKey];
   return [...(DATA[catKey]||[])].filter(r=>r.nombre && r.nombre.trim()!=="")
     .sort((a,b)=> cfg.metric(b) - cfg.metric(a));
+}
+/* A diferencia de sortedRows, esta NO oculta las filas sin nombre —
+   así una persona recién agregada (todavía sin nombre) sigue visible
+   en el editor para poder completarla. */
+function allRowsForEditor(catKey){
+  const cfg = CATS[catKey];
+  return [...(DATA[catKey]||[])].sort((a,b)=> cfg.metric(b) - cfg.metric(a));
 }
 
 async function saveData(){
@@ -334,7 +341,7 @@ function renderEditor(){
   const thead = document.getElementById("editThead");
   thead.innerHTML = "<tr><th>#</th>"+cfg.fields.map(f=>`<th>${f.label}</th>`).join("")+`<th>${cfg.metricLabel}</th><th></th></tr>`;
 
-  const rowsSorted = sortedRows(editCat);
+  const rowsSorted = allRowsForEditor(editCat);
   const tbody = document.getElementById("editTbody");
   tbody.innerHTML = rowsSorted.map((r, idx)=>{
     const rankClass = idx===0?"rank-1":"";
@@ -383,8 +390,11 @@ document.getElementById("btnAddRow").addEventListener("click", async ()=>{
     if(editCat==="consultores") blank.meta = 5;
     if(!Array.isArray(DATA[editCat])) DATA[editCat] = [];
     DATA[editCat].push(blank);
+    const nuevoIdx = DATA[editCat].length - 1;
     await saveData();
     renderEditor();
+    const inputNombre = document.querySelector(`input[data-idx="${nuevoIdx}"][data-field="nombre"]`);
+    if(inputNombre){ inputNombre.focus(); inputNombre.scrollIntoView({block:"center", behavior:"smooth"}); }
   }catch(e){
     showError("No se pudo agregar la persona: "+e.message);
   }
