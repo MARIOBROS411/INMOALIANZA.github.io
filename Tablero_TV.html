@@ -92,6 +92,10 @@
   .top5-row.top5-1 .who{font-size:15px;}
   .top5-row.top5-1 .val{color:var(--gold); font-size:17px;}
   .top5-row:not(.top5-1):not(.top5-2):not(.top5-3) .pos{font-family:var(--font-mono); font-size:15px; color:var(--muted-2);}
+  .dual-val{display:flex; gap:18px; align-items:center;}
+  .dual-val > div{text-align:center;}
+  .dual-num{display:block; font-family:var(--font-mono); font-weight:800; font-size:16px; color:var(--text);}
+  .dual-lbl{display:block; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-top:2px;}
   .bar-mini{height:3px; background:var(--bg); border-radius:3px; margin-top:7px; overflow:hidden;}
   .bar-mini > div{height:100%; background:var(--accent);}
 
@@ -177,9 +181,10 @@ const CATS = {
     metric:r=>r.cierres, pct:r=>r.meta>0? r.cierres/r.meta:0, sub:r=>"Sup. "+(r.supervisor||"—"), valueLabel:"cierres", isPct:false },
   consultores: { label:"Consultores", metricLabel:"Contratos",
     metric:r=>r.contratos, pct:r=>r.meta>0? r.contratos/r.meta:0, sub:r=>(r.sucursal||"—"), valueLabel:"contratos", isPct:false },
-  supervisores: { label:"Supervisores", metricLabel:"Puntuación",
-    metric:r=>(r.propios*3)+(r.equipo*1)+(r.activas*2), pct:r=>r.metaPropios>0? r.propios/r.metaPropios:0,
-    sub:r=>"Ger. "+(r.gerente||"—"), valueLabel:"pts", isPct:false, formulaNote:"Puntuación = propios ×3 + equipo ×1 + activas ×2" },
+  supervisores: { label:"Supervisores", metricLabel:"",
+    metric:r=>(r.propios||0)+(r.equipo||0), pct:r=>r.metaPropios>0? r.propios/r.metaPropios:0,
+    sub:r=>"Ger. "+(r.gerente||"—"), isPct:false, dual:true,
+    valA:r=>r.propios||0, valALabel:"Propios", valB:r=>r.equipo||0, valBLabel:"Equipo" },
   gerentes: { label:"Gerentes", metricLabel:"Cumplimiento",
     metric:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0, pct:r=>r.metaProduccion>0? r.facturacion/r.metaProduccion:0,
     sub:r=>(r.region||"—"), valueLabel:"%", isPct:true },
@@ -227,14 +232,19 @@ function renderResumen(){
     const rows = sortedRows(key);
     const top = rows[0];
     if(!top) return `<div class="summary-card"><div class="cat">${cfg.label}</div><div class="empty-slot">Sin datos</div></div>`;
-    const val = cfg.isPct ? fmtPct(cfg.metric(top)) : Math.round(cfg.metric(top))+"";
+    const valorHtml = cfg.dual
+      ? `<div class="dual-val" style="justify-content:center; margin-top:2px;">
+           <div><span class="dual-num">${cfg.valA(top)}</span><span class="dual-lbl">${cfg.valALabel}</span></div>
+           <div><span class="dual-num">${cfg.valB(top)}</span><span class="dual-lbl">${cfg.valBLabel}</span></div>
+         </div>`
+      : `<div class="podium-value">${cfg.isPct ? fmtPct(cfg.metric(top)) : Math.round(cfg.metric(top))+""}</div>
+         <div class="podium-value-label">${cfg.metricLabel}</div>`;
     return `<div class="summary-card">
       <div class="cat">${cfg.label}</div>
       <div class="medal">🥇</div>
       <div class="podium-name">${top.nombre}</div>
       <div class="podium-sub">${cfg.sub(top)}</div>
-      <div class="podium-value">${val}</div>
-      <div class="podium-value-label">${cfg.metricLabel}</div>
+      ${valorHtml}
     </div>`;
   }).join("");
   return `<div class="tv-header">
@@ -274,14 +284,19 @@ function renderTop5(key){
   const medalFor = r => r===1?"🥇": r===2?"🥈": r===3?"🥉": null;
   let rowsHtml = top5.map(({row:r, rank, val})=>{
     const pct = Math.min(cfg.pct(r),1);
-    const displayVal = cfg.isPct ? fmtPct(val) : Math.round(val)+"";
     const medal = medalFor(rank);
+    const valorHtml = cfg.dual
+      ? `<div class="dual-val">
+           <div><span class="dual-num">${cfg.valA(r)}</span><span class="dual-lbl">${cfg.valALabel}</span></div>
+           <div><span class="dual-num">${cfg.valB(r)}</span><span class="dual-lbl">${cfg.valBLabel}</span></div>
+         </div>`
+      : `<div class="val">${cfg.isPct ? fmtPct(val) : Math.round(val)+""}</div>`;
     return `<div class="rest-row top5-row ${rank<=3?'top5-'+rank:''}">
       <div class="pos">${medal ? medal : rank+"."}</div>
       <div class="who">${r.nombre}<span class="tag">${cfg.sub(r)}</span>
         <div class="bar-mini"><div style="width:${(pct*100).toFixed(0)}%"></div></div>
       </div>
-      <div class="val">${displayVal}</div>
+      ${valorHtml}
     </div>`;
   }).join("");
 
