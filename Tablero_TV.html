@@ -4,76 +4,107 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arena Comercial</title>
-
-<!-- ⚠️ FIREBASE: SDK compat -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
-
 <style>
   :root{
-    --bg:#0A0C10; --panel:#0F1216; --line:#1E2228; --line-soft:#171A1F;
-    --gold:#D4A017; --silver:#B8BDC7; --bronze:#A66A3C; --accent:#3DDC97;
-    --text:#F2F3F5; --muted:#6B7280; --muted-2:#454B54;
+    --bg:#07080C;
+    --panel:#101319;
+    --line:#232A36;
+    --gold:#F2B705;
+    --gold-glow:rgba(242,183,5,.35);
+    --silver:#C3C9D4;
+    --bronze:#C97D3F;
+    --accent:#22D3A6;
+    --danger:#E5484D;
+    --text:#F5F6F8;
+    --muted:#818C9C;
+    --muted-2:#4B5563;
+    --font-display:'Arial Black',Impact,'Arial Narrow',sans-serif;
     --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-    --font-mono:'SF Mono','Courier New',monospace;
+    --font-mono:'SF Mono','Consolas','Courier New',monospace;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{background:var(--bg); color:var(--text); font-family:var(--font-body); width:100%; min-height:100vh;}
-  .topbar{display:flex; align-items:center; justify-content:space-between; padding:22px 40px; border-bottom:1px solid var(--line);}
-  .brand{display:flex; align-items:baseline; gap:14px;}
-  .brand .name{font-size:15px; font-weight:700; letter-spacing:3px; text-transform:uppercase;}
-  .divider{width:1px; height:14px; background:var(--line);}
-  .sub{font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;}
-  .live-pill{display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-weight:600;}
-  .live-dot{width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); animation:pulse 1.8s infinite;}
-  .live-dot.off{background:#E5484D; box-shadow:0 0 6px #E5484D; animation:none;}
+  html,body{background:var(--bg); color:var(--text); font-family:var(--font-body); width:100%; min-height:100vh; overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse 1100px 550px at 50% -12%, rgba(242,183,5,.10), transparent 60%),
+      radial-gradient(ellipse 900px 500px at 100% 105%, rgba(34,211,166,.06), transparent 60%),
+      var(--bg);
+  }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; padding:24px 44px;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex; align-items:center; gap:14px;}
+  .brand .mark{
+    width:38px; height:38px; border-radius:9px; background:linear-gradient(135deg, var(--gold), var(--accent));
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:900; color:#0a0d10; font-size:19px;
+    box-shadow:0 0 22px var(--gold-glow);
+  }
+  .brand .name{font-family:var(--font-display); font-size:22px; font-weight:900; letter-spacing:.5px; text-transform:uppercase;}
+  .brand .sub{font-size:12px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-top:2px; font-weight:600;}
+  .live-pill{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--accent); letter-spacing:1.5px; text-transform:uppercase; font-weight:800;}
+  .live-dot{width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 10px var(--accent); animation:pulse 1.6s infinite;}
+  .live-dot.off{background:var(--danger); box-shadow:0 0 10px var(--danger); animation:none;}
   @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.3}}
 
-  .stage{max-width:1360px; margin:0 auto; padding:36px 40px 60px;}
-  .progress-track{height:2px; background:var(--line); margin-bottom:36px;}
-  .progress-fill{height:100%; background:var(--accent); width:0%;}
+  .stage{max-width:1400px; margin:0 auto; padding:38px 44px 60px;}
+  .progress-track{height:3px; background:var(--line); border-radius:3px; overflow:hidden; margin-bottom:34px;}
+  .progress-fill{height:100%; background:linear-gradient(90deg, var(--accent), var(--gold)); width:0%;}
 
-  .tv-header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:30px; flex-wrap:wrap; gap:8px;}
-  .tv-title{font-size:13px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--muted);}
-  .tv-title-main{font-size:32px; font-weight:800; letter-spacing:-.5px; margin-top:4px;}
-  .tv-meta{color:var(--muted-2); font-size:11.5px; letter-spacing:.3px;}
+  .tv-header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:10px;}
+  .tv-title{font-size:12.5px; font-weight:800; letter-spacing:3.5px; text-transform:uppercase; color:var(--gold);}
+  .tv-title-main{font-family:var(--font-display); font-size:36px; font-weight:900; letter-spacing:.3px; text-transform:uppercase; margin-top:6px;}
+  .tv-meta{color:var(--muted); font-size:12px; letter-spacing:.3px;}
 
-  .podium{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:2px;}
-  .podium-card{background:var(--panel); padding:30px 22px; text-align:center;}
-  .rank-num{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); letter-spacing:2px; margin-bottom:18px;}
-  .podium-card.p1{background:#121510;}
-  .podium-card.p1 .rank-num{color:var(--gold);}
-  .podium-card.p2 .rank-num{color:var(--silver);}
-  .podium-card.p3 .rank-num{color:var(--bronze);}
-  .podium-name{font-size:16px; font-weight:700; margin-bottom:6px;}
-  .p1 .podium-name{font-size:19px;}
-  .podium-sub{font-size:10.5px; color:var(--muted); margin-bottom:22px; text-transform:uppercase; letter-spacing:1px;}
-  .podium-value{font-family:var(--font-mono); font-weight:700; font-size:34px; color:var(--text); line-height:1;}
-  .p1 .podium-value{font-size:46px; color:var(--gold);}
-  .podium-value-label{font-size:10px; color:var(--muted-2); text-transform:uppercase; letter-spacing:1.5px; margin-top:6px;}
-  .empty-slot{opacity:.25; font-size:12px; padding:26px 0;}
+  .podium{display:grid; grid-template-columns:1fr 1.18fr 1fr; align-items:end; gap:16px; margin-bottom:32px;}
+  .podium-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:26px 20px; text-align:center; position:relative; overflow:hidden;
+  }
+  .podium-card.p1{
+    border-color:var(--gold); padding-top:34px; padding-bottom:34px;
+    box-shadow:0 0 50px -8px var(--gold-glow), inset 0 0 0 1px rgba(242,183,5,.18);
+    background:linear-gradient(180deg, rgba(242,183,5,.09), var(--panel) 55%);
+  }
+  .podium-card.p2{border-color:rgba(195,201,212,.35);}
+  .podium-card.p3{border-color:rgba(201,125,63,.45);}
+  .medal{width:54px; height:54px; border-radius:50%; margin:0 auto 14px; display:flex; align-items:center; justify-content:center; font-size:26px;}
+  .p1 .medal{width:68px; height:68px; font-size:34px;}
+  .podium-name{font-size:17px; font-weight:800; margin-bottom:5px; letter-spacing:.2px;}
+  .p1 .podium-name{font-size:22px;}
+  .podium-sub{font-size:11px; color:var(--muted); margin-bottom:18px; text-transform:uppercase; letter-spacing:.8px; font-weight:600;}
+  .podium-value{font-family:var(--font-mono); font-weight:800; font-size:36px; color:var(--text); line-height:1;}
+  .p1 .podium-value{font-size:50px; color:var(--gold);}
+  .podium-value-label{font-size:10.5px; color:var(--muted-2); text-transform:uppercase; letter-spacing:1.3px; margin-top:6px; font-weight:700;}
+  .empty-slot{opacity:.25; font-size:12px; padding:30px 0;}
 
-  .rest-list{border:1px solid var(--line); border-top:none;}
-  .rest-row{display:grid; grid-template-columns:48px 1fr auto; gap:16px; align-items:center; padding:13px 22px; border-top:1px solid var(--line-soft);}
-  .rest-row .pos{font-family:var(--font-mono); color:var(--muted-2); font-weight:700; font-size:13px;}
-  .rest-row .who{font-weight:600; font-size:13.5px;}
-  .rest-row .who .tag{color:var(--muted); font-weight:400; font-size:11px; text-transform:uppercase; margin-left:10px;}
-  .rest-row .val{font-family:var(--font-mono); font-weight:700; font-size:14px;}
-  .bar-mini{height:2px; background:var(--line); margin-top:8px; overflow:hidden;}
-  .bar-mini > div{height:100%; background:var(--muted-2);}
+  .rest-list{background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  .rest-row{display:grid; grid-template-columns:48px 1fr auto; gap:16px; align-items:center; padding:13px 22px; border-bottom:1px solid var(--line);}
+  .rest-row:last-child{border-bottom:none;}
+  .rest-row .pos{font-family:var(--font-mono); color:var(--muted-2); font-weight:800; font-size:15px;}
+  .rest-row .who{font-weight:700; font-size:14px;}
+  .rest-row .who .tag{color:var(--muted); font-weight:500; font-size:11.5px; text-transform:uppercase; margin-left:10px; letter-spacing:.4px;}
+  .rest-row .val{font-family:var(--font-mono); font-weight:800; color:var(--accent); font-size:15px;}
+  .bar-mini{height:3px; background:var(--bg); border-radius:3px; margin-top:7px; overflow:hidden;}
+  .bar-mini > div{height:100%; background:var(--accent);}
 
-  .summary-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
-  .summary-card{background:var(--panel); padding:26px 16px; text-align:center;}
-  .summary-card .cat{font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:var(--muted); margin-bottom:16px; font-weight:700;}
-  .summary-card .podium-name{font-size:14px;}
-  .summary-card .podium-value{font-size:26px;}
+  .summary-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px;}
+  .summary-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:24px 16px; text-align:center;}
+  .summary-card .cat{font-size:10.5px; letter-spacing:1.8px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; font-weight:800;}
+  .summary-card .medal{margin-bottom:10px; width:44px; height:44px; font-size:22px;}
+  .summary-card .podium-name{font-size:14.5px;}
+  .summary-card .podium-value{font-size:28px; color:var(--gold);}
 
   .status-msg{text-align:center; padding:80px 0; color:var(--muted); font-size:14px;}
   .status-msg.err{color:#ff9a9d;}
 
   @media (max-width:900px){
-    .podium, .summary-grid{grid-template-columns:1fr;}
-    .stage{padding:24px 20px 40px;}
+    .podium{grid-template-columns:1fr; grid-template-rows:auto;}
+    .podium-card.p1{order:-1;}
+    .summary-grid{grid-template-columns:repeat(2,1fr);}
+    .stage{padding:26px 20px 40px;}
     .topbar{padding:18px 20px;}
   }
 </style>
@@ -82,9 +113,11 @@
 
 <div class="topbar">
   <div class="brand">
-    <div class="name">Arena Comercial</div>
-    <div class="divider"></div>
-    <div class="sub" id="mesLabel">—</div>
+    <div class="mark">A</div>
+    <div>
+      <div class="name">Arena Comercial</div>
+      <div class="sub" id="mesLabel">Ranking mensual</div>
+    </div>
   </div>
   <div class="live-pill"><span class="live-dot" id="liveDot"></span><span id="liveLabel">Conectando…</span></div>
 </div>
@@ -96,13 +129,12 @@
 
 <script>
 /* =========================================================
-   ⚠️ PEGA AQUÍ EL MISMO firebaseConfig QUE USASTE EN
-   tablero_editor.html (deben ser idénticos)
+   FIREBASE — ya con tus datos reales
    ========================================================= */
 const firebaseConfig = {
   apiKey: "AIzaSyD5oom7DJdoWQlUPDkmCJtlsHtUWuK_2c4",
   authDomain: "area-comercial-574f9.firebaseapp.com",
-  databaseURL: "https://area-comercial-574f9-default-rtdb.firebaseio.com", /* ⚠️ CONFIRMA esta línea contra la que ves arriba de tu Realtime Database */
+  databaseURL: "https://area-comercial-574f9-default-rtdb.firebaseio.com",
   projectId: "area-comercial-574f9",
   storageBucket: "area-comercial-574f9.firebasestorage.app",
   messagingSenderId: "336038746184",
@@ -120,8 +152,18 @@ try{
   db = firebase.database();
   dataRef = db.ref("gamificacion/data");
 }catch(e){
-  document.getElementById("tvContent").innerHTML = `<div class="status-msg err">No se pudo conectar a Firebase.<br>Revisa el firebaseConfig. Detalle: ${e.message}</div>`;
+  document.getElementById("tvContent").innerHTML = `<div class="status-msg err">No se pudo conectar a Firebase.<br>Detalle: ${e.message}</div>`;
   setLive(false, "Error");
+}
+
+/* Mes: usa el ajuste manual guardado en el editor si existe; si no, calcula con la fecha del sistema */
+const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+function mesActualLabel(){
+  if(DATA && DATA.mesManual){
+    return "Ranking mensual · " + MESES[DATA.mesManual.mesIdx] + " " + DATA.mesManual.anio;
+  }
+  const d = new Date();
+  return "Ranking mensual · " + MESES[d.getMonth()] + " " + d.getFullYear();
 }
 
 /* ============ CONFIG DE CATEGORÍAS ============ */
@@ -169,7 +211,7 @@ function renderResumen(){
     const val = cfg.isPct ? fmtPct(cfg.metric(top)) : Math.round(cfg.metric(top))+"";
     return `<div class="summary-card">
       <div class="cat">${cfg.label}</div>
-      <div class="rank-num">N.º 1</div>
+      <div class="medal">🥇</div>
       <div class="podium-name">${top.nombre}</div>
       <div class="podium-sub">${cfg.sub(top)}</div>
       <div class="podium-value">${val}</div>
@@ -178,7 +220,7 @@ function renderResumen(){
   }).join("");
   return `<div class="tv-header">
       <div><div class="tv-title">Resumen general</div><div class="tv-title-main">Líder de cada equipo</div></div>
-      <div class="tv-meta">Mes ${DATA.mes}</div>
+      <div class="tv-meta" id="mesMetaResumen"></div>
     </div>
     <div class="summary-grid">${cards}</div>`;
 }
@@ -187,13 +229,13 @@ function renderCategoriaTV(key){
   const rows = sortedRows(key);
   const podium = [rows[1], rows[0], rows[2]];
   const posClass = ["p2","p1","p3"];
-  const posLabel = ["N.º 2","N.º 1","N.º 3"];
+  const posMedal = ["🥈","🥇","🥉"];
 
   let podiumHtml = podium.map((r,i)=>{
     if(!r) return `<div class="podium-card ${posClass[i]}"><div class="empty-slot">Sin datos aún</div></div>`;
     const val = cfg.isPct ? fmtPct(cfg.metric(r)) : Math.round(cfg.metric(r))+"";
     return `<div class="podium-card ${posClass[i]}">
-      <div class="rank-num">${posLabel[i]}</div>
+      <div class="medal">${posMedal[i]}</div>
       <div class="podium-name">${r.nombre}</div>
       <div class="podium-sub">${cfg.sub(r)}</div>
       <div class="podium-value">${val}</div>
@@ -216,7 +258,7 @@ function renderCategoriaTV(key){
 
   return `<div class="tv-header">
       <div><div class="tv-title">${cfg.label}</div><div class="tv-title-main">Ranking del mes</div></div>
-      <div class="tv-meta">${cfg.metricLabel} · mes ${DATA.mes}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
+      <div class="tv-meta">${cfg.metricLabel}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
     </div>
     <div class="podium">${podiumHtml}</div>
     <div class="rest-list">${restHtml}</div>`;
@@ -237,13 +279,13 @@ function startCycle(){
   }, CYCLE_MS);
 }
 
-/* ============ TIEMPO REAL: escucha cambios en vivo (push, sin polling) ============ */
+/* ============ TIEMPO REAL (push, sin polling) ============ */
 if(dataRef){
   dataRef.on("value", (snapshot)=>{
     const val = snapshot.val();
     if(val){
       DATA = val;
-      document.getElementById("mesLabel").textContent = "Mes "+DATA.mes;
+      document.getElementById("mesLabel").textContent = mesActualLabel();
       setLive(true, "En vivo");
       renderTV();
       if(!cycleTimer) startCycle();
