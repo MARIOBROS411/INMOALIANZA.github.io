@@ -54,6 +54,12 @@
   .progress-track{height:3px; background:var(--line); border-radius:3px; overflow:hidden; margin-bottom:34px;}
   .progress-fill{height:100%; background:linear-gradient(90deg, var(--accent), var(--gold)); width:0%;}
 
+  #tvContent.fade-in{animation:contentIn .5s cubic-bezier(.16,1,.3,1);}
+  @keyframes contentIn{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
   .tv-header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:10px;}
   .tv-title{font-size:12.5px; font-weight:800; letter-spacing:3.5px; text-transform:uppercase; color:var(--gold);}
   .tv-title-main{font-family:var(--font-display); font-size:36px; font-weight:900; letter-spacing:.3px; text-transform:uppercase; margin-top:6px;}
@@ -62,6 +68,7 @@
   .podium{display:grid; grid-template-columns:1fr 1.18fr 1fr; align-items:end; gap:16px; margin-bottom:32px;}
   .podium-card{
     background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:26px 20px; text-align:center; position:relative; overflow:hidden;
+    box-shadow:0 8px 24px -12px rgba(0,0,0,.4);
   }
   .podium-card.p1{
     border-color:var(--gold); padding-top:34px; padding-bottom:34px;
@@ -79,6 +86,12 @@
   .p1 .podium-value{font-size:50px; color:var(--gold);}
   .podium-value-label{font-size:10.5px; color:var(--muted-2); text-transform:uppercase; letter-spacing:1.3px; margin-top:6px; font-weight:700;}
   .empty-slot{opacity:.25; font-size:12px; padding:30px 0;}
+  .summary-card.is-empty{opacity:.55;}
+  .summary-card.is-empty .cat{color:var(--muted-2);}
+  .empty-icon{font-size:26px; color:var(--muted-2); margin:10px 0 12px; font-weight:300;}
+  .empty-msg{font-size:12.5px; color:var(--muted); font-weight:600; letter-spacing:.2px;}
+  .rest-row.empty-row{padding:26px 22px; justify-content:center;}
+  .rest-row.empty-row .who{color:var(--muted); font-weight:600; text-align:center; width:100%;}
 
   .rest-list{background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden;}
   .rest-row{display:grid; grid-template-columns:48px 1fr auto; gap:16px; align-items:center; padding:13px 22px; border-bottom:1px solid var(--line);}
@@ -227,13 +240,24 @@ function renderTV(){
   if(screen==="resumen"){ el.innerHTML = renderResumen(); }
   else if(TOP5_CATS.includes(screen)){ el.innerHTML = renderTop5(screen); }
   else{ el.innerHTML = renderCategoriaTV(screen); }
+  el.classList.remove("fade-in");
+  void el.offsetWidth; /* fuerza reflow para poder repetir la animación */
+  el.classList.add("fade-in");
 }
 function renderResumen(){
   let cards = catsVisibles().map(key=>{
     const cfg = CATS[key];
     const rows = sortedRows(key);
     const top = rows[0];
-    if(!top) return `<div class="summary-card"><div class="cat">${cfg.label}</div><div class="empty-slot">Sin datos</div></div>`;
+    const esZeroCat = TOP5_CATS.includes(key);
+    if(!top || (esZeroCat && cfg.metric(top)===0)){
+      const msgs = { asesores:"0 ventas aún…", consultores:"Sin contratos aún", supervisores:"Sin puntos aún" };
+      return `<div class="summary-card is-empty">
+        <div class="cat">${cfg.label}</div>
+        <div class="empty-icon">–</div>
+        <div class="empty-msg">${msgs[key] || "Sin datos aún"}</div>
+      </div>`;
+    }
     const valorHtml = cfg.dual
       ? `<div class="dual-val" style="justify-content:center; margin-top:2px;">
            <div><span class="dual-num">${cfg.valA(top)}</span><span class="dual-lbl">${cfg.valALabel}</span></div>
@@ -276,12 +300,13 @@ function renderTop5(key){
   const ranked = withRanks(rows, cfg.metric);
   const top5 = ranked.filter(x => x.rank <= 5);
 
-  if(top5.length === 0){
+  if(top5.length === 0 || cfg.metric(top5[0].row) === 0){
+    const msgs = { asesores:"0 ventas aún…", consultores:"Sin contratos aún", supervisores:"Sin puntos aún" };
     return `<div class="tv-header">
         <div><div class="tv-title">${cfg.label}</div><div class="tv-title-main">Top 5 del mes</div></div>
         <div class="tv-meta">${cfg.metricLabel}${cfg.formulaNote? " · "+cfg.formulaNote : ""}</div>
       </div>
-      <div class="rest-list"><div class="rest-row"><div class="who" style="color:var(--muted)">Sin datos aún en esta categoría.</div></div></div>`;
+      <div class="rest-list"><div class="rest-row empty-row"><div class="who">${msgs[key] || "Sin datos aún"}</div></div></div>`;
   }
 
   const medalFor = r => r===1?"🥇": r===2?"🥈": r===3?"🥉": null;
@@ -351,19 +376,25 @@ function renderCategoriaTV(key){
     <div class="rest-list">${restHtml}</div>`;
 }
 
+let rafId = null;
 function startCycle(){
-  clearInterval(cycleTimer); clearInterval(progressTimer);
-  let elapsed = 0;
+  clearInterval(cycleTimer);
+  if(rafId) cancelAnimationFrame(rafId);
   const fill = document.getElementById("progressFill");
-  progressTimer = setInterval(()=>{
-    elapsed += 100;
-    fill.style.width = Math.min(100, (elapsed/CYCLE_MS)*100)+"%";
-  },100);
-  cycleTimer = setInterval(()=>{
-    tvIndex = (tvIndex+1) % tvScreens().length;
-    elapsed = 0;
-    renderTV();
-  }, CYCLE_MS);
+  let segmentStart = performance.now();
+
+  function tick(now){
+    const elapsed = now - segmentStart;
+    const pct = Math.min(100, (elapsed/CYCLE_MS)*100);
+    fill.style.width = pct + "%";
+    if(elapsed >= CYCLE_MS){
+      tvIndex = (tvIndex+1) % tvScreens().length;
+      renderTV();
+      segmentStart = now;
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
 }
 
 /* ============ TIEMPO REAL (push, sin polling) ============ */
@@ -375,7 +406,7 @@ if(dataRef){
       document.getElementById("mesLabel").textContent = mesActualLabel();
       setLive(true, "En vivo");
       renderTV();
-      if(!cycleTimer) startCycle();
+      if(!rafId) startCycle();
     }else{
       document.getElementById("tvContent").innerHTML = `<div class="status-msg">Esperando datos del editor…</div>`;
       setLive(true, "Sin datos");
