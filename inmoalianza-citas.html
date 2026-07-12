@@ -723,8 +723,9 @@ async function generarPDF() {
   const codigoPromo = generarCodigoPromo();
 
   // QR apunta a página de validación del código promo (este mismo archivo)
-  const baseUrl = window.location.href.split('?')[0];
-  const verUrl = baseUrl + '?validar=' + codigoPromo + '&cliente=' + encodeURIComponent(cliente) + '&uid=' + uid;
+  // QR apunta a página de verificación genérica (sin nombre de empresa)
+  const baseUrl = window.location.href.split('/').slice(0,-1).join('/');
+  const verUrl = baseUrl + '/verificar.html?c=' + codigoPromo + '&n=' + encodeURIComponent(cliente) + '&r=' + uid;
 
   // QR
   const qrDataUrl = await generarQR(verUrl);
