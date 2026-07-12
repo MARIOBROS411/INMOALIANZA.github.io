@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Verificación de código</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #F1F5F9;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 380px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 44px 32px 32px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.07);
+  position: relative;
+  overflow: hidden;
+}
+
+/* accent bar top */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--accent, #E2E8F0);
+  transition: background 0.4s;
+}
+.card.state-valid::before   { --accent: #16A34A; }
+.card.state-invalid::before { --accent: #DC2626; }
+
+/* icon */
+.icon-ring {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  transition: background 0.3s;
+  background: #F1F5F9;
+}
+.card.state-valid .icon-ring   { background: #DCFCE7; }
+.card.state-invalid .icon-ring { background: #FEE2E2; }
+
+.icon-ring svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* spinner */
+.spinner {
+  width: 28px; height: 28px;
+  border: 3px solid #E2E8F0;
+  border-top-color: #94A3B8;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* title */
+.title {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 6px;
+  transition: color 0.3s;
+}
+.card.state-valid .title   { color: #15803D; }
+.card.state-invalid .title { color: #B91C1C; }
+
+/* subtitle */
+.subtitle {
+  font-size: 13.5px;
+  color: #64748B;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  min-height: 40px;
+}
+
+/* code display */
+.code-pill {
+  display: inline-block;
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-family: 'Sora', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 9px;
+  background: #F8FAFC;
+  color: #94A3B8;
+  transition: all 0.3s;
+  margin-bottom: 20px;
+  border: 1.5px solid #E2E8F0;
+}
+.card.state-valid .code-pill {
+  background: #F0FDF4;
+  color: #16A34A;
+  border-color: #BBF7D0;
+}
+.card.state-invalid .code-pill {
+  background: #FFF5F5;
+  color: #DC2626;
+  border-color: #FECACA;
+}
+
+/* meta */
+.meta {
+  display: none;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 16px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #94A3B8;
+  line-height: 1.9;
+  text-align: left;
+}
+.meta.show { display: block; }
+.meta strong { color: #64748B; font-weight: 600; }
+.meta-row { display: flex; gap: 6px; }
+.meta-row span:first-child { flex-shrink: 0; }
+
+/* footer */
+.page-footer {
+  font-size: 11px;
+  color: #CBD5E1;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="card" id="card">
+    <div class="icon-ring" id="iconRing">
+      <div class="spinner" id="spinner"></div>
+    </div>
+
+    <div class="title" id="titleEl">Verificando...</div>
+    <div class="subtitle" id="subtitleEl">Un momento por favor.</div>
+    <div class="code-pill" id="codePill">——————</div>
+
+    <div class="meta" id="metaEl"></div>
+  </div>
+
+  <div class="page-footer" id="footerEl">Sistema de verificación</div>
+</div>
+
+<script>
+// ── SVG icons ─────────────────────────────────────────
+const SVG_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+const SVG_X     = `<svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+// ── Read params ───────────────────────────────────────
+const p       = new URLSearchParams(window.location.search);
+const codigo  = (p.get('c') || '').toUpperCase().trim();
+const cliente = p.get('n') || '';
+const uid     = p.get('r') || '';
+
+const card      = document.getElementById('card');
+const iconRing  = document.getElementById('iconRing');
+const titleEl   = document.getElementById('titleEl');
+const subtitleEl= document.getElementById('subtitleEl');
+const codePill  = document.getElementById('codePill');
+const metaEl    = document.getElementById('metaEl');
+const footerEl  = document.getElementById('footerEl');
+
+// Show code immediately
+if (codigo) codePill.textContent = codigo;
+
+// ── Storage key (shared with citas system via localStorage) ──
+const STORE_KEY = 'inmoalianza_promo_v1';
+
+function getStore() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); }
+  catch(e) { return {}; }
+}
+function setStore(obj) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(obj)); } catch(e) {}
+}
+
+function fmtDate() {
+  return new Date().toLocaleString('es-EC', {
+    day: '2-digit', month: 'long', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function showValid(ahora, isNew) {
+  card.classList.add('state-valid');
+  iconRing.innerHTML = SVG_CHECK;
+  titleEl.textContent  = isNew ? 'Código válido' : 'Código ya verificado';
+  subtitleEl.innerHTML = isNew
+    ? 'El código ha sido verificado.<br/>Queda inhabilitado a partir de ahora.'
+    : 'Este código ya fue verificado anteriormente.';
+  footerEl.textContent = 'Verificación completada.';
+}
+
+function showInvalid(msg) {
+  card.classList.add('state-invalid');
+  iconRing.innerHTML   = SVG_X;
+  titleEl.textContent  = 'Código no válido';
+  subtitleEl.innerHTML = msg;
+  footerEl.textContent = 'Verificación fallida.';
+}
+
+function showMeta(obj) {
+  const rows = [];
+  if (obj.fecha)   rows.push(`<div class="meta-row"><span>📅</span><span>Verificado: <strong>${obj.fecha}</strong></span></div>`);
+  if (obj.uid)     rows.push(`<div class="meta-row"><span>🔖</span><span>Ref: <strong>${obj.uid}</strong></span></div>`);
+  if (rows.length) {
+    metaEl.innerHTML = rows.join('');
+    metaEl.classList.add('show');
+  }
+}
+
+// ── Main logic ────────────────────────────────────────
+setTimeout(function() {
+  if (!codigo) {
+    showInvalid('No se encontró ningún código en este enlace.<br/>Verifica que el QR esté completo.');
+    codePill.textContent = '——————';
+    return;
+  }
+
+  const store = getStore();
+
+  if (store[codigo]) {
+    // Ya fue usado
+    showInvalid('Este código ya fue utilizado y <strong>no puede reusarse</strong>.<br/>Cada código es válido una única vez.');
+    showMeta(store[codigo]);
+  } else {
+    // Primera vez — marcar como usado
+    const ahora = fmtDate();
+    const entry = { fecha: ahora, uid: uid };
+    store[codigo] = entry;
+    setStore(store);
+
+    showValid(ahora, true);
+    showMeta(entry);
+  }
+
+}, 1000); // pequeña pausa visual para que se vea la animación
+</script>
+</body>
+</html>
